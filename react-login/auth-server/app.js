@@ -3,10 +3,15 @@ const bcrypt = require('bcrypt')
 var cors = require('cors')
 const jwt = require('jsonwebtoken')
 // import low from 'lowdb'
-var low = require("lowdb")
-var FileSync = require('lowdb/adapters/FileSync')
-var adapter = new FileSync('./database.json')
-var db = low(adapter)
+// var low = require("lowdb")
+// var FileSync = require('lowdb/adapters/FileSync')
+// var adapter = new FileSync('./database.json')
+// var db = low(adapter)
+
+// attempt to import all endpoint code
+const { auth_command } = require("./endpoints/auth.js");
+
+
 
 // Initialize Express app
 const app = express()
@@ -29,6 +34,8 @@ app.get('/', (_req, res) => {
 // auth
 
 app.post('/auth', (req, res) => {
+    return auth_command(req, res);
+    /*
     const { email, password } = req.body
   
     // Look up the user entry in the database
@@ -66,7 +73,7 @@ app.post('/auth', (req, res) => {
         const token = jwt.sign(loginData, jwtSecretKey)
         res.status(200).json({ message: 'success', token })
       })
-    }
+    } */
   })
 
 
