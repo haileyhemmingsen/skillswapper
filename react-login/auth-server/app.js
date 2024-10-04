@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken')
 // var db = low(adapter)
 
 // attempt to import all endpoint code
-const { auth_command } = require("./endpoints/auth.js");
+const { authenticate } = require("./endpoints/auth.js");
 
 
 
@@ -34,7 +34,7 @@ app.get('/', (_req, res) => {
 // auth
 
 app.post('/auth', (req, res) => {
-    return auth_command(req, res);
+    return authenticate(req, res);
     /*
     const { email, password } = req.body
   
@@ -97,23 +97,23 @@ app.post('/verify', (req, res) => {
 
 
 // An endpoint to see if there's an existing account for a given email address
-app.post('/check-account', (req, res) => {
-    const { email } = req.body
+// app.post('/check-account', (req, res) => {
+//     const { email } = req.body
   
-    console.log(req.body)
+//     console.log(req.body)
   
-    const user = db
-      .get('users')
-      .value()
-      .filter((user) => email === user.email)
+//     const user = db
+//       .get('users')
+//       .value()
+//       .filter((user) => email === user.email)
   
-    console.log(user)
+//     console.log(user)
   
-    res.status(200).json({
-      status: user.length === 1 ? 'User exists' : 'User does not exist',
-      userExists: user.length === 1,
-    })
-  })
+//     res.status(200).json({
+//       status: user.length === 1 ? 'User exists' : 'User does not exist',
+//       userExists: user.length === 1,
+//     })
+//   })
 
 
 app.listen(3080);
