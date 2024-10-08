@@ -10,7 +10,8 @@ const jwt = require('jsonwebtoken')
 
 // attempt to import all endpoint code
 const { authenticate } = require("./endpoints/auth.js");
-
+const { verify } = require("./endpoints/verify.js");
+const { check_account } = require('./endpoints/check_account.js');
 
 
 // Initialize Express app
@@ -79,41 +80,43 @@ app.post('/auth', (req, res) => {
 
 // The verify endpoint that checks if a given JWT token is valid
 app.post('/verify', (req, res) => {
-    const tokenHeaderKey = 'jwt-token'
-    const authToken = req.headers[tokenHeaderKey]
-    try {
-      const verified = jwt.verify(authToken, jwtSecretKey)
-      if (verified) {
-        return res.status(200).json({ status: 'logged in', message: 'success' })
-      } else {
-        // Access Denied
-        return res.status(401).json({ status: 'invalid auth', message: 'error' })
-      }
-    } catch (error) {
-      // Access Denied
-      return res.status(401).json({ status: 'invalid auth', message: 'error' })
-    }
+    return verify(req, res);
+    // const tokenHeaderKey = 'jwt-token'
+    // const authToken = req.headers[tokenHeaderKey]
+    // try {
+    //   const verified = jwt.verify(authToken, jwtSecretKey)
+    //   if (verified) {
+    //     return res.status(200).json({ status: 'logged in', message: 'success' })
+    //   } else {
+    //     // Access Denied
+    //     return res.status(401).json({ status: 'invalid auth', message: 'error' })
+    //   }
+    // } catch (error) {
+    //   // Access Denied
+    //   return res.status(401).json({ status: 'invalid auth', message: 'error' })
+    // }
   })
 
 
 // An endpoint to see if there's an existing account for a given email address
-// app.post('/check-account', (req, res) => {
-//     const { email } = req.body
+app.post('/check-account', (req, res) => {
+    return check_account(req, res);
+    // const { email } = req.body
   
-//     console.log(req.body)
+    // console.log(req.body)
   
-//     const user = db
-//       .get('users')
-//       .value()
-//       .filter((user) => email === user.email)
+    // const user = db
+    //   .get('users')
+    //   .value()
+    //   .filter((user) => email === user.email)
   
-//     console.log(user)
+    // console.log(user)
   
-//     res.status(200).json({
-//       status: user.length === 1 ? 'User exists' : 'User does not exist',
-//       userExists: user.length === 1,
-//     })
-//   })
+    // res.status(200).json({
+    //   status: user.length === 1 ? 'User exists' : 'User does not exist',
+    //   userExists: user.length === 1,
+    // })
+  })
 
 
 app.listen(3080);
