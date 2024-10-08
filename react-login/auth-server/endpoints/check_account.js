@@ -14,7 +14,7 @@ function check_account(req, res) {
         let user_exists = db_content.users.find((user) => {
             email === user.email;
         });
-        console.log(user)
+        // console.log(user)
         
         res.status(200).json({
           status: user_exists ? 'User exists' : 'User does not exist',
