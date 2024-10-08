@@ -11,8 +11,8 @@ function check_account(req, res) {
         }
 
         let db_content = JSON.parse(jsonData);
-        console.log("database content:");
-        console.log(db_content);
+        // console.log("database content:");
+        // console.log(db_content);
         let user_exists = db_content.users.find((user) => {
             // console.log(email === user.email);
             return email === user.email;
