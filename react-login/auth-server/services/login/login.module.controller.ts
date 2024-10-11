@@ -16,7 +16,8 @@ import { SignUpCredentials } from './login.module.index';
 /**
  * Route for signup
  * Returns 201 on created account and 409 if account already exists
- * Returns as a boolean, true/false if the account was created */ 
+ * Returns as a boolean, true/false if the account was create
+ * Also don't need the security decorator because this isn't a secure route */ 
 @Route('signup')
 export class SignUpController extends Controller {
 	@Post()
@@ -30,6 +31,6 @@ export class SignUpController extends Controller {
 					this.setStatus(409);
 				}
 				return created;
-			}
+			});
 	}
 }
