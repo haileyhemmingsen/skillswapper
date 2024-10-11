@@ -34,3 +34,18 @@ export class SignUpController extends Controller {
 			});
 	}
 }
+
+@Route('login')
+export class LogInController extends Controller {
+    @Post()
+    @Response('401', 'Invalid Username or Password')
+    @SuccessResponse('200', 'Logged In') // also not sure about here
+    public async login(@Body body: SignUpCredentials): Promise<boolean|undefined> {
+        return new LoginService().login(body).then(async (valid: boolean | undefined): Promise <boolean | undefined> => {
+            if(!valid) {
+                this.setStatus(401);
+            }
+            return valid;
+        })
+    }
+}
