@@ -1,0 +1,70 @@
+.container {
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 31px 15px 670px;
+  }
+  
+  @media (max-width: 991px) {
+    .container {
+      max-width: 100%;
+      margin-top: 40px;
+      padding: 0 20px 100px 0;
+    }
+  }
+  
+  .title {
+    color: #e06b1d;
+    font: 400 64px Paytone One, -apple-system, Roboto, Helvetica, sans-serif;
+  }
+  
+  @media (max-width: 991px) {
+    .title {
+      max-width: 100%;
+      font-size: 40px;
+    }
+  }
+  
+  .categoryPrompt {
+    color: rgba(226, 122, 43, 0.8);
+    align-self: start;
+    margin-top: 70px;
+    font: 400 25px Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
+  }
+  
+  @media (max-width: 991px) {
+    .categoryPrompt {
+      margin: 40px 0 0 8px;
+    }
+  }
+  
+  .categoryGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 17px;
+  }
+  
+  .categoryImage {
+    aspect-ratio: 2.39;
+    object-fit: contain;
+    object-position: center;
+    width: 136px;
+    border-radius: 32px;
+    background-color: #fff;
+    max-width: 100%;
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }

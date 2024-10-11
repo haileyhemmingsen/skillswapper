@@ -1,9 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './home'
-import Login from './login'
-import './App.css'
-import { useEffect, useState } from 'react'
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './landing';
+import Login from './login';
+import SkillSwapper from './skillswapper_components/CategorySelection';
+import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -37,15 +37,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-          />
+          <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/homepage" element={<SkillSwapper />} /> 
         </Routes>
       </BrowserRouter>
     </div>
-  )
+  );
 }
 
 export default App
