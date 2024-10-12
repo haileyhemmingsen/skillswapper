@@ -1,7 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './landing';
 import Login from './login';
-import SkillSwapper from './skillswapper_components/CategorySelection';
+import SkillSwapper from './skillswapper_components/homepage/homepage.module';
+
+
+// import SkillSwapper from './skillswapper_components/homepage/MainFeed/ServiceSearch';
+// import SkillSwapper from './skillswapper_components/homepage/CategorySelection/CategorySelection';
+
 import './App.css';
 import { useEffect, useState } from 'react';
 

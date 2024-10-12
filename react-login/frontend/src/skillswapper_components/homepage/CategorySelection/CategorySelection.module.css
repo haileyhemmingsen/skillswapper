@@ -5,6 +5,8 @@
     flex-direction: column;
     margin: 0 auto;
     padding: 31px 15px 670px;
+    background-color: rgba(226, 122, 43, 0.25);
+
   }
   
   @media (max-width: 991px) {
@@ -55,7 +57,18 @@
     border-radius: 32px;
     background-color: #fff;
     max-width: 100%;
+    cursor: pointer; 
+    transition: box-shadow 0.3s ease;
   }
+
+  .categoryImage:hover {
+    cursor: pointer; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+  .categoryImage:active {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+}
   
   .visually-hidden {
     position: absolute;

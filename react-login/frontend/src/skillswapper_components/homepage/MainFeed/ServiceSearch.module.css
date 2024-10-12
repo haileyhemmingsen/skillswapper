@@ -1,0 +1,146 @@
+html, body {
+  height: 100%; /* Ensure html and body are full height */
+  margin: 0; /* Remove default margin */
+}
+
+.container {
+    display: flex;
+    width: 100%; 
+    flex-direction: column;
+    object-position: center;
+    max-height: 100%;
+    overflow-y: auto;  /* Enable vertical scrolling when content exceeds max height*/
+  }
+  
+  @media (max-width: 991px) {
+    .container {
+      max-width: 100%;
+      margin-top: 40px;
+      object-position: center;
+    }
+  } 
+  
+  .header {
+    margin-top: 0px;
+    align-self: flex-end;
+    display: flex;
+    width: 526px;
+    max-width: 100%;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    object-position: center;
+  }
+  
+  @media (max-width: 991px) {
+    .header {
+      margin-right: 10px;
+      object-position: center;
+    }
+  }
+  
+  .logoCompany {
+    aspect-ratio: 1.09;
+    object-fit: contain;
+    object-position: center;
+    width: 94px;
+    align-self: flex-end;
+    margin-top: 23px;
+    object-position: center;
+  }
+  
+  .logoUser {
+    aspect-ratio: 1;
+    object-fit: contain;
+    object-position: center;
+    padding-right: 2%;
+    align-self: flex-start;
+  }
+  
+  .mainContent {
+    display: flex;
+    margin-top: 29px;
+    gap: 25px;
+    font-family: Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
+    color: #e06b1d;
+    font-weight: 400;
+    flex-wrap: wrap;
+    object-position: center;
+  }
+  
+  .searchSection {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+    align-items: center;
+  }
+  
+  @media (max-width: 991px) {
+    .searchSection {
+      max-width: 100%;
+      object-position: center;
+    }
+  }
+  
+  .searchTitle {
+    font-size: 32px;
+    align-self: center;
+  }
+  
+  @media (max-width: 991px) {
+    .searchTitle {
+      max-width: 100%;
+    }
+  }
+  
+  .searchInput {
+    border-radius: 50px;
+    background-color: rgba(217, 217, 217, 0.56);
+    align-self: center;
+    margin-top: 22px;
+    width: 619px;
+    max-width: 100%;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.4);
+    padding: 15px 20px;
+    border: none;
+    outline: none;
+  }
+  
+  .postButton {
+    border-radius: 15px;
+    background-color: #e06b1d;
+    align-self: center;
+    margin-top: 42px;
+    width: 388px;
+    max-width: 100%;
+    color: #fff;
+    padding: 8px 70px;
+    font: 465 24px Inter, sans-serif;
+    align-items: center;
+    border: none;
+    outline: none;
+  }
+  
+  @media (max-width: 991px) {
+    .postButton {
+      margin-top: 40px;
+      padding: 0 20px;
+      align-items: center;
+    }
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
