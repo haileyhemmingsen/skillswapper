@@ -1,8 +1,8 @@
 // where actual functions are
 import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { auth, db } from '../../firebase'; // Firebase imports
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { v4 as uuidv4 } from 'uuid';
+import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { SignUpCredentials, UpdateEmail, UpdatePassword, UpdateUsername } from './account.module.index';
 // import something for backend API
@@ -20,10 +20,7 @@ export class LoginService {
         return undefined;
       }
 
-      // has two different ways to do it
-      // could use the built in method from firebase
-      // or we can do it this way with bcrypt
-      // Create the user in Firebase Authentication
+      const uuid = uuidv4();
       const hashedPassword = await bcrypt.hash(body.password, this.saltRounds);
 
       // Insert user credentials into Firestore
@@ -31,7 +28,7 @@ export class LoginService {
         email: body.email,
         password: hashedPassword,
         createdAt: new Date(),
-        // uid: userCredential.user.uid,
+        uuid: uuid,
       });
 
       return true;
