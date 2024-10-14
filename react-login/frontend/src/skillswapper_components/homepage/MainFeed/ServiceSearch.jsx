@@ -1,8 +1,10 @@
 import React from "react";
 import styles from './ServiceSearch.module.css';
 import ServicePost from './ServicePost';
-import userImage from '../../../images/user.png';
-import logoImage from '../../../images/logo.png';
+import searchImage from '../../../images/search.svg';
+import logoImage from '../../../images/logo.svg';
+import userImage from '../../../images/user.svg';
+
 
 
 const samplePosts = [
@@ -17,20 +19,23 @@ function ServiceSearch() {
     <main className={styles.container}>
       <header className={styles.header}>
         <img loading="lazy" src={logoImage} className={styles.logoCompany} alt="Company logo" />
-        <img loading="lazy" src={userImage} className={styles.logoUser} alt="User logo" />
+        <img loading="lazy" src={userImage} className={styles.iconUser} alt="User logo" />
       </header>
       <div className={styles.mainContent}>
         <section className={styles.searchSection}>
           <h1 className={styles.searchTitle}>What service are you looking for?</h1>
           <form>
             <label htmlFor="serviceSearch" className={styles['visually-hidden']}>Search for services</label>
-            <input
-              type="text"
-              id="serviceSearch"
-              className={styles.searchInput}
-              placeholder="Type keywords here..."
-              aria-label="Search for services"
-            />
+            <div className={styles.searchInputWrapper}>
+              <input
+                type="text"
+                id="serviceSearch"
+                className={styles.searchInput}
+                placeholder="Type keywords here..."
+                aria-label="Search for services"
+              />
+              <img loading="lazy" src={searchImage} alt="Search icon" className={styles.searchIcon} />
+            </div>
           </form>
           <button type="submit" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>

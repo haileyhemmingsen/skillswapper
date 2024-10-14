@@ -17,9 +17,10 @@
   
   .header {
     margin-top: 0px;
-    align-self: flex-end;
+    align-self: center;
     display: flex;
-    width: 526px;
+    /* width: 526px; */
+    width: 100%;
     max-width: 100%;
     align-items: flex-start;
     gap: 20px;
@@ -43,13 +44,15 @@
     align-self: flex-end;
     margin-top: 23px;
     object-position: center;
+    margin-left: 45%;
   }
   
-  .logoUser {
+  .iconUser {
     aspect-ratio: 1;
     object-fit: contain;
     object-position: center;
     padding-right: 2%;
+    /* margin-left: 50%; */
     align-self: flex-start;
   }
   
@@ -96,21 +99,37 @@
     border-radius: 50px;
     background-color: rgba(217, 217, 217, 0.56);
     align-self: center;
-    margin-top: 22px;
+    /* margin-top: 12px; */
     width: 619px;
     max-width: 100%;
-    font-size: 24px;
+    font-size: 19px;
     color: rgba(0, 0, 0, 0.4);
-    padding: 15px 20px;
+    padding: 8px 26px;
     border: none;
     outline: none;
+  }
+
+  .searchInputWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 600px; /* Adjust based on your layout */
+  }
+
+  .searchIcon {
+    position: absolute;
+    right: 3%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
   }
   
   .postButton {
     border-radius: 15px;
     background-color: #e06b1d;
     align-self: center;
-    margin-top: 42px;
+    margin-top: 30px;
     width: 388px;
     max-width: 100%;
     color: #fff;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styles from './CategorySelection.module.css';
 import CategoryImage from './CategoryImage';
-import basketballImage from '../../../images/basketball.jpg';
-import mediaImage from '../../../images/media.jpg';
-import musicImage from '../../../images/music.jpg';
-import foodImage from '../../../images/food.jpg';
-import digitalImage from '../../../images/digital.jpg';
-import fixingImage from '../../../images/fixing.jpg';
-import logo from '../../../images/longLogo.png';
+import basketballImage from '../../../images/basketball.svg';
+import mediaImage from '../../../images/media.svg';
+import musicImage from '../../../images/music.svg';
+import foodImage from '../../../images/food.svg';
+import digitalImage from '../../../images/digital.svg';
+import fixingImage from '../../../images/fixing.svg';
+import logo from '../../../images/SkillSwapper.svg';
 
 
 const categories = [
