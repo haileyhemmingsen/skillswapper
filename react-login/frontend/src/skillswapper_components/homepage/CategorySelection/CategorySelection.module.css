@@ -61,6 +61,7 @@
     cursor: pointer;
     transition: box-shadow 0.3s ease;
     background-color: transparent;
+    max-height: 55px;
   }
 
   .categoryButton:hover {
@@ -69,6 +70,10 @@
   }
 
   .categoryButton:active {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .active {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
   }
   
