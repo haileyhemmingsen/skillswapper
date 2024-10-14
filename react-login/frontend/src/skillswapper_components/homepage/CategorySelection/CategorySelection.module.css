@@ -17,23 +17,24 @@
     }
   }
   
-  .title {
-    color: #e06b1d;
-    font: 400 64px Paytone One, -apple-system, Roboto, Helvetica, sans-serif;
-  }
-  
-  @media (max-width: 991px) {
-    .title {
-      max-width: 100%;
-      font-size: 40px;
+  .logo {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+}
+
+@media (max-width: 991px) {
+    .logo {
+        max-width: 250px;
     }
-  }
+}
   
   .categoryPrompt {
     color: rgba(226, 122, 43, 0.8);
     align-self: start;
-    margin-top: 70px;
-    font: 400 25px Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
+    margin-top: 60px;
+    font: 400 20px Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
   }
   
   @media (max-width: 991px) {
@@ -45,8 +46,30 @@
   .categoryGrid {
     display: flex;
     flex-wrap: wrap;
-    gap: 9px;
-    margin-top: 17px;
+    /* gap: 9px; */
+    gap: 20px 40px; 
+    margin-top: 4px;
+    justify-content: center; 
+}
+
+  /* Style the button */
+  .categoryButton {
+    border: none;
+    background: none;
+    padding: 0;
+    border-radius: 32px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    background-color: transparent;
+  }
+
+  .categoryButton:hover {
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .categoryButton:active {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
   }
   
   .categoryImage {
@@ -57,18 +80,8 @@
     border-radius: 32px;
     background-color: #fff;
     max-width: 100%;
-    cursor: pointer; 
-    transition: box-shadow 0.3s ease;
+    cursor: pointer;
   }
-
-  .categoryImage:hover {
-    cursor: pointer; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-}
-
-  .categoryImage:active {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
-}
   
   .visually-hidden {
     position: absolute;

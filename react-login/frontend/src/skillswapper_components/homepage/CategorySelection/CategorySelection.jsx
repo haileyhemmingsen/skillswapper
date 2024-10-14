@@ -7,6 +7,7 @@ import musicImage from '../../../images/music.jpg';
 import foodImage from '../../../images/food.jpg';
 import digitalImage from '../../../images/digital.jpg';
 import fixingImage from '../../../images/fixing.jpg';
+import logo from '../../../images/longLogo.png';
 
 
 const categories = [
@@ -21,11 +22,13 @@ const categories = [
 const CategorySelection = () => {
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>SkillSwapper</h1>
+      <img src={logo} alt="SkillSwapper Logo" className={styles.logo} />
       <h2 className={styles.categoryPrompt}>Select category...</h2>
       <section className={styles.categoryGrid}>
         {categories.map((category, index) => (
-          <CategoryImage key={index} src={category.src} alt={category.alt} />
+          <button key={index} className={styles.categoryButton}>
+            <CategoryImage key={index} src={category.src} alt={category.alt} />
+          </button>
         ))}
       </section>
     </main>

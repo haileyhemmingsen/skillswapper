@@ -1,6 +1,6 @@
 import React from "react";
 import styles from './ServicePost.module.css';
-import userImage from '../../../images/user.jpg';
+import userImage from '../../../images/user.png';
 
 function ServicePost({ username, date, content }) {
   return (
