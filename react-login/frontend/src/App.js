@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './landing';
-import Login from './login';
+import Home from './skillswapper_components/landing/landing';
+import Login from './skillswapper_components/login/login';
 import SkillSwapper from './skillswapper_components/homepage/homepage.module';
 
 
