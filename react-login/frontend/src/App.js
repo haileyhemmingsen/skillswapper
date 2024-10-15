@@ -1,9 +1,14 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './home'
-import Login from './login'
-import './App.css'
-import { useEffect, useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './skillswapper_components/landing/landing';
+import Login from './skillswapper_components/login/login';
+import SkillSwapper from './skillswapper_components/homepage/homepage.module';
 
+
+// import SkillSwapper from './skillswapper_components/homepage/MainFeed/ServiceSearch';
+// import SkillSwapper from './skillswapper_components/homepage/CategorySelection/CategorySelection';
+
+import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -37,15 +42,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-          />
+          <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/homepage" element={<SkillSwapper />} /> 
         </Routes>
       </BrowserRouter>
     </div>
-  )
+  );
 }
 
 export default App
