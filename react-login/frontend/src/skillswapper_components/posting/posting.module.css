@@ -1,0 +1,97 @@
+body {
+    font-family: 'Kantumruy Pro';
+  }
+  
+  .container {
+    max-width: 1400px;
+    margin: 20px auto;
+    background-color: rgba(226, 122, 43, 0.25);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .postContent {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #E06B1D;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .userInfo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .username {
+    font-weight: bold;
+    color: #E06B1D;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+  
+  .iconSpacing {
+    margin-left: 10px;
+  }
+  
+  .content {
+    color: #E06B1D;
+  }
+  
+  .additionalInfo {
+    color: #999;
+    font-size: 0.9em;
+  }
+  
+  .commentInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #E06B1D;
+    margin-bottom: 10px;
+    font-family: 'Kantumruy Pro';
+  }
+  
+
+  .commentsSection {
+    margin-top: 20px;
+  }
+  
+  .commentHeader {
+    color: #E06B1D;
+    margin-bottom: 10px;
+  }
+  
+  .comment {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #E06B1D;
+  }
+  
+  /* all text uses the same color */
+  .container, .postContent, .content, .commentInput, .commentButton, .comment {
+    color: #E06B1D;
+  }
