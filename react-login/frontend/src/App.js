@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './skillswapper_components/landing/landing';
 import Login from './skillswapper_components/login/login';
 import SkillSwapper from './skillswapper_components/homepage/homepage.module';
+import FigmaLogin from './skillswapper_components/figmaLogin/LoginPage/LoginPage';
 
 
 // import SkillSwapper from './skillswapper_components/homepage/MainFeed/ServiceSearch';
