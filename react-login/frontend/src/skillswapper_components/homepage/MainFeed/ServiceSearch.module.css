@@ -19,7 +19,6 @@
     margin-top: 0px;
     align-self: center;
     display: flex;
-    /* width: 526px; */
     width: 100%;
     max-width: 100%;
     align-items: flex-start;
@@ -52,8 +51,10 @@
     object-fit: contain;
     object-position: center;
     padding-right: 2%;
-    /* margin-left: 50%; */
-    align-self: flex-start;
+  }
+
+  .clickableUserArea {
+    cursor: pointer;
   }
   
   .mainContent {

@@ -19,7 +19,9 @@ function ServiceSearch() {
     <main className={styles.container}>
       <header className={styles.header}>
         <img loading="lazy" src={logoImage} className={styles.logoCompany} alt="Company logo" />
-        <img loading="lazy" src={userImage} className={styles.iconUser} alt="User logo" />
+        <div className={styles.clickableUserArea}>
+          <img loading="lazy" src={userImage} className={styles.iconUser} alt="User logo" />
+        </div>
       </header>
       <div className={styles.mainContent}>
         <section className={styles.searchSection}>
