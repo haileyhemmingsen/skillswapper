@@ -34,10 +34,12 @@ function ServiceSearch() {
                 placeholder="Type keywords here..."
                 aria-label="Search for services"
               />
-              <img loading="lazy" src={searchImage} alt="Search icon" className={styles.searchIcon} />
+              <div className={styles.clickableSearchArea}>
+                <img loading="lazy" src={searchImage} alt="Search icon" className={styles.searchIcon} />
+              </div>
             </div>
           </form>
-          <button type="submit" className={styles.postButton}>Make a post</button>
+          <button type="button" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>
             {samplePosts.map((post) => (
               <ServicePost key={post.id} {...post} />
