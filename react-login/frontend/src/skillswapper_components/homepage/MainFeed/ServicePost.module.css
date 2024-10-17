@@ -69,8 +69,12 @@
 
 .postContent {
   font-size: 18px;
-  /* margin-top: 17px; */
   width: 770px;
+}
+
+.contentLine {
+  margin: 0; 
+  line-height: 1.5;
 }
 
 @media (max-width: 991px) {

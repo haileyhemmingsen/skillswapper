@@ -5,8 +5,6 @@ import searchImage from '../../../images/search.svg';
 import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
 
-
-
 const samplePosts = [
   { id: 1, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
   { id: 2, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
