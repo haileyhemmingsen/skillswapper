@@ -9,7 +9,7 @@ function ServicePost({ username, date, content }) {
       <header className={styles.postHeader}>
         <div className={styles.userInfo}>
           <img loading="lazy" src={userImage} className={styles.userAvatar} alt={`${username}'s avatar`} />
-          <h2 className={styles.username}>{username}</h2>
+          <p className={styles.username}>{username}</p>
         </div>
         <time className={styles.postDate}>{date}</time>
       </header>
