@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
 /* The whole page */
 .loginPage {
     background-color: #fff;
@@ -7,6 +9,7 @@
     align-items: center;
     color: #fff;
     padding: 34px 80px 54px;
+    font-family: 'Kantumruy Pro', sans-serif;
   }
   
   /* Light orange square */
@@ -18,20 +21,20 @@
     max-width: 1082px;
     flex-direction: column;
     align-items: center;
-    padding: 0 80px 20px;
+    padding: 0 80px 0px;
   }
   
   /* SkillSwapper title at top */
   .logo {
     margin-top: 37px;
-    width: 600px;
+    width: 110%;
   }
   
   /* Login title after SkillSwapper */
   .title {
     color: #e06b1d;
-    margin: 70px 0 0 0px;
-    width: 200px;
+    margin: 60px 0 15px 0px;
+    width: 40%;
   }
 
   /* For the placeholder text in input boxes */
@@ -49,7 +52,7 @@
     padding: 27px 21px 20px;
     font-size: 25px;
     color:#fff;
-    font-style: Kantumruy Pro, sans-serif;
+    font-family: 'Kantumruy Pro', sans-serif;
     border-style: none;
   }
   
@@ -65,12 +68,17 @@
     width: 180px;
     max-width: 100%;
     font-weight: 500;
-    margin: 20px 0 0 30%;
+    /*30%*/
+    margin: 30px 0 10px 33%;
     padding: 8px 20px;
-    font-size: 20px;
+    font-size: 25px;
+    
     color:#fff;
-    font-style: Kantumruy Pro, sans-serif;
+    font-family: 'Kantumruy Pro', sans-serif;
+    font-weight: bolder;
+    letter-spacing: 1px;
     border-style: none;
+    /* margin-bottom: 15px; */
   }
   
   .loginButton:hover {
