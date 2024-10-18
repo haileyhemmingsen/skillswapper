@@ -5,8 +5,6 @@ import searchImage from '../../../images/search.svg';
 import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
 
-
-
 const samplePosts = [
   { id: 1, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
   { id: 2, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
@@ -19,7 +17,9 @@ function ServiceSearch() {
     <main className={styles.container}>
       <header className={styles.header}>
         <img loading="lazy" src={logoImage} className={styles.logoCompany} alt="Company logo" />
-        <img loading="lazy" src={userImage} className={styles.iconUser} alt="User logo" />
+        <div className={styles.clickableUserArea}>
+          <img loading="lazy" src={userImage} className={styles.iconUser} alt="User logo" />
+        </div>
       </header>
       <div className={styles.mainContent}>
         <section className={styles.searchSection}>
@@ -34,10 +34,12 @@ function ServiceSearch() {
                 placeholder="Type keywords here..."
                 aria-label="Search for services"
               />
-              <img loading="lazy" src={searchImage} alt="Search icon" className={styles.searchIcon} />
+              <div className={styles.clickableSearchArea}>
+                <img loading="lazy" src={searchImage} alt="Search icon" className={styles.searchIcon} />
+              </div>
             </div>
           </form>
-          <button type="submit" className={styles.postButton}>Make a post</button>
+          <button type="button" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>
             {samplePosts.map((post) => (
               <ServicePost key={post.id} {...post} />
