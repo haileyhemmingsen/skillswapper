@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.signupPage {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    color: #fff;
+    padding: 30px 80px 54px;
+    font-family: 'Kantumruy Pro', sans-serif;
+}
+  
+  .container {
+    border-radius: 50px;
+    background-color: #f8deca;
+    display: flex;
+    /* width: 60%; */
+    max-width: 1082px;
+    flex-direction: column;
+    align-items: center;
+    padding: 21px 80px 20px;
+}
+  
+  .logoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 110%;
+    margin-top: 30px;
+}
+  
+  .signupLogo {
+    color: #e06b1d;
+    margin: 32px 0 33px 0px;
+}
+
+  /* For the placeholder text in input boxes */
+  ::placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+  
+
+  .formGroup {
+    align-self: stretch;
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    gap: 50px 60px;
+    flex-wrap: wrap;
+    flex-direction: row; /* Change to row to align fields horizontally */
+    justify-content: center; /* Center the fields horizontally */
+    align-items: center; /* Center the fields vertically */
+}
+  
+  .inputField {
+    border-radius: 30px;
+    background-color: rgba(224, 107, 29, 0.5); /* Your desired background color */
+    width: 400px;
+    max-width: 100%;
+    padding: 25px 36px;
+    border: none; /* Remove the default border */
+    outline: none; /* Remove the default outline */
+    font-size: 23px; /* Adjust font size */
+    color: #fff; /* Text color */
+    font-family: Kantumruy Pro, sans-serif;
+    height:67px;
+    appearance: none; /* Remove default appearance */
+    -webkit-appearance: none; /* Remove default appearance for Safari */
+    -moz-appearance: none; /* Remove default appearance for Firefox */
+    box-sizing: border-box;  /* Include padding in the width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  /* How much space in between text boxes */
+  .inputField:first-of-type {
+    margin-top: 9px;
+}
+
+  
+  .submitButtonContainer {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    width: 100%;
+  }
+  
+  .submitButton {
+    border-radius: 10px;
+    background-color: #e06b1d;
+    color: white;
+    border: none;
+    width: 180px;
+    max-width: 100%;
+    font-size: 25px;
+    font-weight: 500;
+    padding: 8px 20px;
+    font-family: 'Kantumruy Pro', sans-serif;
+    font-weight: bolder;
+    letter-spacing: 1px;
+  }
+  
+  .loginLink {
+    color: rgba(80, 79, 79, 0.603);
+    font-weight: 500;
+    margin-top: 25px;
+    font-size: 18px;
+  }
+
+  .submitButton:hover {
+    cursor: pointer; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .submitButton:active {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+  }
+
+    /* login prompt text at bottom */
+  .loginPrompt {
+        font-size: 30px;
+        margin-top: 20px;
+        color: #000;
+        color: rgba(0, 0, 0, 0.28);
+}
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
