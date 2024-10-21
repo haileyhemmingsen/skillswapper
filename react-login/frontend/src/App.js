@@ -39,9 +39,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
-          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/login" element={<FigmaLogin setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/homepage" element={<SkillSwapper />} /> 
-          <Route path="/figma-login" element={<FigmaLogin />} />
+          {/* <Route path="/figma-login" element={<FigmaLogin />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
