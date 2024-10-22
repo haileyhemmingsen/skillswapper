@@ -12,9 +12,14 @@ import closeIcon from '../../images/backarrow.svg';
 
 const Posting = (props) => {
   const [comment, setComment] = useState('');
-  const [isInputFocused, setIsInputFocused] = useState(false); // Track input focus
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
-  // Sample comments for now
+const handleTextAreaResize = (e) => {
+    const textarea = e.target;
+    textarea.style.height = 'auto'; 
+    textarea.style.height = `${textarea.scrollHeight}px`; 
+};
+
   const samplePosts = [
     { id: 1, username: "Username1", content: "shirin help" },
     { id: 2, username: "Username2", content: "shirin help" },
@@ -25,38 +30,45 @@ const Posting = (props) => {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting comment:", comment);
-    setComment(''); // Clear input after submitting
-    setIsInputFocused(false); // Hide button after submitting
+    setComment(''); 
+    setIsInputFocused(false); 
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.postContent}>
-        <div className={styles.header}>
-          <div className={styles.userInfo}>
-            <img src={userAvatar} alt="User avatar" className={styles.avatar} />
-            <span className={styles.username}>Username</span>
-          </div>
-          <div className={styles.headerIcons}>
-            <img src={menuIcon} alt="Menu" className={styles.icon} />
-            <img src={closeIcon} alt="Close" className={styles.icon} />
-          </div>
+    <div className={styles.topIcons}>
+      <img src={closeIcon} alt="Close" className={styles.arrowIcon} />
+    </div>
+    
+    <div className={styles.postContent}>
+      <div className={styles.header}>
+        <div className={styles.userInfo}>
+          <img src={userAvatar} alt="User avatar" className={styles.avatar} />
+          <span className={styles.username}>Username</span>
         </div>
-        <div className={styles.content}>
-          <p>I am seeking a service</p>
-          <p>I can offer this other service</p>
-          <p className={styles.additionalInfo}>Additional information</p>
+        <div className={styles.headerIcons}>
+          <img src={menuIcon} alt="Menu" className={styles.icon} />
         </div>
       </div>
+      <div className={styles.content}>
+        <p>I am seeking a service</p>
+        <p>I can offer this other service</p>
+        <p className={styles.additionalInfo}>Additional information</p>
+      </div>
+    </div>
 
-      <div style={{ position: 'relative' }}> {/* Add this container */}
-        <input
+      <div style={{ position: 'relative' }}> {}
+        <textarea
           type="text"
           value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          onChange={(e) => {
+            setComment(e.target.value);
+            handleTextAreaResize(e);  // dynamically resize as you type
+          }}
           onFocus={() => setIsInputFocused(true)}
+          
           onBlur={(e) => {
-            // Only hide if we're not clicking the button
+            // hide if button isnt clicked
             if (!e.relatedTarget || e.relatedTarget.className !== styles.commentButton) {
               setIsInputFocused(false);
             }
@@ -72,7 +84,7 @@ const Posting = (props) => {
         </button>
       </div>
 
-      {/* Display sample comments */}
+      {}
       <div className={styles.commentsSection}>
         <h3 className={styles.commentHeader}>Comments</h3>
         {samplePosts.map((post) => (
