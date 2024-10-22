@@ -102,13 +102,13 @@ const Login = (props) => {
         <img src={title} alt="Login Title" className={styles.title} />
         <form>
           <div>
-            <label htmlFor="username" className={styles['visually-hidden']}>Username</label>
+            <label htmlFor="email" className={styles['visually-hidden']}>Email</label>
             <input
-              id="username"
+              id="email"
               className={styles.inputField}
               type="text"
-              placeholder="Username..."
-              aria-label="Username"
+              placeholder="Email..."
+              aria-label="Email"
               onChange={(ev) => setEmail(ev.target.value)}
             />
             <label className="errorLabel">{emailError}</label>
