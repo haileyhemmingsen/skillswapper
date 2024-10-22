@@ -1,26 +1,32 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './posting.module.css';
 
 import userAvatar from '../../images/user.svg';
 import menuIcon from '../../images/3dots.svg';
-import closeIcon from '../../images/exit.svg';
+import closeIcon from '../../images/backarrow.svg';
+
+// import Kantumruy pro font
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
+</style>
 
 const Posting = (props) => {
   const [comment, setComment] = useState('');
-  const navigate = useNavigate();
+  const [isInputFocused, setIsInputFocused] = useState(false); // Track input focus
 
+  // Sample comments for now
   const samplePosts = [
-    { id: 1, username: "Username", content: "comment replying and offering own service" },
-    { id: 2, username: "Username", content: "comment replying and offering own service" },
-    { id: 2, username: "Username", content: "comment replying and offering own service" },
-    { id: 2, username: "Username", content: "comment replying and offering own service" },
+    { id: 1, username: "Username1", content: "Comment replying and offering own service" },
+    { id: 2, username: "Username2", content: "Another comment offering a service" },
+    { id: 3, username: "Username3", content: "Third comment with a service" },
+    { id: 4, username: "Username4", content: "Fourth comment offering something" }
   ];
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting comment:", comment);
-    setComment('');
+    setComment(''); // Clear input after submitting
+    setIsInputFocused(false); // Hide button after submitting
   };
 
   return (
@@ -39,21 +45,34 @@ const Posting = (props) => {
         <div className={styles.content}>
           <p>I am seeking a service</p>
           <p>I can offer this other service</p>
-          <p className={styles.additionalInfo}>additional information</p>
+          <p className={styles.additionalInfo}>Additional information</p>
         </div>
       </div>
+
+      {/* Comment Input */}
       <input
         type="text"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        onFocus={() => setIsInputFocused(true)} // Show button when focused
+        onBlur={() => comment.length === 0 && setIsInputFocused(false)} // Hide button on blur if input is empty
         placeholder="Add a comment"
         className={styles.commentInput}
       />
-      <button onClick={handleCommentSubmit} className={styles.commentButton}>
-        Comment
-      </button>
+
+      {/* Comment Button */}
+      {isInputFocused && (
+        <button
+          onClick={handleCommentSubmit}
+          className={styles.commentButton}
+        >
+          Comment
+        </button>
+      )}
+
+      {/* Display sample comments */}
       <div className={styles.commentsSection}>
-        <h3 className={styles.commentHeader}>comments</h3>
+        <h3 className={styles.commentHeader}>Comments</h3>
         {samplePosts.map((post) => (
           <div key={post.id} className={styles.comment}>
             <div className={styles.userInfo}>

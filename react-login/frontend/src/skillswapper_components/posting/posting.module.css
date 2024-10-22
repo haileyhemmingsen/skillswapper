@@ -1,97 +1,138 @@
-body {
-    font-family: 'Kantumruy Pro';
-  }
-  
-  .container {
-    max-width: 1400px;
-    margin: 20px auto;
-    background-color: rgba(226, 122, 43, 0.25);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .postContent {
-    background-color: white;
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border: 1px solid #E06B1D;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .userInfo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .username {
-    font-weight: bold;
-    color: #E06B1D;
-  }
-  
-  .icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-  }
-  
-  .iconSpacing {
-    margin-left: 10px;
-  }
-  
-  .content {
-    color: #E06B1D;
-  }
-  
-  .additionalInfo {
-    color: #999;
-    font-size: 0.9em;
-  }
-  
-  .commentInput {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #E06B1D;
-    margin-bottom: 10px;
-    font-family: 'Kantumruy Pro';
-  }
-  
+body /*{ */
+    /* font-family: 'Kantumruy Pro'; */
+  /* } */
 
-  .commentsSection {
-    margin-top: 20px;
-  }
+.kantumruy-pro {
+  font-family: "Kantumruy Pro", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
   
-  .commentHeader {
+.container {
+max-width: 1400px;
+margin: 20px auto;
+background-color: rgba(226, 122, 43, 0.25);
+border-radius: 20px;
+padding: 20px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.postContent {
+background-color: white;
+font-size: 30px;
+border-radius: 15px;
+padding: 20px;
+margin-bottom: 20px;
+border-radius: 10px;
+border: 1px solid #E06B1D;
+}
+
+::placeholder {
     color: #E06B1D;
-    margin-bottom: 10px;
+    font-family: "Kantumruy Pro";
+    opacity: 1;
+    font-size: 20px;
   }
-  
-  .comment {
-    background-color: white;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    border: 1px solid #E06B1D;
-  }
-  
-  /* all text uses the same color */
-  .container, .postContent, .content, .commentInput, .commentButton, .comment {
-    color: #E06B1D;
-  }
+
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 15px;
+}
+
+.userInfo {
+display: flex;
+align-items: center;
+}
+
+.avatar {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+margin-right: 10px;
+}
+
+.username {
+font-weight: regular;
+color: #E06B1D;
+font-size: 20px
+}
+
+.icon {
+width: 24px;
+height: 24px;
+cursor: pointer;
+}
+
+.iconSpacing {
+margin-left: 10px;
+}
+
+.additionalInfo {
+color: #E06B1D;;
+font-size: 20px;
+}
+
+.commentInput {
+color: #E06B1D;
+width: 100%;
+padding: 10px;
+border-radius: 10px;
+border: 1px solid #E06B1D;
+margin-bottom: 0px; /* Remove bottom margin for tight layout */
+font-family: 'Kantumruy Pro';
+}
+
+.commentButton {
+background-color: #E06B1D;
+color: white; /* Text should be white */
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+margin-top: 10px;
+cursor: pointer;
+display: none; /* Initially hidden */
+}
+
+.commentButton.show {
+display: inline-block; /* Show button when input is clicked */
+}
+
+/* Add a hover effect for the button */
+.commentButton:hover {
+background-color: #D55A1A;
+}
+
+.commentsSection {
+margin-top: 20px;
+background-color: white;
+border-radius: 20px;
+border: 1px solid #E06B1D;
+padding: 20px;
+font-weight: normal;
+font-family: "Kantumruy Pro";
+}
+
+.commentHeader {
+color: #E06B1D;
+margin-bottom: 10px;
+font-size: 25px;
+text-align: center;
+font-weight: normal;
+}
+
+.comment {
+background-color: white;
+border-radius: 10px;
+padding: 10px;
+margin-bottom: 10px;
+border: 1px solid #E06B1D;
+
+}
+
+/* all text uses the same color */
+.container, .postContent, .content, .commentInput, .commentButton, .comment {
+color: #E06B1D;
+}
