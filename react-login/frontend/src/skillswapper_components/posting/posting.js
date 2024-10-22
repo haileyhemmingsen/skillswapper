@@ -49,26 +49,28 @@ const Posting = (props) => {
         </div>
       </div>
 
-      {/* Comment Input */}
-      <input
-        type="text"
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        onFocus={() => setIsInputFocused(true)} // Show button when focused
-        onBlur={() => comment.length === 0 && setIsInputFocused(false)} // Hide button on blur if input is empty
-        placeholder="Add a comment"
-        className={styles.commentInput}
-      />
-
-      {/* Comment Button */}
-      {isInputFocused && (
+      <div style={{ position: 'relative' }}> {/* Add this container */}
+        <input
+          type="text"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={(e) => {
+            // Only hide if we're not clicking the button
+            if (!e.relatedTarget || e.relatedTarget.className !== styles.commentButton) {
+              setIsInputFocused(false);
+            }
+          }}
+          placeholder="Add a comment"
+          className={styles.commentInput}
+        />
         <button
           onClick={handleCommentSubmit}
-          className={styles.commentButton}
+          className={`${styles.commentButton} ${isInputFocused ? styles.commentButtonVisible : ''}`}
         >
           Comment
         </button>
-      )}
+      </div>
 
       {/* Display sample comments */}
       <div className={styles.commentsSection}>
