@@ -3,7 +3,7 @@ import styles from './posting.module.css';
 
 import userAvatar from '../../images/user.svg';
 import menuIcon from '../../images/3dots.svg';
-import closeIcon from '../../images/backarrow.svg';
+import closeIcon from '../../images/bubble_arrow.svg';
 
 // import Kantumruy pro font
 <style>
@@ -23,7 +23,7 @@ const handleTextAreaResize = (e) => {
   const samplePosts = [
     { id: 1, username: "Username1", content: "shirin help" },
     { id: 2, username: "Username2", content: "shirin help" },
-    { id: 3, username: "Username3", content: "shirin help" },
+    { id: 3, username: "Username3", content: "shirin help\nshirin help\nshirin help" },
     { id: 4, username: "Username4", content: "shirin help" }
   ];
 
