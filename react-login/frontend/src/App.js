@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './skillswapper_components/landing/landing';
 import Login from './skillswapper_components/login/login';
 import SkillSwapper from './skillswapper_components/homepage/homepage.module';
+import Posting from './skillswapper_components/posting/posting';
 
 
 // import SkillSwapper from './skillswapper_components/homepage/MainFeed/ServiceSearch';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/homepage" element={<SkillSwapper />} /> 
+          <Route path="/posting" element={<Posting />} />
         </Routes>
       </BrowserRouter>
     </div>
