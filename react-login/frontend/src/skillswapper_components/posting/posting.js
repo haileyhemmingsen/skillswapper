@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams} from 'react-router-dom';
 import styles from './posting.module.css';
-
+import { samplePosts } from '../homepage/MainFeed/ServiceSearch';
 import userAvatar from '../../images/user.svg';
 import menuIcon from '../../images/3dots.svg';
 import closeIcon from '../../images/bubble_arrow.svg';
@@ -11,9 +11,19 @@ import closeIcon from '../../images/bubble_arrow.svg';
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
 </style>
 
+
 const Posting = (props) => {
-  const [comment, setComment] = useState('');
-  const [isInputFocused, setIsInputFocused] = useState(false);
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [comment, setComment] = useState('');
+    const [isInputFocused, setIsInputFocused] = useState(false);
+  
+    // Find the post data based on the ID
+    const postData = samplePosts.find(post => post.id === Number(id)) || {
+      username: "Username",
+      date: "mm/dd/yyyy",
+      content: "Default content"
+    };
 
 const handleTextAreaResize = (e) => {
     const textarea = e.target;
@@ -21,21 +31,12 @@ const handleTextAreaResize = (e) => {
     textarea.style.height = `${textarea.scrollHeight}px`; 
 };
 
-  const samplePosts = [
-    { id: 1, username: "Username1", content: "shirin help" },
-    { id: 2, username: "Username2", content: "shirin help" },
-    { id: 3, username: "Username3", content: "shirin help\nshirin help\nshirin help" },
-    { id: 4, username: "Username4", content: "shirin help" }
-  ];
-
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting comment:", comment);
     setComment(''); 
     setIsInputFocused(false); 
   };
-
-  const navigate = useNavigate();
 
   const handlePostClick = () => {
     navigate('/homepage');
@@ -59,9 +60,10 @@ const handleTextAreaResize = (e) => {
         </div>
       </div>
       <div className={styles.content}>
-        <p>I am seeking a service</p>
-        <p>I can offer this other service</p>
-        <p className={styles.additionalInfo}>Additional information</p>
+        {}
+        {postData.content.split('\n').map((text, index) => (
+            <p key={index}>{text}</p>
+          ))}
       </div>
     </div>
 

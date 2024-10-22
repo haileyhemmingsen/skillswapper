@@ -6,18 +6,18 @@ import searchImage from '../../../images/search.svg';
 import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
 
-const samplePosts = [
-  { id: 1, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
-  { id: 2, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
-  { id: 3, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
-  { id: 4, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...\nOffer..." },
+export const samplePosts = [
+  { id: 1, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test1\nOffer..." },
+  { id: 2, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test2\nOffer..." },
+  { id: 3, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test3\nOffer..." },
+  { id: 4, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test4\nOffer..." },
 ];
 
 function ServiceSearch() {
   const navigate = useNavigate();
 
-  const handlePostClick = () => {
-    navigate('/posting');
+  const handlePostClick = (postId) => {
+    navigate(`/posting/${postId}`);
   };
 
   return (

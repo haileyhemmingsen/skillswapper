@@ -42,7 +42,7 @@ function App() {
           <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/login" element={<FigmaLogin setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/homepage" element={<SkillSwapper />} /> 
-          <Route path='/posting' element={<Posting/>} />
+          <Route path="/posting/:id" element={<Posting />} />
           {/* <Route path="/figma-login" element={<FigmaLogin />} /> */}
         </Routes>
       </BrowserRouter>
