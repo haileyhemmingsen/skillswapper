@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './posting.module.css';
 
 import userAvatar from '../../images/user.svg';
@@ -34,10 +35,17 @@ const handleTextAreaResize = (e) => {
     setIsInputFocused(false); 
   };
 
+  const navigate = useNavigate();
+
+  const handlePostClick = () => {
+    navigate('/homepage');
+  };
+
+
   return (
     <div className={styles.container}>
     <div className={styles.topIcons}>
-      <img src={closeIcon} alt="Close" className={styles.arrowIcon} />
+      <img src={closeIcon} alt="Close" className={styles.arrowIcon} onClick={handlePostClick} style={{ cursor: 'pointer' }} />
     </div>
     
     <div className={styles.postContent}>
