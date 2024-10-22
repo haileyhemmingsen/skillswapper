@@ -145,6 +145,7 @@ border: 1px solid #E06B1D;
 }
 
 /* all text uses the same color */
-.container, .postContent, .content, .commentInput, .commentButton, .comment {
+.container, .postContent, .content, .commentInput, .commentButton, .commentsSection {
 color: #E06B1D;
+font-family: "Kantumruy Pro";
 }
