@@ -7,7 +7,7 @@ const SignUpPage = () => {
   const inputFields = [
     { id: 'email', placeholder: 'Enter Email...', type: 'text' },
     { id: 'password', placeholder: 'Create Password...', type: 'password' },
-    { id: 'fullName', placeholder: 'Enter Full name...', type: 'text' },
+    { id: 'fullName', placeholder: 'Enter First & Last Name...', type: 'text' },
     { id: 'zipCode', placeholder: 'Enter Zip Code...', type: 'text' },
   ];
 
