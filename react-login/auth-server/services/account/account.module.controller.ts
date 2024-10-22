@@ -11,7 +11,7 @@ import {
 } from 'tsoa';
 
 import { LoginService } from './account.module.service';
-import { SignUpCredentials, UpdatePassword, UpdateEmail, UpdateUsername } from './account.module.index';
+import { SignUpCredentials, UpdatePassword, UpdateEmail, UpdateUsername, Authenticated } from './account.module.index';
 
 /**
  * Route for signup
@@ -40,8 +40,9 @@ export class LogInController extends Controller {
     @Post()
     @Response('401', 'Invalid Username or Password')
     @SuccessResponse('200', 'Logged In') // also not sure about here
-    public async login(@Body() body: SignUpCredentials): Promise<boolean|undefined> {
-        return new LoginService().login(body).then(async (valid: boolean | undefined): Promise <boolean | undefined> => {
+    public async login(@Body() body: SignUpCredentials): Promise<Authenticated|undefined> {
+        return new LoginService().login(body)
+            .then(async (valid: Authenticated | undefined): Promise <Authenticated | undefined> => {
             if(!valid) {
                 this.setStatus(401);
             }
@@ -80,17 +81,17 @@ export class EmailController extends Controller {
     }
 }
 
-@Route('changePassword')
-export class UsernameController extends Controller {
-    @Post()
-    @Response('500', 'Failed to change password')
-    @SuccessResponse('200', 'Username changed')
-    public async changeUsername(@Body() body: UpdateUsername): Promise<boolean|undefined> {
-        return new LoginService().changeUsername(body).then(async (valid: boolean | undefined): Promise <boolean | undefined> => {
-            if(!valid) {
-                this.setStatus(500);
-            }
-            return valid;
-        })
-    }
-}
+// @Route('changePassword')
+// export class UsernameController extends Controller {
+//     @Post()
+//     @Response('500', 'Failed to change password')
+//     @SuccessResponse('200', 'Username changed')
+//     public async changeUsername(@Body() body: UpdateUsername): Promise<boolean|undefined> {
+//         return new LoginService().changeUsername(body).then(async (valid: boolean | undefined): Promise <boolean | undefined> => {
+//             if(!valid) {
+//                 this.setStatus(500);
+//             }
+//             return valid;
+//         })
+//     }
+// }

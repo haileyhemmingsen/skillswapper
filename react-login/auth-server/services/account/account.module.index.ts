@@ -3,10 +3,24 @@
 import e from "express"
 
 export interface SignUpCredentials {
+    firstname?: string,
+    lastname?: string,
+    email: string,
+    password: string
+}
+
+export interface DatabaseCredentials {
     firstname: string,
     lastname: string,
     email: string,
-    password: string
+    password: string,
+    createdAt: Date,
+    uuid: string
+}
+
+export interface Authenticated { 
+    id: string,
+    accessToken: string
 }
 
 export interface UpdatePassword {
