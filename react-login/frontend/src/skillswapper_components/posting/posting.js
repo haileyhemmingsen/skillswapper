@@ -16,10 +16,10 @@ const Posting = (props) => {
 
   // Sample comments for now
   const samplePosts = [
-    { id: 1, username: "Username1", content: "Comment replying and offering own service" },
-    { id: 2, username: "Username2", content: "Another comment offering a service" },
-    { id: 3, username: "Username3", content: "Third comment with a service" },
-    { id: 4, username: "Username4", content: "Fourth comment offering something" }
+    { id: 1, username: "Username1", content: "shirin help" },
+    { id: 2, username: "Username2", content: "shirin help" },
+    { id: 3, username: "Username3", content: "shirin help" },
+    { id: 4, username: "Username4", content: "shirin help" }
   ];
 
   const handleCommentSubmit = (e) => {
