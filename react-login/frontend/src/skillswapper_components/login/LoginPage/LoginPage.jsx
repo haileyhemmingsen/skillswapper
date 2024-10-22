@@ -128,7 +128,7 @@ const Login = (props) => {
               src={showPassword ? eyeOpen : eyeClosed}
               alt="Toggle password visibility"
               className={styles.eyeIcon}
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowPassword(!showPassword)}  // Handle toggle on click
             />
             <label className="errorLabel">{passwordError}</label>
           </div>
