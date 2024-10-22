@@ -10,3 +10,12 @@ export interface PostComment {
     comment: string
 }
 
+export interface SkillPost {
+    id: number,
+    username: string,
+    date: Date,
+    location?: string,
+    skillsAsked: string,
+    skillsOffered: string,
+    description: string,
+}
