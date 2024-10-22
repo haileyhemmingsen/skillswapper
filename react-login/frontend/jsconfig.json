@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"],
+      "@firebase": ["./firebase.ts"]
+    }
+  },
+  "include": ["src"]
+}
