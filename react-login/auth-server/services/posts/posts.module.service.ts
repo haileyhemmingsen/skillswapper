@@ -11,8 +11,8 @@ export class PostService {
     public async newComment(body: PostComment): Promise <number | undefined> {
         return 0;
     }
-    // public async getLocalPosts(): Promise <SkillPost[]> {
-    //     // get a list of all posts from database and 
-    //     return [];
-    // }
+    public async getLocalPosts(body: string | undefined | null): Promise <SkillPost[]> {
+        // get a list of all posts from database and 
+        return [];
+    }
 }
