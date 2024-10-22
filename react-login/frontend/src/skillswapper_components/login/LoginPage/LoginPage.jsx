@@ -1,6 +1,8 @@
 import styles from '../loginPage.module.css';
 import logo from '../../../images/SkillSwapper.svg';
 import title from '../../../images/Log_In.svg';
+import eyeClosed from '../../../images/eyeClosed.svg'; 
+import eyeOpen from '../../../images/eyeOpen.svg';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,6 +11,7 @@ const Login = (props) => {
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate()
 
@@ -96,8 +99,6 @@ const Login = (props) => {
   return (
     <main className={styles.loginPage}>
       <section className={styles.container}>
-        {/* <h1 className={styles.logo}>SkillSwapper</h1>
-        <h2 className={styles.title}>Log In</h2> */}
         <img src={logo} alt="SkillSwapper Title" className={styles.logo} />
         <img src={title} alt="Login Title" className={styles.title} />
         <form>
@@ -113,26 +114,31 @@ const Login = (props) => {
             />
             <label className="errorLabel">{emailError}</label>
           </div>
-          <div>
+          <div className={styles.passwordContainer}>
             <label htmlFor="password" className={styles['visually-hidden']}>Password</label>
             <input
               id="password"
               className={styles.inputField}
-              type="password"
+              type={showPassword ? 'text' : 'password'}  // Toggle between text and password
               placeholder="Password..."
               aria-label="Password"
               onChange={(ev) => setPassword(ev.target.value)}
             />
+            <img
+              src={showPassword ? eyeOpen : eyeClosed}
+              alt="Toggle password visibility"
+              className={styles.eyeIcon}
+              onClick={() => setShowPassword(!showPassword)}
+            />
             <label className="errorLabel">{passwordError}</label>
           </div>
-          <button type="submit" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
+          <button type="button" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
         </form>
         <p className={styles.signupPrompt}>
-          Don't have an account? <a href="http://localhost:3000/figma-login"> Sign up </a>
+          Don't have an account? <a href="http://localhost:3000/figma-login">Sign up</a>
         </p>
       </section>
     </main>
   );
-
 };
 export default Login;
