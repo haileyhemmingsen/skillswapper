@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from './ServiceSearch.module.css';
 import ServicePost from './ServicePost';
 import searchImage from '../../../images/search.svg';
@@ -13,6 +14,12 @@ const samplePosts = [
 ];
 
 function ServiceSearch() {
+  const navigate = useNavigate();
+
+  const handlePostClick = () => {
+    navigate('/posting');
+  };
+
   return (
     <main className={styles.container}>
       <header className={styles.header}>
@@ -42,7 +49,13 @@ function ServiceSearch() {
           <button type="button" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>
             {samplePosts.map((post) => (
-              <ServicePost key={post.id} {...post} />
+              <div 
+                key={post.id} 
+                onClick={() => handlePostClick(post.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <ServicePost {...post} />
+              </div>
             ))}
           </div>
         </section>
