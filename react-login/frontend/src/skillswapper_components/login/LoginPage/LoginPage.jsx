@@ -3,10 +3,10 @@ import logo from '../../../images/SkillSwapper.svg';
 import title from '../../../images/Log_In.svg';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {db, auth} from '../../../firebase.ts';
+// import {db, auth} from '../../../firebase.ts';
 // import {db, auth} from '~/../../auth-server/firebase.ts';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-import bcrypt from 'bcryptjs';
+// import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+// import bcrypt from 'bcryptjs';
 import axios from 'axios'
 
 const Login = (props) => {
@@ -49,9 +49,10 @@ const Login = (props) => {
       password: password
     };
 
-    const response = await axios.post('http://localhost:3080/api/v0/login', dto, {header: {
-      'Content-Type': 'application/json'
-    }}).then((res) => {
+    const response = await axios.post('http://localhost:3080/api/v0/login', 
+        dto, 
+        {header: {'Content-Type': 'application/json'}}
+    ).then((res) => {
       console.log(res);
       console.log('here');
       props.setLoggedIn(true);
