@@ -7,7 +7,7 @@ import {db, auth} from '../../../firebase.ts';
 // import {db, auth} from '~/../../auth-server/firebase.ts';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
-
+import axios from 'axios'
 
 const Login = (props) => {
   const [email, setEmail] = useState('');
@@ -18,7 +18,7 @@ const Login = (props) => {
 
   const navigate = useNavigate();
 
-  const onButtonClick = (e) => {
+  const onButtonClick = async (e) => {
     e.preventDefault();
     setEmailError('');
     setPasswordError('');
@@ -44,60 +44,27 @@ const Login = (props) => {
 
     if (hasError) return;
 
-    checkAccountExists((accountExists) => {
-      if (accountExists) {
-        logIn();
-      } else {
-        setAccountError('This email is not registered.');
-      }
-    });
-  };
+    const dto = {
+      email: email, 
+      password: password
+    };
 
-  const checkAccountExists = async (callback) => {
-    try {
-      const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('email', '==', email));
-      const snapshot = await getDocs(q);
-      callback(!snapshot.empty);
-    } catch (error) {
-      console.error('Error checking account:', error);
-      setAccountError('An error occurred while checking your account.');
-    }
-  };
+    const response = await axios.post('http://localhost:3080/api/v0/login', dto, {header: {
+      'Content-Type': 'application/json'
+    }}).then((res) => {
+      console.log(res);
+      console.log('here');
+      props.setLoggedIn(true);
+      props.setEmail(email);
+      navigate('/homepage');
+    }).catch((err) => {
+      console.log(err);
+    })
 
 
-  const logIn = async () => {
-    try {
-      const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('email', '==', email));
-      const snapshot = await getDocs(q);
-  
-      if (!snapshot.empty) {
-        const userData = snapshot.docs[0].data();
-  
-        // Assuming your stored password is hashed
-        const storedHashedPassword = userData.password;
-  
-        // Check if the hashed version of the input password matches the stored hashed password
-        const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
-  
-        if (passwordMatch) {
-          // Password is correct
-          props.setLoggedIn(true);
-          props.setEmail(email);
-          navigate('/homepage');
-        } else {
-          // Password is incorrect
-          setPasswordError('Incorrect password. Please try again.');
-        }
-      } else {
-        setAccountError('This email is not registered.');
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      setAccountError('Login failed. Please try again later.');
-    }
   };
+
+
 
   return (
     <main className={styles.loginPage}>
