@@ -78,7 +78,7 @@ const Login = (props) => {
               aria-label="Email"
               onChange={(ev) => setEmail(ev.target.value)}
             />
-            <label className="errorLabel">{emailError}</label>
+            {emailError && <p className={styles.errorLabel}>{emailError}</p>}
           </div>
           <div className={styles.passwordContainer}>
             <label htmlFor="password" className={styles['visually-hidden']}>Password</label>
@@ -96,7 +96,7 @@ const Login = (props) => {
               className={styles.eyeIcon}
               onClick={() => setShowPassword(!showPassword)}  // Handle toggle on click
             />
-            <label className="errorLabel">{passwordError}</label>
+            {passwordError && <p className={styles.errorLabel}>{passwordError}</p>}
           </div>
           <button type="button" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
         </form>
