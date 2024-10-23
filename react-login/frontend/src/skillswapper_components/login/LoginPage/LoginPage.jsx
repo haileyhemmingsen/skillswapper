@@ -1,22 +1,21 @@
 import styles from '../loginPage.module.css';
 import logo from '../../../images/SkillSwapper.svg';
 import title from '../../../images/Log_In.svg';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import {db, auth} from '../../../firebase.ts';
-// import {db, auth} from '~/../../auth-server/firebase.ts';
-// import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-// import bcrypt from 'bcryptjs';
+import eyeClosed from '../../../images/eyeClosed.svg'; 
+import eyeOpen from '../../../images/eyeOpen.svg';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const Login = (props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
   const [accountError, setAccountError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const onButtonClick = async (e) => {
     e.preventDefault();
@@ -65,8 +64,6 @@ const Login = (props) => {
     })
   };
 
-
-
   return (
     <main className={styles.loginPage}>
       <section className={styles.container}>
@@ -83,6 +80,9 @@ const Login = (props) => {
               aria-label="Email"
               onChange={(ev) => setEmail(ev.target.value)}
             />
+            <label className="errorLabel">{emailError}</label>
+          </div>
+          <div className={styles.passwordContainer}>
             {emailError && <p className={styles.errorText}>{emailError}</p>}
             {accountError && <p className={styles.errorText}>{accountError}</p>}
           </div>
@@ -91,17 +91,23 @@ const Login = (props) => {
             <input
               id="password"
               className={styles.inputField}
-              type="password"
+              type={showPassword ? 'text' : 'password'}  // Toggle between text and password
               placeholder="Password..."
               aria-label="Password"
               onChange={(ev) => setPassword(ev.target.value)}
             />
-            {passwordError && <p className={styles.errorText}>{passwordError}</p>}
+            <img
+              src={showPassword ? eyeOpen : eyeClosed}
+              alt="Toggle password visibility"
+              className={styles.eyeIcon}
+              onClick={() => setShowPassword(!showPassword)}  // Handle toggle on click
+            />
+            <label className="errorLabel">{passwordError}</label>
           </div>
-          <button type="submit" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
+          <button type="button" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
         </form>
         <p className={styles.signupPrompt}>
-          Don't have an account? <a href="http://localhost:3000/figma-login"> Sign up </a>
+          Don't have an account? <a href="http://localhost:3000/figma-login">Sign up</a>
         </p>
       </section>
     </main>
