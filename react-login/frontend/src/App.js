@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './skillswapper_components/landing/landing';
-import Login from './skillswapper_components/login/login';
 import SkillSwapper from './skillswapper_components/homepage/homepage.module';
-import FigmaLogin from './skillswapper_components/figmaLogin/LoginPage/LoginPage';
+import Login from './skillswapper_components/login/LoginPage/LoginPage';
 import './App.css';
 import { useEffect, useState } from 'react';
 
@@ -39,9 +38,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
-          <Route path="/login" element={<FigmaLogin setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/homepage" element={<SkillSwapper />} /> 
-          {/* <Route path="/figma-login" element={<FigmaLogin />} /> */}
         </Routes>
       </BrowserRouter>
     </div>

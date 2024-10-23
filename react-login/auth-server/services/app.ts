@@ -13,12 +13,17 @@ import { RegisterRoutes } from '../build/routes';
 // Import Firebase services (Firestore and Auth)
 import { db, auth } from '../firebase';  // Import from firebase.ts
 
+import cors from 'cors';
+
 // Create the Express app
 const app: Express = express();
 
 // Express middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+//cors middleware
+app.use(cors())
 
 // Swagger documentation setup
 app.use('/api/v0/docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
