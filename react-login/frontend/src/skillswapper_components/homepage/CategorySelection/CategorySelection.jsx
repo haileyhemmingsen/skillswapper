@@ -19,38 +19,42 @@ const categories = [
   { src: fixingImage, alt: "Handywork" }
 ];
 
-const CategorySelection = () => {
+const CategorySelection = ({ setSelectedCategories }) => {
   // State to track which buttons are active
   const [activeCategories, setActiveCategories] = useState(Array(categories.length).fill(false));
   // State to track the selected categories' alt texts
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [localSelectedCategories, setLocalSelectedCategories] = useState([]);
 
   const handleCategoryClick = (index, alt) => {
     const newActiveCategories = [...activeCategories];
     newActiveCategories[index] = !newActiveCategories[index];
     setActiveCategories(newActiveCategories);
-
+  
     if (newActiveCategories[index]) {
-      // If category is selected, add its alt text to selectedCategories
-      setSelectedCategories([...selectedCategories, alt]);
+      setLocalSelectedCategories((prev) => [...prev, alt]);
     } else {
-      // If category is deselected, remove its alt text from selectedCategories
-      setSelectedCategories(selectedCategories.filter(category => category !== alt));
+      setLocalSelectedCategories((prev) => prev.filter((category) => category !== alt));
     }
+  
+    // Update the parent component with the selected categories
+    setSelectedCategories(newActiveCategories.map((active, i) => active ? categories[i].alt : null).filter(Boolean));
   };
 
   return (
     <main className={styles.container}>
       <img src={logo} alt="SkillSwapper Logo" className={styles.logo} />
       <h2 className={styles.categoryPrompt}>
-        {selectedCategories.length > 0 ? `Selected: ${selectedCategories.join(', ')}` : "Select category..."}
+        {localSelectedCategories.length > 0
+          ? `Selected: ${localSelectedCategories.join(', ')}`
+          : "Select category..."}
       </h2>
       <section className={styles.categoryGrid}>
         {categories.map((category, index) => (
           <button
             key={index}
             className={`${styles.categoryButton} ${activeCategories[index] ? styles.active : ''}`}
-            onClick={() => handleCategoryClick(index, category.alt)}>
+            onClick={() => handleCategoryClick(index, category.alt)}
+          >
             <CategoryImage key={index} src={category.src} alt={category.alt} />
           </button>
         ))}
