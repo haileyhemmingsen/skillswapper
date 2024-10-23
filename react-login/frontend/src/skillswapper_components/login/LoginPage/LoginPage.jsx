@@ -53,16 +53,16 @@ const Login = (props) => {
         dto, 
         {header: {'Content-Type': 'application/json'}}
     ).then((res) => {
-      console.log(res);
-      console.log('here');
-      props.setLoggedIn(true);
-      props.setEmail(email);
-      navigate('/homepage');
+        console.log(res);
+        const accessToken = res.data.accessToken;
+        const id = res.data.id;
+
+        props.setLoggedIn(true);
+        props.setEmail(email);
+        navigate('/homepage');
     }).catch((err) => {
       console.log(err);
     })
-
-
   };
 
 
