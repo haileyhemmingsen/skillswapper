@@ -12,7 +12,6 @@ const Login = (props) => {
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
-  const [accountError, setAccountError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate()
@@ -21,7 +20,6 @@ const Login = (props) => {
     e.preventDefault();
     setEmailError('');
     setPasswordError('');
-    setAccountError('');
 
     let hasError = false;
 
@@ -83,10 +81,6 @@ const Login = (props) => {
             <label className="errorLabel">{emailError}</label>
           </div>
           <div className={styles.passwordContainer}>
-            {emailError && <p className={styles.errorText}>{emailError}</p>}
-            {accountError && <p className={styles.errorText}>{accountError}</p>}
-          </div>
-          <div>
             <label htmlFor="password" className={styles['visually-hidden']}>Password</label>
             <input
               id="password"
