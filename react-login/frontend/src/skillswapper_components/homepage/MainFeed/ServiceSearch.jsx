@@ -7,18 +7,25 @@ import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
 
 export const samplePosts = [
-  { id: 1, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test1\nOffer..." },
-  { id: 2, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test2\nOffer..." },
-  { id: 3, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test3\nOffer..." },
-  { id: 4, username: "Username", date: "mm/dd/yyyy", content: "Seeking for...test4\nOffer..." },
+  { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Sports", "Music"] },
+  { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Food"] },
+  { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Digital"] },
+  { id: 4, username: "Username4", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Handywork", "Sports"] },
 ];
 
-function ServiceSearch() {
+function ServiceSearch( { selectedCategories } ) {
+  
+  const filteredPosts = selectedCategories.length === 0 
+    ? samplePosts // Show all posts if no categories are selected
+    : samplePosts.filter(post =>
+        post.categories.some(category => selectedCategories.includes(category))
+      );
   const navigate = useNavigate();
 
   const handlePostClick = (postId) => {
     navigate(`/posting/${postId}`);
   };
+
 
   return (
     <main className={styles.container}>
@@ -57,9 +64,17 @@ function ServiceSearch() {
                 <ServicePost {...post} />
               </div>
             ))}
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
+                <ServicePost key={post.id} {...post} />
+              ))
+            ) : (
+              <p>No posts available for the selected categories.</p>
+            )}
+
           </div>
         </section>
-      </div>
+      </div> 
     </main>
   );
 }
