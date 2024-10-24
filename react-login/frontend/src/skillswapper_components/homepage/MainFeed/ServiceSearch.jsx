@@ -1,11 +1,12 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from './ServiceSearch.module.css';
 import ServicePost from './ServicePost';
 import searchImage from '../../../images/search.svg';
 import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
 
-const samplePosts = [
+export const samplePosts = [
   { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Sports", "Music"] },
   { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Food"] },
   { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Digital"] },
@@ -19,6 +20,11 @@ function ServiceSearch( { selectedCategories } ) {
     : samplePosts.filter(post =>
         post.categories.some(category => selectedCategories.includes(category))
       );
+  const navigate = useNavigate();
+
+  const handlePostClick = (postId) => {
+    navigate(`/posting/${postId}`);
+  };
 
 
   return (
@@ -49,6 +55,15 @@ function ServiceSearch( { selectedCategories } ) {
           </form>
           <button type="button" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>
+            {samplePosts.map((post) => (
+              <div 
+                key={post.id} 
+                onClick={() => handlePostClick(post.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <ServicePost {...post} />
+              </div>
+            ))}
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
                 <ServicePost key={post.id} {...post} />
@@ -56,6 +71,7 @@ function ServiceSearch( { selectedCategories } ) {
             ) : (
               <p>No posts available for the selected categories.</p>
             )}
+
           </div>
         </section>
       </div> 
