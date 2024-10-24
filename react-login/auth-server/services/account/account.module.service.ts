@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { SignUpCredentials, UpdateEmail, UpdatePassword, UpdateUsername } from './account.module.index';
+import { SignUpCredentials, UpdateEmail, UpdatePassword, UpdateUsername, Authenticated } from './account.module.index';
 // import something for backend API
 
 export class LoginService {
@@ -25,6 +25,8 @@ export class LoginService {
 
       // Insert user credentials into Firestore
       await setDoc(doc(db, 'users', body.email), {
+        firstname: body.firstname,
+        lastname: body.lastname,
         email: body.email,
         password: hashedPassword,
         createdAt: new Date(),
@@ -37,9 +39,34 @@ export class LoginService {
       return undefined;
     }
   }
-    public async login(body: SignUpCredentials): Promise<boolean|undefined> {
-        // search database for credentials, match email, match hashed passwords then return true, else return false
-        return true;
+    public async login(credentials: SignUpCredentials): Promise<Authenticated|undefined> {
+      // search database for credentials, match email, match hashed passwords then return true, else return false
+      try {
+        const userRef = doc(db, 'users', credentials.email);
+        const userSnapshot = await getDoc(userRef);
+        
+        if (!userSnapshot.exists()) {
+          // User not found, login fails
+          return undefined;
+        }
+        const userData = userSnapshot.data();
+        const passwordMatch = await bcrypt.compare(credentials.password, userData.password);
+
+        if (passwordMatch) {
+          const accessToken = jwt.sign(
+            {id: userData.id, email: credentials.email, password: credentials.password}, 
+            `${process.env.MASTER_SECRET}`, {
+              expiresIn: '30m',
+              algorithm: 'HS256'
+            });
+            return {id: userData.id, accessToken: accessToken};
+        } else {
+          return undefined;
+        }
+      } catch (error) {
+        console.error('Error Logging In: ', error);
+        return undefined;
+      }
     }
     public async changePassword(body: UpdatePassword): Promise<boolean|undefined> {
         // attempt to change password, if database returns success return true here, else if error then return false

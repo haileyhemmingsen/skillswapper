@@ -19,7 +19,6 @@
     margin-top: 0px;
     align-self: center;
     display: flex;
-    /* width: 526px; */
     width: 100%;
     max-width: 100%;
     align-items: flex-start;
@@ -52,8 +51,10 @@
     object-fit: contain;
     object-position: center;
     padding-right: 2%;
-    /* margin-left: 50%; */
-    align-self: flex-start;
+  }
+
+  .clickableUserArea {
+    cursor: pointer;
   }
   
   .mainContent {
@@ -104,15 +105,42 @@
     max-width: 100%;
     font-size: 19px;
     color: rgba(0, 0, 0, 0.4);
-    padding: 8px 26px;
+    /* padding: 8px 26px; */
+    padding: 8px 60px 8px 26px;
     border: none;
     outline: none;
+  }
+
+  .searchInput::placeholder {
+    color: rgba(0, 0, 0, 0.4); 
+    opacity: 1; 
+  }
+
+
+
+  .clickableSearchArea {
+    position: absolute;
+    right: 3%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .searchIcon {
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
   }
 
   .searchInputWrapper {
     position: relative;
     width: 100%;
-    max-width: 600px; /* Adjust based on your layout */
+    max-width: 600px;
   }
 
   .searchIcon {
@@ -139,33 +167,25 @@
     border: none;
     outline: none;
     cursor: pointer; 
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.15s ease;
   }
 
 .postButton:hover {
   cursor: pointer; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2); 
 }
 
 .postButton:active {
-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4); 
 }
   
   .postsContainer {
-    flex-grow: 1;  /* Allow it to grow and fill the available space */
+    flex-grow: 1;
     width: 100%;
-    max-height: 650px;  /* Define the max-height for the posts area */
+    max-height: 690px;  /* Define the max-height for the posts area */
     overflow-y: auto;  /* Enable scrolling when content exceeds max-height */
     margin-top: 20px;
 }
-  
-  @media (max-width: 991px) {
-    .postButton {
-      /* margin-top: 40px; */
-      /* padding: 0 20px; */
-      align-items: center;
-    }
-  }
   
   .visually-hidden {
     position: absolute;
