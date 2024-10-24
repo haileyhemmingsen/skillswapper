@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import styles from '../signUp.module.css';
 import signupLogo from '../../../images/SignupLoginSkillSwapper.svg';
 import signupText from '../../../images/signup.svg';
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
-
-const SignUpPage = () => {
+const SignUpPage = (props) => {
   
-
+    const navigate = useNavigate();
     // create all values used to maintain page state
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -57,44 +58,23 @@ const SignUpPage = () => {
         const dto = {email: email, password: password, firstName: firstName, lastName: lastName, zip: zip};
         console.log(dto);
       
-        //   const response = await axios.post('http://localhost:3080/api/v0/login', 
-        //       dto, 
-        //       {header: {'Content-Type': 'application/json'}}
-        //   ).then((res) => {
-        //       console.log(res);
-        //       const accessToken = res.data.accessToken;
-        //       const id = res.data.id;
+          const response = await axios.post('http://localhost:3080/api/v0/signup', 
+              dto, 
+              {header: {'Content-Type': 'application/json'}}
+          ).then((res) => {
+              console.log(res);
+              //currently the result of the signup attempt returns just a boolean for whether we succeeded in creating the account, this functionality needs to be expanded. 
+            //   const accessToken = res.data.accessToken;
+            //   const id = res.data.id;
       
-        //       props.setLoggedIn(true);
-        //       props.setEmail(email);
-        //       navigate('/homepage');
-        //   }).catch((err) => {
-        //     console.log(err);
-        //   })
+              props.setLoggedIn(true);
+              props.setEmail(email);
+              navigate('/homepage');
+          }).catch((err) => {
+            console.log(err);
+          })
     };
 
-//   const [formData, setFormData] = useState({
-//     email: '',
-//     password: '',
-//     fullName: '',
-//     zipCode: '',
-//   });
-
-
-//   const inputFields = [
-//     { id: 'email', placeholder: 'Enter Email...', type: 'text' },
-//     { id: 'password', placeholder: 'Create Password...', type: 'password' },
-//     { id: 'fullName', placeholder: 'Enter First & Last Name...', type: 'text' },
-//     { id: 'zipCode', placeholder: 'Enter Zip Code...', type: 'text' },
-//   ];
-
-//   const handleChange = (e) => {
-//     const { id, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [id]: value,
-//     }));
-//   };
 
 //   const handleSubmit = (e) => {
 //     e.preventDefault();

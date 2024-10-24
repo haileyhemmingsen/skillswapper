@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './signup.module.css'; 
-import SignUpPage from './signup';
+import styles from './signUp.module.css'; 
+import SignUpPage from './SignUpPage/signup';
 
 const signupPage = () => {
   return (
