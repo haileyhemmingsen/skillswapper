@@ -55,7 +55,7 @@ function ServiceSearch( { selectedCategories } ) {
           </form>
           <button type="button" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>
-            {samplePosts.map((post) => (
+            {filteredPosts.map((post) => (
               <div 
                 key={post.id} 
                 onClick={() => handlePostClick(post.id)}
