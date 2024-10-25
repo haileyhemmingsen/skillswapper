@@ -28,7 +28,7 @@ export class LoginService {
         firstname: body.firstname,
         lastname: body.lastname,
         email: body.email,
-        // zip: body.zip,
+        zip: body.zip,
         password: hashedPassword,
         createdAt: new Date(),
         uuid: uuid,
