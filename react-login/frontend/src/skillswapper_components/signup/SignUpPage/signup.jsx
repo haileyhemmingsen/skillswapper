@@ -16,7 +16,7 @@ const SignUpPage = (props) => {
     const [passwordError, setPasswordError] = useState('');
     const [zipError, setZipError] = useState('');
 
-    const validateEmail = (email) => {
+    const validateEmail = async (email) => {
       if (email === '') {
           setEmailError('Email field must not be empty');
       } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
@@ -64,8 +64,11 @@ const SignUpPage = (props) => {
 
       if (hasError) return;
 
-      const [firstName, lastName] = name.split(' ');
-      const dto = { email: email, password: password, firstName: firstName, lastName: lastName, zip: zip };
+      let [firstName, lastName] = name.split(' ');
+      if (!lastName) {
+        lastName = '';
+      }
+      const dto = { email: email, password: password, firstname: firstName, lastname: lastName, zip: zip };
       console.log(dto);
 
       const response = await axios.post('http://localhost:3080/api/v0/signup',
@@ -75,7 +78,7 @@ const SignUpPage = (props) => {
           console.log(res);
           props.setLoggedIn(true);
           props.setEmail(email);
-          navigate('/homepage');
+          navigate('/login');
       }).catch((err) => {
           console.log(err);
       });
