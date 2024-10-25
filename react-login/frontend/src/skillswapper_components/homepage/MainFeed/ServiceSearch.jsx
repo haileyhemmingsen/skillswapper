@@ -55,23 +55,19 @@ function ServiceSearch( { selectedCategories } ) {
           </form>
           <button type="button" className={styles.postButton}>Make a post</button>
           <div className={styles.postsContainer}>
-            {samplePosts.map((post) => (
-              <div 
-                key={post.id} 
-                onClick={() => handlePostClick(post.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                <ServicePost {...post} />
-              </div>
-            ))}
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
-                <ServicePost key={post.id} {...post} />
+                <div 
+                  key={post.id} 
+                  onClick={() => handlePostClick(post.id)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <ServicePost {...post} />
+                </div>
               ))
             ) : (
               <p>No posts available for the selected categories.</p>
             )}
-
           </div>
         </section>
       </div> 

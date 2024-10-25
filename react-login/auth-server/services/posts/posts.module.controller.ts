@@ -37,7 +37,16 @@ export class NewCommentController extends Controller {
         });
     }
 }
-
+/**
+ * due to the fact the below route is a get-route, it would be preferable to make it a GET endpoint
+ * it should be feasible to do this by adding params to the url endpoint, in axios call it would appear as
+ * axios.get('/my_endpoint', {
+ *   params: {
+ *     param1: value
+ *     param2: value2
+ *   }
+ * });
+ */
 @Route('getLocalPosts')
 export class GetLocalPostsController extends Controller {
     @Post()
