@@ -25,6 +25,7 @@ export interface Authenticated {
 }
 
 export interface UpdatePassword {
+    email: string,
     oldPass: string,
     newPass: string
 }

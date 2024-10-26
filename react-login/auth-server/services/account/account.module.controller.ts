@@ -8,6 +8,7 @@ import {
 	Response,
 	Route,
 	SuccessResponse,
+    Security,
 } from 'tsoa';
 
 import { LoginService } from './account.module.service';
@@ -52,6 +53,7 @@ export class LogInController extends Controller {
 }
 
 @Route('changePassword')
+@Security('jwt')
 export class PasswordController extends Controller {
     @Post()
     @Response('500', 'Failed to change password')
@@ -67,6 +69,7 @@ export class PasswordController extends Controller {
 }
 
 @Route('changeEmail')
+@Security('jwt')
 export class EmailController extends Controller {
     @Post()
     @Response('500', 'Failed to change password')
