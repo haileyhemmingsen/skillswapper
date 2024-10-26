@@ -101,7 +101,7 @@ const Login = (props) => {
           <button type="button" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
         </form>
         <p className={styles.signupPrompt}>
-          Don't have an account? <a href="http://localhost:3000/figma-login">Sign up</a>
+          Don't have an account? <a href="/signup">Sign up</a>
         </p>
       </section>
     </main>
