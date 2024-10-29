@@ -46,7 +46,18 @@ export class LogInController extends Controller {
             .then(async (valid: Authenticated | undefined): Promise <Authenticated | undefined> => {
             if(!valid) {
                 this.setStatus(401);
+                return undefined;
             }
+            
+            this.setHeader('Set-Cookie', `token=${valid.accessToken}; HttpOnly; Secure; SameSite=strict; Path=/`);
+
+            // below is reliant upon using ExpressResponse, which appears to not be working, and instead I must use TsoaResponse object
+            // res.cookie('accessToken', valid.accessToken,  {
+            //     httpOnly: true,
+            //     secure: true,
+            //     sameSite: 'strict',
+            //     path: '/'
+            // });
             return valid;
         })
     }

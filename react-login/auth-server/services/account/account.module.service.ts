@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { Response as ExpressResponse } from 'express';
 import { SignUpCredentials, UpdateEmail, UpdatePassword, UpdateUsername, Authenticated } from './account.module.index';
 // import something for backend API
 
@@ -63,6 +64,9 @@ export class LoginService {
             expiresIn: '30m',
             algorithm: 'HS256'
           });
+
+
+          
           return {id: userData.uuid, accessToken: accessToken};
       } else {
         return undefined;
