@@ -78,6 +78,7 @@ export class LoginService {
   }
   public async changePassword(body: UpdatePassword): Promise<boolean|undefined> {
     // attempt to change password, if database returns success return true here, else if error then return false
+    // compare password in db to old password passed through, then update password to new password otherwise return unauthorized
     try {
       const userRef = doc(db, 'users', body.email);
       const userSnapshot = await getDoc(userRef);
@@ -85,10 +86,16 @@ export class LoginService {
         // User not found, login fails
         console.log('User not found');
         return undefined;
-      }
-      const hashedPassword = await bcrypt.hash(body.newPass, this.saltRounds);
-      await updateDoc(userRef, { password: hashedPassword });
-      return true;
+      } 
+      const userData = userSnapshot.data();
+      const passwordMatch = await bcrypt.compare(body.oldPass, userData.password);
+      if (passwordMatch) {
+        const hashedPassword = await bcrypt.hash(body.newPass, this.saltRounds);
+        await updateDoc(userRef, { password: hashedPassword });
+        return true;
+      } 
+      console.log('Password does not match');
+      return undefined;
     } catch(error) {
       console.error('Error Changing Password: ', error);
       return undefined;
