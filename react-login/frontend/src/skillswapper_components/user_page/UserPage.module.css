@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.pageContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  .backLink {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .backArrow {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    margin-right: 16px;
+  }
+  
+  .profileSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .profileAvatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+  }
+  
+  .profileUsername {
+    color: #E06B1D;
+    font-size: 25px;
+    font-weight: 500;
+  }
+  
+  .archiveSection {
+    margin-top: 20px;
+  }
+  
+  .archiveTitle {
+    color: #E06B1D;
+    font-size: 1.875rem;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  .postsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Post Styles */
+  .postContainer {
+    position: relative;
+    border-radius: 20px;
+    background-color: rgba(226, 122, 43, 0.25);
+    padding: 20px;
+  }
+  
+  .postHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .username {
+    color: #E06B1D;
+    font-size: 1.25rem;
+  }
+  
+  .postDate {
+    color: #E06B1D;
+    font-size: 0.875rem;
+  }
+  
+  .postContent {
+    color: #E06B1D;
+  }
+  
+  .contentLine {
+    margin: 4px 0;
+  }
+
+  .pageContainer, .profileSection, .profileUsername, .archiveSection, .archiveTitle, .postDate, .username {
+    color: #E06B1D;
+    font-family: "Kantumruy Pro";
+    }
