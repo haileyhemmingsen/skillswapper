@@ -1,24 +1,65 @@
-import React from "react";
+// /skillswapper_components/homepage/MainFeed/ServicePost.jsx
+import React, { useState, useRef, useEffect } from "react";
 import styles from './ServicePost.module.css';
 import userImage from '../../../images/user.svg';
+import ProfilePopup from '../../profile/ProfilePopup';
 
 function ServicePost({ username, date, content }) {
-  const contentLines = content.split('\n');
+  const [isProfileVisible, setIsProfileVisible] = useState(false);
+  const popupRef = useRef(null);
+  const iconRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && 
+          !popupRef.current.contains(event.target) &&
+          !iconRef.current.contains(event.target)) {
+        setIsProfileVisible(false);
+      }
+    };
+
+    if (isProfileVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isProfileVisible]);
+
+  const handleIconClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsProfileVisible(!isProfileVisible);
+  };
+
   return (
-    <article className={styles.postContainer}>
-      <header className={styles.postHeader}>
+    <div className={styles.postContainer}>
+      <div className={styles.postHeader}>
         <div className={styles.userInfo}>
-          <img loading="lazy" src={userImage} className={styles.userAvatar} alt={`${username}'s avatar`} />
-          <p className={styles.username}>{username}</p>
+          <div ref={iconRef} className={styles.iconWrapper}>
+            <img 
+              src={userImage}
+              alt="User avatar" 
+              className={styles.userAvatar}
+              onClick={handleIconClick}
+            />
+            <div ref={popupRef} className={styles.popupContainer}>
+              <ProfilePopup 
+                username={username}
+                isVisible={isProfileVisible}
+              />
+            </div>
+          </div>
+          <span className={styles.username}>{username}</span>
         </div>
-        <time className={styles.postDate}>{date}</time>
-      </header>
+        <span className={styles.postDate}>{date}</span>
+      </div>
+      
       <div className={styles.postContent}>
-        {contentLines.map((line, index) => (
+        {content.split('\n').map((line, index) => (
           <p key={index} className={styles.contentLine}>{line}</p>
         ))}
-      </div>    
-    </article>
+      </div>
+    </div>
   );
 }
 
