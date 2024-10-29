@@ -1,4 +1,3 @@
-// /skillswapper_components/homepage/MainFeed/ServicePost.jsx
 import React, { useState, useRef, useEffect } from "react";
 import styles from './ServicePost.module.css';
 import userImage from '../../../images/user.svg';

@@ -56,7 +56,7 @@ function UserPage() {
       </div>
 
       <div className={styles.archiveSection}>
-        <h2 className={styles.archiveTitle}>User Archive</h2>
+        <h2 className={styles.archiveTitle}>My Posts</h2>
         <div className={styles.postsContainer}>
           {samplePosts.map(post => (
             <Post

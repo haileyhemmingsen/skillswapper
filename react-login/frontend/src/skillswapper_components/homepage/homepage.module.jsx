@@ -1,9 +1,9 @@
-import React, { useState } from 'react'; // Import useState
+import React, { useState } from 'react';
 import styles from './homepage.module.css'; 
 import CategorySelection from './CategorySelection/CategorySelection';
 import ServiceSearch from './MainFeed/ServiceSearch';
 
-const Homepage = () => { // Change to uppercase
+const Homepage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   
   return (
@@ -18,4 +18,4 @@ const Homepage = () => { // Change to uppercase
   );
 };
 
-export default Homepage; // Ensure the export matches the component name 
+export default Homepage;
