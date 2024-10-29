@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styles from './CreatePost.module.css';
-import menuIcon from '../../images/3dots.svg';
 import ImageGallery from '../../skillswapper_components/createPost/tagMenu/ImageGallery';
+import { Link } from "react-router-dom";
+
 
 
 // import Kantumruy pro font
@@ -35,12 +36,14 @@ function CreatePost() {
     <main className={styles.createPost}>
       <div className={styles.postContainer}>
       <div className={styles.topIcons}>
+        <Link to="/homepage">
         <img  
             loading="lazy" 
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/cfdc61dafac0285a079f24b0b6281e077a22c077a2b773601af0abc34588e6ab?placeholderIfAbsent=true&apiKey=d4809dff43a0497eb3b4b1f0b8ac743d" 
             className={styles.decorativeIcon} 
             alt=""
           />
+        </Link>
       </div>
 
         <div className={styles.whiteContainer}>
@@ -53,10 +56,6 @@ function CreatePost() {
             />
             <div className={styles.username}>Username</div>
 
-            <div className={styles.topIcons}>
-              <img src={menuIcon} alt="Menu" className={styles.dotsIcon} />
-
-            </div>
 
           </div>
 
