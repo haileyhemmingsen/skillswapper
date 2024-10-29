@@ -1,7 +1,8 @@
 export interface NewPost {
     desireSkills: string,
     haveSkills: string,
-    description: string
+    description: string,
+    categories: string[]
 }
 
 export interface PostComment {
@@ -11,11 +12,12 @@ export interface PostComment {
 }
 
 export interface SkillPost {
-    id: number,
+    id: string,
     username: string,
     date: Date,
     location?: string,
     skillsAsked: string,
     skillsOffered: string,
     description: string,
+    categories: string[]
 }

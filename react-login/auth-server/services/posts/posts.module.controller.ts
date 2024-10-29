@@ -53,6 +53,8 @@ export class GetLocalPostsController extends Controller {
     @Response('500', 'Internal Error')
     @SuccessResponse('200', 'Posts Retrieved')
     public async getLocalPosts(@Body() body: string | undefined | null): Promise <SkillPost[]> {
-        return [];
+        return new PostService().getLocalPosts(body).then(async (posts: SkillPost[]): Promise <SkillPost[]> => {
+            return posts;
+        });
     }
 }
