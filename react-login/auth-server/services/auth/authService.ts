@@ -27,11 +27,11 @@ export class AuthService {
         }
         // const token = cookieAuthHeader.split(' ')[1];
         jwt.verify(token,
-          `${process.env.JWT_SECRET}`,
-          (error: jwt.VerifyErrors | null, decoded?: object| string) => {
+          ` ${process.env.JWT_SECRET}`,
+            (error: jwt.VerifyErrors | null, decoded?: object| string) => {
             const user = decoded as User;
             if (error) {
-              reject(error);
+                reject(error);
             }
             resolve({email:user.email, name: user.name, id: user.id});
           });

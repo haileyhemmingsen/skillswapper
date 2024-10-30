@@ -7,7 +7,10 @@ import {
 	Response,
 	Route,
 	SuccessResponse,
+    Security,
+    Request
 } from 'tsoa';
+import express from 'express'
 
 import { PostService } from './posts.module.service';
 import { NewPost, PostComment, SkillPost } from './posts.module.index';
@@ -15,11 +18,15 @@ import { NewPost, PostComment, SkillPost } from './posts.module.index';
 @Route('createPost')
 export class NewPostController extends Controller {
     @Post()
+    @Security('jwt')
     @Response('500', 'Internal Error') // need to define multiple different possible errors (500 error for internal server, and 401 for bad auth header)
     @Response('401', 'Unauthorized')
     @SuccessResponse('201', 'Post Created')
-    public async newPost(@Body() body: NewPost): Promise<number | undefined> {
-        return new PostService().newPost(body).then(async (identifier: number | undefined): Promise<number|undefined> => {
+    public async newPost(
+        @Body() body: NewPost,
+        @Request() request: express.Request
+    ): Promise<number | undefined> {
+        return new PostService().newPost(body, `${request.user?.id}`).then(async (identifier: number | undefined): Promise<number|undefined> => {
             return 1000;
         });
     }

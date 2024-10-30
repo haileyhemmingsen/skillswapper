@@ -5,7 +5,7 @@ import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
 
 export class PostService {
-    public async newPost(body: NewPost): Promise<number | undefined> {
+    public async newPost(body: NewPost, user_id: string): Promise<number | undefined> {
         // needs to create post ID and send all info to DB
         // needs to grab the date
         // grab their username/UUID
@@ -15,7 +15,10 @@ export class PostService {
         //check if this user has made a post before
         // if yes, then update
 
-        const user_id = 'INSERT_UUID_HERE';
+        // const user_id = 'INSERT_UUID_HERE';
+        if (user_id === '') {
+            return undefined;
+        }
         const postDocRef = doc(db, 'posts', user_id);
         const postDocSnapshot = await getDoc(postDocRef);
 
