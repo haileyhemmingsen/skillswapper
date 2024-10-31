@@ -21,3 +21,7 @@ export interface SkillPost {
     description: string,
     categories: string[]
 }
+
+export interface Categories {
+    categories: string[]
+}

@@ -13,7 +13,7 @@ import {
 import express from 'express'
 
 import { PostService } from './posts.module.service';
-import { NewPost, PostComment, SkillPost } from './posts.module.index';
+import { NewPost, PostComment, SkillPost, Categories } from './posts.module.index';
 
 @Route('createPost')
 export class NewPostController extends Controller {
@@ -59,7 +59,7 @@ export class GetLocalPostsController extends Controller {
     @Post()
     @Response('500', 'Internal Error')
     @SuccessResponse('200', 'Posts Retrieved')
-    public async getLocalPosts(@Body() body: string | undefined | null): Promise <SkillPost[]> {
+    public async getLocalPosts(@Body() body: Categories | undefined | null): Promise <SkillPost[]> {
         return new PostService().getLocalPosts(body).then(async (posts: SkillPost[]): Promise <SkillPost[]> => {
             return posts;
         });
