@@ -5,6 +5,7 @@ import Login from './skillswapper_components/login/LoginPage/LoginPage';
 import Posting from './skillswapper_components/posting/posting';
 import './App.css';
 import { useEffect, useState } from 'react';
+import CreatePost from './skillswapper_components/createPost/CreatePost';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -41,6 +42,7 @@ function App() {
           <Route path="/" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/homepage" element={<SkillSwapper />} /> 
+          <Route path="/createpost" element={<CreatePost />} />
           <Route path="/posting/:id" element={<Posting />} />
           <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
         </Routes>
