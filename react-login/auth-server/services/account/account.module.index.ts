@@ -6,7 +6,8 @@ export interface SignUpCredentials {
     firstname?: string,
     lastname?: string,
     email: string,
-    password: string
+    password: string,
+    zip?: string
 }
 
 export interface DatabaseCredentials {
@@ -24,6 +25,7 @@ export interface Authenticated {
 }
 
 export interface UpdatePassword {
+    email: string,
     oldPass: string,
     newPass: string
 }

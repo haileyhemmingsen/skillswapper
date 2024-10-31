@@ -8,6 +8,7 @@ import {
 	Response,
 	Route,
 	SuccessResponse,
+    Security,
 } from 'tsoa';
 
 import { LoginService } from './account.module.service';
@@ -45,13 +46,25 @@ export class LogInController extends Controller {
             .then(async (valid: Authenticated | undefined): Promise <Authenticated | undefined> => {
             if(!valid) {
                 this.setStatus(401);
+                return undefined;
             }
+            
+            this.setHeader('Set-Cookie', `token=${valid.accessToken}; HttpOnly; Secure; SameSite=strict; Path=/`);
+
+            // below is reliant upon using ExpressResponse, which appears to not be working, and instead I must use TsoaResponse object
+            // res.cookie('accessToken', valid.accessToken,  {
+            //     httpOnly: true,
+            //     secure: true,
+            //     sameSite: 'strict',
+            //     path: '/'
+            // });
             return valid;
         })
     }
 }
 
 @Route('changePassword')
+@Security('jwt')
 export class PasswordController extends Controller {
     @Post()
     @Response('500', 'Failed to change password')
@@ -67,6 +80,7 @@ export class PasswordController extends Controller {
 }
 
 @Route('changeEmail')
+@Security('jwt')
 export class EmailController extends Controller {
     @Post()
     @Response('500', 'Failed to change password')

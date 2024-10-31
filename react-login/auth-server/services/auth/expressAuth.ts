@@ -7,5 +7,6 @@ import {SessionUser} from '../types/express';
 export function expressAuthentication(
   request: Request,
   securityName: string): Promise<SessionUser> {
-    return new AuthService().check(request.headers.authorization);
+    console.log(request.headers.cookie);
+    return new AuthService().check(request.headers.cookie);
 }

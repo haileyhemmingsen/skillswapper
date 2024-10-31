@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './skillswapper_components/landing/landing';
-import Login from './skillswapper_components/login/login';
 import SkillSwapper from './skillswapper_components/homepage/homepage.module';
-import FigmaLogin from './skillswapper_components/figmaLogin/LoginPage/LoginPage';
+import SignUpPage from './skillswapper_components/signup/SignUpPage/signup';
+import Login from './skillswapper_components/login/LoginPage/LoginPage';
+import Posting from './skillswapper_components/posting/posting';
 import './App.css';
 import { useEffect, useState } from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
@@ -39,10 +39,12 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
-          <Route path="/login" element={<FigmaLogin setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/homepage" element={<SkillSwapper />} /> 
           <Route path="/createpost" element={<CreatePost />} />
+          <Route path="/posting/:id" element={<Posting />} />
+          <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
         </Routes>
       </BrowserRouter>
     </div>
@@ -50,6 +52,5 @@ function App() {
 }
 
 export default App
-
 
 

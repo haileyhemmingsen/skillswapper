@@ -116,61 +116,30 @@
     border: 0;
   }
   
-  /* for mobile view? -- not needed right now?
-    @media (max-width: 991px) {
-    .loginPage {
-      font-size: 40px;
-      padding: 0 20px;
-    }
-  
-    .container {
-      max-width: 100%;
-      font-size: 40px;
-      padding: 0 20px;
-    }
-  
-    .logo {
-      max-width: 100%;
-      font-size: 40px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 40px;
-    }
-  
-    .title {
-      margin-top: 10px;
-      max-width: 70%;
+/* Container to position eye icon */
+.passwordContainer {
+  position: relative;
+  width: 100%;
+}
 
-      font-size: 40px;
-    }
-  
-    .inputField {
-      font-size: 40px;
-      white-space: initial;
-      padding: 0 20px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  
-    .inputField:first-of-type {
-      margin-top: 30px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  
-    .loginButton {
-      font-size: 40px;
-      padding: 0 20px;
-    }
-  
-    a:link {
-      color: #000;
-      color: rgba(0, 0, 0, 0.5);
-    }
+.eyeIcon {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  opacity: 0.7;
+  margin-left: -55px; /* Pull the icon back over the input field */
+  flex-shrink: 0; 
+  margin-bottom: -3px;
+}
 
-    .signupPrompt {
-      max-width: 40%;
-      color: #000;
-      color: rgba(0, 0, 0, 0.5);
-    }
-  } */
+.eyeIcon:hover {
+  opacity: 1;
+}
+
+.errorLabel {
+  color: #ff4f4f;
+  margin-left: 12px;
+  font-size: 14px;
+  margin-top: 5px;
+  font-family: 'Kantumruy Pro', sans-serif;
+}
