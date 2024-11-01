@@ -2,7 +2,7 @@ import React from "react";
 import styles from './ServicePost.module.css';
 import userImage from '../../../images/user.svg';
 
-function ServicePost({ username, date, content }) {
+function ServicePost({ username, date, content }) { // Accept individual props
   const contentLines = content.split('\n');
   return (
     <article className={styles.postContainer}>
