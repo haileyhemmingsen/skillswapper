@@ -4,6 +4,7 @@ import styles from './ServicePost.module.css';
 import userImage from '../../../images/user.svg';
 import ProfilePopup from '../../profile/ProfilePopup';
 
+
 function ServicePost({ username, date, content }) {
   const [isProfileVisible, setIsProfileVisible] = useState(false);
   const popupRef = useRef(null);
@@ -30,6 +31,8 @@ function ServicePost({ username, date, content }) {
     e.stopPropagation();
     setIsProfileVisible(!isProfileVisible);
   };
+
+  const contentLines = content.split('\n');
 
   return (
     <div className={styles.postContainer}>

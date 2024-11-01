@@ -1,0 +1,79 @@
+.galleryContainer {
+    max-width: none !important;
+  }
+  
+  .tagMenu {
+    border-radius: 10px;
+    background-color: rgba(224, 107, 29, 1);
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 57%;
+    overflow: hidden;
+    align-items: flex-start;
+    padding: 10px;
+    padding-top: -5px;
+    flex-grow: 1;
+    height: auto;
+    margin: 5px 0;
+  }
+  
+  .imageRow {
+    display: flex;
+    gap: 11px;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 0px;
+    padding-top: -5px;
+  }
+  
+  .imageRow + .imageRow {
+    margin-top: 0px;
+    padding-top: -5px;
+  }
+  
+  .imageRow:last-child {
+    margin-top: 18px;
+    align-self: stretch;
+  }
+  
+  .galleryImage {
+    object-fit: contain;
+    object-position: center;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+    border-radius: 32px;
+    transition: box-shadow 0.15s ease;
+    background-color: transparent;
+    padding-top: -10px;
+    margin-top: -22px;
+    margin-bottom: -9px;
+  }
+    
+  .imageSize1 {
+    width: 84px;
+    aspect-ratio: 2.46;
+    object-fit: contain;
+  }
+  
+  .imageSize2 {
+    width: 85px;
+    height: 55px;
+    aspect-ratio: 2.3;
+    object-fit: contain;
+  }
+  
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }

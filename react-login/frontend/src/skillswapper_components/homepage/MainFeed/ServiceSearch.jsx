@@ -1,30 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-import styles from './ServiceSearch.module.css';
-import ServicePost from './ServicePost';
-import searchImage from '../../../images/search.svg';
-import logoImage from '../../../images/logo.svg';
-import userImage from '../../../images/user.svg';
+import { useNavigate } from "react-router-dom";
+import styles from "./ServiceSearch.module.css";
+import ServicePost from "./ServicePost";
+import searchImage from "../../../images/search.svg";
+import logoImage from "../../../images/logo.svg";
+import userImage from "../../../images/user.svg";
 import ProfilePopup from '../../profile/ProfilePopup';
+import axios from "axios";
 
-export const samplePosts = [
-  { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Sports", "Music"] },
-  { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Food"] },
-  { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Digital"] },
-  { id: 4, username: "Username4", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Handywork", "Sports"] },
-];
+export const samplePosts = [];
 
 function ServiceSearch({ selectedCategories }) {
   const [showHeaderPopup, setShowHeaderPopup] = useState(false);
   const headerPopupRef = useRef(null);
   const headerIconRef = useRef(null);
   const navigate = useNavigate();
-  
-  const filteredPosts = selectedCategories.length === 0 
-    ? samplePosts
-    : samplePosts.filter(post =>
-        post.categories.some(category => selectedCategories.includes(category))
-      );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,8 +40,59 @@ function ServiceSearch({ selectedCategories }) {
     setShowHeaderPopup(!showHeaderPopup);
   };
 
+  const [posts, setPosts] = useState(samplePosts); 
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      console.log("selected categories: ", selectedCategories);
+      const payload = { categories: selectedCategories.length > 0 ? selectedCategories : ['useless'] };
+    
+      try {
+        const response = await axios.post(
+          "http://localhost:3080/api/v0/getLocalPosts",
+          payload,
+          { headers: { "Content-Type": "application/json" } }
+        );
+        console.log("Response data:", response.data); 
+    
+        const posts = response.data; 
+        const parsedPosts = posts.map(post => {
+          return {
+            post_id: post.id,
+            username: post.username,
+            date: new Date(post.date).toLocaleDateString(),
+            content: 
+              `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
+              `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
+              `${post.description ? `${post.description}` : ''}`,
+            categories: post.categories || []
+          };
+        });     
+        
+        setPosts(parsedPosts); 
+        samplePosts.push(...parsedPosts); 
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, [selectedCategories]);
+
+  const filteredPosts =
+    selectedCategories.length === 0
+      ? posts
+      : posts.filter((post) =>
+          post.categories.some((category) => selectedCategories.includes(category))
+        );
+
   const handlePostClick = (postId) => {
     navigate(`/posting/${postId}`);
+  };
+
+
+  const handleMakePostClick = () => {
+    navigate("/createpost");
   };
 
   return (
@@ -80,7 +121,7 @@ function ServiceSearch({ selectedCategories }) {
         <section className={styles.searchSection}>
           <h1 className={styles.searchTitle}>What service are you looking for?</h1>
           <form>
-            <label htmlFor="serviceSearch" className={styles['visually-hidden']}>Search for services</label>
+            <label htmlFor="serviceSearch" className={styles["visually-hidden"]}>Search for services</label>
             <div className={styles.searchInputWrapper}>
               <input
                 type="text"
@@ -94,16 +135,20 @@ function ServiceSearch({ selectedCategories }) {
               </div>
             </div>
           </form>
-          <button type="button" className={styles.postButton}>Make a post</button>
+          <button type="button" className={styles.postButton} onClick={handleMakePostClick}>Make a post</button>
           <div className={styles.postsContainer}>
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
-                <div 
-                  key={post.id} 
-                  onClick={() => handlePostClick(post.id)}
-                  style={{ cursor: 'pointer' }}
+                <div
+                  key={post.post_id}
+                  onClick={() => handlePostClick(post.post_id)}
+                  style={{ cursor: "pointer" }}
                 >
-                  <ServicePost {...post} />
+                  <ServicePost 
+                    username={post.username} 
+                    date={post.date} 
+                    content={post.content} 
+                  />
                 </div>
               ))
             ) : (
@@ -111,7 +156,7 @@ function ServiceSearch({ selectedCategories }) {
             )}
           </div>
         </section>
-      </div> 
+      </div>
     </main>
   );
 }
