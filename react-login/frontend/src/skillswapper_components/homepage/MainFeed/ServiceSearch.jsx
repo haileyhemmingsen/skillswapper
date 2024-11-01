@@ -1,17 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ServiceSearch.module.css";
 import ServicePost from "./ServicePost";
 import searchImage from "../../../images/search.svg";
 import logoImage from "../../../images/logo.svg";
 import userImage from "../../../images/user.svg";
+import ProfilePopup from '../../profile/ProfilePopup';
 import axios from "axios";
 
 export const samplePosts = [];
 
 function ServiceSearch({ selectedCategories }) {
+  const [showHeaderPopup, setShowHeaderPopup] = useState(false);
+  const headerPopupRef = useRef(null);
+  const headerIconRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showHeaderPopup &&
+          headerPopupRef.current && 
+          !headerPopupRef.current.contains(event.target) &&
+          !headerIconRef.current.contains(event.target)) {
+        setShowHeaderPopup(false);
+      }
+    };
+
+    if (showHeaderPopup) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showHeaderPopup]);
+
+  const handleHeaderIconClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Header icon clicked');
+    setShowHeaderPopup(!showHeaderPopup);
+  };
+
   const [posts, setPosts] = useState(samplePosts); 
-  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -61,6 +90,7 @@ function ServiceSearch({ selectedCategories }) {
     navigate(`/posting/${postId}`);
   };
 
+
   const handleMakePostClick = () => {
     navigate("/createpost");
   };
@@ -69,8 +99,22 @@ function ServiceSearch({ selectedCategories }) {
     <main className={styles.container}>
       <header className={styles.header}>
         <img loading="lazy" src={logoImage} className={styles.logoCompany} alt="Company logo" />
-        <div className={styles.clickableUserArea}>
-          <img loading="lazy" src={userImage} className={styles.iconUser} alt="User logo" />
+        <div ref={headerIconRef} className={styles.clickableUserArea}>
+          <img 
+            loading="lazy" 
+            src={userImage} 
+            className={styles.iconUser} 
+            alt="User logo" 
+            onClick={handleHeaderIconClick}
+          />
+          {showHeaderPopup && (
+            <div ref={headerPopupRef} className={styles.headerPopupContainer}>
+              <ProfilePopup 
+                username="Username"
+                isVisible={showHeaderPopup}
+              />
+            </div>
+          )}
         </div>
       </header>
       <div className={styles.mainContent}>

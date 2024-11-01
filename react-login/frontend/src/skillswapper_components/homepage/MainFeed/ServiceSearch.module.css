@@ -16,6 +16,7 @@
   } 
   
   .header {
+    position: relative;
     margin-top: 0px;
     align-self: center;
     display: flex;
@@ -26,6 +27,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     object-position: center;
+    z-index: 100; 
   }
   
   @media (max-width: 991px) {
@@ -51,10 +53,22 @@
     object-fit: contain;
     object-position: center;
     padding-right: 2%;
+    position: fixed;
+    top: 5px;
+    right: -15px;
+  }
+
+  .headerPopupContainer {
+    position: fixed;
+    top: 20px; 
+    right: 20px; /* offset from right edge */
+    z-index: 10000;
   }
 
   .clickableUserArea {
+    position: relative;
     cursor: pointer;
+    z-index: 101; /* higher than header */
   }
   
   .mainContent {
@@ -116,8 +130,6 @@
     opacity: 1; 
   }
 
-
-
   .clickableSearchArea {
     position: absolute;
     right: 3%;
@@ -131,12 +143,6 @@
     align-items: center;
   }
   
-  .searchIcon {
-    width: 24px;
-    height: 24px;
-    pointer-events: none;
-  }
-
   .searchInputWrapper {
     position: relative;
     width: 100%;
