@@ -76,9 +76,17 @@ const SignUpPage = (props) => {
           { header: { 'Content-Type': 'application/json' } }
       ).then((res) => {
           console.log(res);
-          props.setLoggedIn(true);
-          props.setEmail(email);
-          navigate('/login');
+          if (res.data) {
+            props.setLoggedIn(true);
+            props.setEmail(email);
+            navigate('/login');
+          }
+          else {
+            // there is an error of some kind, internal service error, show something to the user that 
+            // signup failed, is possible account already exists, or some other error
+
+          }
+          
       }).catch((err) => {
           console.log(err);
       });

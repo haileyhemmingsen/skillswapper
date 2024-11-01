@@ -1,25 +1,74 @@
+<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from "react";
+=======
+import React from "react";
+import {useState, useEffect } from 'react';
+>>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
 import { useNavigate } from 'react-router-dom';
 import styles from './ServiceSearch.module.css';
 import ServicePost from './ServicePost';
 import searchImage from '../../../images/search.svg';
 import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
+<<<<<<< HEAD
 import ProfilePopup from '../../profile/ProfilePopup';
+=======
+import axios from 'axios'
+>>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
 
-export const samplePosts = [
-  { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Sports", "Music"] },
-  { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Food"] },
-  { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Digital"] },
-  { id: 4, username: "Username4", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Handywork", "Sports"] },
-];
+// export const samplePosts = [
+//   { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Sports", "Music"] },
+//   { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Food"] },
+//   { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Digital"] },
+//   { id: 4, username: "Username4", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Handywork", "Sports"] },
+// ];
 
+export let samplePosts = undefined;
+
+<<<<<<< HEAD
 function ServiceSearch({ selectedCategories }) {
   const [showHeaderPopup, setShowHeaderPopup] = useState(false);
   const headerPopupRef = useRef(null);
   const headerIconRef = useRef(null);
   const navigate = useNavigate();
   
+=======
+function ServiceSearch( { selectedCategories } ) {
+  const [samplePosts, setSamplePosts] = useState([]);
+  const post = {
+    desireSkills: 'body.desireSkills',
+    haveSkills: 'body.haveSkills',
+    description: 'body.description',
+    categories: ['body.categories'],
+    // post_id: 'postuuid',
+    // createdAt: new Date() 
+}
+const post_string = JSON.stringify(post);
+console.log(post_string);
+console.log(typeof(post_string))
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      console.log("selected categories: ", selectedCategories);
+      const payload = { categories: ['useless'] };
+
+      try {
+        const response = await axios.post('http://localhost:3080/api/v0/getLocalPosts', 
+          payload, 
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        console.log('logging response:');
+        console.log("res.data: ", response.data);
+        setSamplePosts(response.data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, [selectedCategories]);
+
+>>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
   const filteredPosts = selectedCategories.length === 0 
     ? samplePosts
     : samplePosts.filter(post =>
@@ -54,6 +103,14 @@ function ServiceSearch({ selectedCategories }) {
     navigate(`/posting/${postId}`);
   };
 
+<<<<<<< HEAD
+=======
+  const handleMakePostClick = () => {
+    navigate('/createpost');
+  }
+
+
+>>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
   return (
     <main className={styles.container}>
       <header className={styles.header}>
@@ -94,7 +151,7 @@ function ServiceSearch({ selectedCategories }) {
               </div>
             </div>
           </form>
-          <button type="button" className={styles.postButton}>Make a post</button>
+          <button type="button" className={styles.postButton} onClick={()=> handleMakePostClick()}>Make a post</button>
           <div className={styles.postsContainer}>
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
