@@ -64,9 +64,6 @@ export class LoginService {
             expiresIn: '30m',
             algorithm: 'HS256'
           });
-
-
-          
           return {id: userData.uuid, accessToken: accessToken};
       } else {
         return undefined;

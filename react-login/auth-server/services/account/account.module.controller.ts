@@ -9,8 +9,10 @@ import {
 	Route,
 	SuccessResponse,
     Security,
+    Res,
+    TsoaResponse
 } from 'tsoa';
-
+import { Request, Response as ExpressResponse } from 'express';
 import { LoginService } from './account.module.service';
 import { SignUpCredentials, UpdatePassword, UpdateEmail, UpdateUsername, Authenticated } from './account.module.index';
 
@@ -36,30 +38,30 @@ export class SignUpController extends Controller {
 	}
 }
 
+
 @Route('login')
 export class LogInController extends Controller {
     @Post()
     @Response('401', 'Invalid Username or Password')
-    @SuccessResponse('200', 'Logged In') // also not sure about here
-    public async login(@Body() body: SignUpCredentials): Promise<Authenticated|undefined> {
+    @SuccessResponse('200', 'Logged In')
+    public async login(
+        @Body() body: SignUpCredentials,
+        @Res() setCookieResponse: TsoaResponse<200 | 401, { message: string }>
+    ): Promise<Authenticated | undefined> {
         return new LoginService().login(body)
-            .then(async (valid: Authenticated | undefined): Promise <Authenticated | undefined> => {
-            if(!valid) {
-                this.setStatus(401);
-                return undefined;
-            }
-            
-            this.setHeader('Set-Cookie', `token=${valid.accessToken}; HttpOnly; Secure; SameSite=strict; Path=/`);
+            .then((valid: Authenticated | undefined): Authenticated | undefined => {
+                if (!valid) {
+                    setCookieResponse(401, { message: 'Invalid Username or Password' });
+                    return undefined;
+                }
 
-            // below is reliant upon using ExpressResponse, which appears to not be working, and instead I must use TsoaResponse object
-            // res.cookie('accessToken', valid.accessToken,  {
-            //     httpOnly: true,
-            //     secure: true,
-            //     sameSite: 'strict',
-            //     path: '/'
-            // });
-            return valid;
-        })
+                // Set cookie and send response using TsoaResponse
+                setCookieResponse(200, { message: 'Logged In' }, {
+                    'Set-Cookie': `accessToken=${valid.accessToken}; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=86400`
+                });
+
+                return valid;
+            });
     }
 }
 
