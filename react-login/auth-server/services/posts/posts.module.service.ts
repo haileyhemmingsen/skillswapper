@@ -53,10 +53,38 @@ export class PostService {
         return 0;
     }
 
-    public async newComment(body: PostComment): Promise <number | undefined> {
-        // every single comment will be added to a single document for the correct post. So each post will have a "comment" document
-
-        return 0;
+    public async newComment(body: PostComment, user_id: string): Promise <boolean | undefined> {
+        // every single comment will be added to a single document for the correct post. So each post will have a "comment" document;
+        try {
+            const postDocRef = doc(db, 'comments', body.postID);
+            const postDocSnapshot = await getDoc(postDocRef);
+            const comment_uuid = uuidv4();
+            const comment = {
+                postID: body.postID,
+                postingUserID: user_id,
+                comment: body.comment,
+                comment_id: comment_uuid,
+                createdAt: new Date() 
+            }
+            const comment_string = JSON.stringify(comment);
+            if (postDocSnapshot.exists()) {
+                // comments already exists for post, thus update
+                await updateDoc(doc(db, 'comments', body.postID), {
+                    post_uuid: body.postID,
+                    comment: arrayUnion(comment_string)
+                });
+            } else {
+                // comments do not exist for post, thus create new comment
+                await setDoc(doc(db, 'comments', body.postID), {
+                    post_uuid: body.postID,
+                    comment: [comment_string]
+                });
+            }
+        } catch (error) {
+            console.error('Error Creating Comment: ', error);
+            return false;
+        }
+        return true;
     }
     public async getLocalPosts(body: Categories | undefined | null): Promise <SkillPost[]> {
         // get a list of all posts from database and 
