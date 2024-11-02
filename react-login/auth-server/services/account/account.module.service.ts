@@ -61,7 +61,7 @@ export class LoginService {
         const accessToken = jwt.sign(
           {id: userData.uuid, email: credentials.email, name: userData.firstname}, 
           `${process.env.JWT_SECRET}`, {
-            expiresIn: '30m',
+            expiresIn: '1d',
             algorithm: 'HS256'
           });
           return {id: userData.uuid, accessToken: accessToken};

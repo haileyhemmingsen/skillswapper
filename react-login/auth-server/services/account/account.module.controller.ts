@@ -57,7 +57,7 @@ export class LogInController extends Controller {
 
                 // Set the access token in a cookie with the `Set-Cookie` header
                 setCookieResponse(200, { message: 'Logged In' }, {
-                    'Set-Cookie': `accessToken=${valid.accessToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${60 * 60}`
+                    'Set-Cookie': `accessToken=${valid.accessToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`
                 });
 
                 return valid;
