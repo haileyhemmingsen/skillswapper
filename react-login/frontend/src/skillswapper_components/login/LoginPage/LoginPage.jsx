@@ -48,7 +48,9 @@ const Login = (props) => {
 
     const response = await axios.post('http://localhost:3080/api/v0/login', 
         dto, 
-        {header: {'Content-Type': 'application/json'}}
+        {header: {'Content-Type': 'application/json'},
+        withCredentials: true
+      }
     ).then((res) => {
         console.log(res);
         const accessToken = res.data.accessToken;

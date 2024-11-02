@@ -22,8 +22,11 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//cors middleware
-app.use(cors())
+// In your server or middleware setup
+app.use(cors({
+  origin: 'http://localhost:3000',  // Adjust to your frontend origin
+  credentials: true  // Allow cookies to be sent
+}));
 
 // Swagger documentation setup
 app.use('/api/v0/docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {

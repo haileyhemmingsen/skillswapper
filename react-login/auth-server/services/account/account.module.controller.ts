@@ -46,18 +46,18 @@ export class LogInController extends Controller {
     @SuccessResponse('200', 'Logged In')
     public async login(
         @Body() body: SignUpCredentials,
-        @Res() setCookieResponse: TsoaResponse<200 | 401, { message: string }>
+        @Res() setCookieResponse: TsoaResponse<200 | 401, { message: string }> // Use TsoaResponse here
     ): Promise<Authenticated | undefined> {
         return new LoginService().login(body)
             .then((valid: Authenticated | undefined): Authenticated | undefined => {
                 if (!valid) {
-                    setCookieResponse(401, { message: 'Invalid Username or Password' });
-                    return undefined;
+                    // Return a 401 response with a message
+                    return setCookieResponse(401, { message: 'Invalid Username or Password' });
                 }
 
-                // Set cookie and send response using TsoaResponse
+                // Set the access token in a cookie with the `Set-Cookie` header
                 setCookieResponse(200, { message: 'Logged In' }, {
-                    'Set-Cookie': `accessToken=${valid.accessToken}; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=86400`
+                    'Set-Cookie': `accessToken=${valid.accessToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${60 * 60}`
                 });
 
                 return valid;
