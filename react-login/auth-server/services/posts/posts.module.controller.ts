@@ -35,12 +35,19 @@ export class NewPostController extends Controller {
 @Route('createComment')
 export class NewCommentController extends Controller {
     @Post()
+    @Security('jwt')
     @Response('500', 'Internal Error') // need to define multiple different possible errors (500 error for internal server, and 401 for bad auth header)
     @Response('401', 'Unauthorized')
     @SuccessResponse('201', 'Comment Created')
-    public async newComment(@Body() body: PostComment): Promise<number | undefined> {
-        return new PostService().newComment(body).then(async (identifier: number | undefined): Promise<number|undefined> => {
-            return 1000;
+    public async newComment(
+        @Body() body: PostComment,
+        @Request() request: express.Request
+    ): Promise<boolean | undefined> {
+        return new PostService().newComment(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise<boolean|undefined> => {
+            if(!identifier) {
+                this.setStatus(500);
+            }
+            return identifier;
         });
     }
 }
