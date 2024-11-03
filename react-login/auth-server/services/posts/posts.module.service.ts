@@ -5,7 +5,7 @@ import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
 
 export class PostService {
-    public async newPost(body: NewPost, user_id: string): Promise<number | undefined> {
+    public async newPost(body: NewPost, user_id: string): Promise<boolean | undefined> {
         // needs to create post ID and send all info to DB
         // needs to grab the date
         // grab their username/UUID
@@ -16,41 +16,48 @@ export class PostService {
         // if yes, then update
 
         // const user_id = 'INSERT_UUID_HERE';
-        console.log(user_id);
-        if (user_id === '') {
-            return undefined;
-        }
-        const postDocRef = doc(db, 'posts', user_id);
-        const postDocSnapshot = await getDoc(postDocRef);
-        const postuuid = uuidv4();
-        const post = {
-            desireSkills: body.desireSkills,
-            haveSkills: body.haveSkills,
-            description: body.description,
-            categories: body.categories,
-            post_id: postuuid,
-            createdAt: new Date() 
-        }
-        const post_string = JSON.stringify(post);
+        try {
+            console.log(user_id);
+            if (user_id === '') {
+                return undefined;
+            }
+            const postDocRef = doc(db, 'posts', user_id);
+            const postDocSnapshot = await getDoc(postDocRef);
+            const postuuid = uuidv4();
+            const post = {
+                desireSkills: body.desireSkills,
+                haveSkills: body.haveSkills,
+                description: body.description,
+                categories: body.categories,
+                post_id: postuuid,
+                createdAt: new Date() 
+            }
+            const post_string = JSON.stringify(post);
 
-        if (postDocSnapshot.exists()) {
-            // post already exists, thus update
-            
-            await updateDoc(doc(db, 'posts', user_id), {
-                poster_uuid: user_id,
-                posts: arrayUnion(post_string)
-            });
+            if (postDocSnapshot.exists()) {
+                // post already exists, thus update
+                
+                await updateDoc(doc(db, 'posts', user_id), {
+                    poster_uuid: user_id,
+                    posts: arrayUnion(post_string)
+                });
+            }
+            else {
+                // account has never posted before, thus create new post
+                //create uuid for the post itself (identifying for commenting later)
+                await setDoc(doc(db, 'posts', user_id), {
+                    poster_uuid: user_id,
+                    posts: [post_string]
+                });
+            }
         }
-        else {
-            // account has never posted before, thus create new post
-            //create uuid for the post itself (identifying for commenting later)
-            await setDoc(doc(db, 'posts', user_id), {
-                poster_uuid: user_id,
-                posts: [post_string]
-            });
+        catch (error) {
+            console.error(error);
+            return false;
         }
+        
 
-        return 0;
+        return true;
     }
 
     public async newComment(body: PostComment, user_id: string): Promise <boolean | undefined> {

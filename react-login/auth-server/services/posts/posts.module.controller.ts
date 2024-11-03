@@ -25,9 +25,12 @@ export class NewPostController extends Controller {
     public async newPost(
         @Body() body: NewPost,
         @Request() request: express.Request
-    ): Promise<number | undefined> {
-        return new PostService().newPost(body, `${request.user?.id}`).then(async (identifier: number | undefined): Promise<number|undefined> => {
-            return 1000;
+    ): Promise<boolean | undefined> {
+        return new PostService().newPost(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise<boolean|undefined> => {
+            if(!identifier) {
+                this.setStatus(500);
+            }
+            return identifier;
         });
     }
 }
