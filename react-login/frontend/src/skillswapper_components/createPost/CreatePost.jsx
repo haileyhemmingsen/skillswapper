@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 
+
 // import Kantumruy pro font
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
@@ -89,17 +90,20 @@ function CreatePost() {
         description: description,
         categories: category_tags
     };
-    const response = await axios.post('http://localhost:3080/api/v0/createPost', 
-        dto, 
-    {header: {'Content-Type': 'application/json'}}).then((res) => {
-        console.log(res);
-        if (res.data) {
-            // either we succeed or we dont
-            navigate('/homepage');
-        }
-    });
-
-
+    try {
+        const response = await axios.post('http://localhost:3080/api/v0/createPost', 
+            dto, 
+        {header: {'Content-Type': 'application/json'}, withCredentials: true}).then((res) => {
+            console.log(res);
+            if (res.data) {
+                // either we succeed or we dont
+                navigate('/homepage');
+            }
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }
   };
 
 

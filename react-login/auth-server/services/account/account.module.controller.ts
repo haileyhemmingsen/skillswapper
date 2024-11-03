@@ -9,8 +9,8 @@ import {
 	Route,
 	SuccessResponse,
     Security,
-    Res,
-    TsoaResponse
+    TsoaResponse,
+    Res
 } from 'tsoa';
 import { Request, Response as ExpressResponse } from 'express';
 import { LoginService } from './account.module.service';
@@ -39,6 +39,32 @@ export class SignUpController extends Controller {
 }
 
 
+// @Route('login')
+// export class LogInController extends Controller {
+//     @Post()
+//     @Response('401', 'Invalid Username or Password')
+//     @SuccessResponse('200', 'Logged In') // also not sure about here
+//     public async login(@Body() body: SignUpCredentials): Promise<Authenticated|undefined> {
+//         return new LoginService().login(body)
+//             .then(async (valid: Authenticated | undefined): Promise <Authenticated | undefined> => {
+//             if(!valid) {
+//                 this.setStatus(401);
+//                 return undefined;
+//             }
+            
+//             this.setHeader('Set-Cookie', `token=${valid.accessToken}; HttpOnly; Secure; SameSite=strict; Path=/`);
+
+//             // below is reliant upon using ExpressResponse, which appears to not be working, and instead I must use TsoaResponse object
+//             // res.cookie('accessToken', valid.accessToken,  {
+//             //     httpOnly: true,
+//             //     secure: true,
+//             //     sameSite: 'strict',
+//             //     path: '/'
+//             // });
+//             return valid;
+//         })
+//     }
+// }
 @Route('login')
 export class LogInController extends Controller {
     @Post()

@@ -16,6 +16,7 @@ export class PostService {
         // if yes, then update
 
         // const user_id = 'INSERT_UUID_HERE';
+        console.log(user_id);
         if (user_id === '') {
             return undefined;
         }
@@ -31,7 +32,6 @@ export class PostService {
             createdAt: new Date() 
         }
         const post_string = JSON.stringify(post);
-        // console.log(post_string);
 
         if (postDocSnapshot.exists()) {
             // post already exists, thus update
@@ -70,10 +70,7 @@ export class PostService {
             // console.log(data);
             if (data.posts && Array.isArray(data.posts)) { // if they have a valid doc, with at least one post
                 for (let i = 0; i < data.posts.length; i += 1) { // loop through all posts made by a single user
-                    // console.log('data.posts thing ahead:');
-                    // console.log(data.posts);
                     const post_obj = JSON.parse(data.posts[i])
-                    console.log(post_obj);
                     const next_post = {
                         id: post_obj.post_id,
                         username: data.poster_uuid,
@@ -88,7 +85,7 @@ export class PostService {
                 }
             }
         });
-        console.log(allPosts);
+        // console.log(allPosts);
         return allPosts;
     }
 }

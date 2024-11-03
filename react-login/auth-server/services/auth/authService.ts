@@ -17,7 +17,7 @@ export class AuthService {
         let token = undefined;
         for (let i = 0; i < cookies.length; i += 1) { // for cookie in cookies
             const [name, value] = cookies[i].split('=');
-            if (name === 'token') { // find the accessToken cookie
+            if (name === 'accessToken') { // find the accessToken cookie
                 token = value; // grab its value
             }
         }
@@ -27,7 +27,7 @@ export class AuthService {
         }
         // const token = cookieAuthHeader.split(' ')[1];
         jwt.verify(token,
-          ` ${process.env.JWT_SECRET}`,
+          `${process.env.JWT_SECRET}`,
             (error: jwt.VerifyErrors | null, decoded?: object| string) => {
             const user = decoded as User;
             if (error) {
