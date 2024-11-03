@@ -60,3 +60,7 @@
 .contentLine {
   margin: 5px 0;
 }
+
+.highlight {
+  font-weight: bold;
+}

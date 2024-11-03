@@ -15,6 +15,8 @@ function ServiceSearch({ selectedCategories }) {
   const headerPopupRef = useRef(null);
   const headerIconRef = useRef(null);
   const navigate = useNavigate();
+  const [posts, setPosts] = useState(samplePosts); 
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,7 +42,6 @@ function ServiceSearch({ selectedCategories }) {
     setShowHeaderPopup(!showHeaderPopup);
   };
 
-  const [posts, setPosts] = useState(samplePosts); 
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -80,11 +81,19 @@ function ServiceSearch({ selectedCategories }) {
   }, [selectedCategories]);
 
   const filteredPosts =
-    selectedCategories.length === 0
-      ? posts
-      : posts.filter((post) =>
-          post.categories.some((category) => selectedCategories.includes(category))
+  selectedCategories.length === 0
+    ? posts.filter((post) => {
+        // Check if the content includes the keyword (case-insensitive)
+        return post.content.toLowerCase().includes(keyword.toLowerCase());
+      })
+    : posts.filter((post) => {
+        const includesCategory = post.categories.some((category) =>
+          selectedCategories.includes(category)
         );
+        // Check if the content includes the keyword (case-insensitive)
+        const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
+        return includesCategory && includesKeyword;
+      });
 
   const handlePostClick = (postId) => {
     navigate(`/posting/${postId}`);
@@ -94,6 +103,15 @@ function ServiceSearch({ selectedCategories }) {
   const handleMakePostClick = () => {
     navigate("/createpost");
   };
+
+  const handleSearchChange = (event) => {
+    setKeyword(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+  };
+
 
   return (
     <main className={styles.container}>
@@ -120,7 +138,7 @@ function ServiceSearch({ selectedCategories }) {
       <div className={styles.mainContent}>
         <section className={styles.searchSection}>
           <h1 className={styles.searchTitle}>What service are you looking for?</h1>
-          <form>
+          <form onSubmit={handleSearchSubmit}>
             <label htmlFor="serviceSearch" className={styles["visually-hidden"]}>Search for services</label>
             <div className={styles.searchInputWrapper}>
               <input
@@ -129,6 +147,8 @@ function ServiceSearch({ selectedCategories }) {
                 className={styles.searchInput}
                 placeholder="Type keywords here..."
                 aria-label="Search for services"
+                value={keyword}
+                onChange={handleSearchChange}
               />
               <div className={styles.clickableSearchArea}>
                 <img loading="lazy" src={searchImage} alt="Search icon" className={styles.searchIcon} />
@@ -144,10 +164,11 @@ function ServiceSearch({ selectedCategories }) {
                   onClick={() => handlePostClick(post.post_id)}
                   style={{ cursor: "pointer" }}
                 >
-                  <ServicePost 
-                    username={post.username} 
-                    date={post.date} 
-                    content={post.content} 
+                  <ServicePost
+                    username={post.username}
+                    date={post.date}
+                    content={post.content}
+                    keyword={keyword} // Pass the keyword to the ServicePost component
                   />
                 </div>
               ))
