@@ -25,3 +25,10 @@ export interface SkillPost {
 export interface Categories {
     categories: string[]
 }
+
+export interface Comment {
+    comment_id: string,
+    poster_id: string,
+    date: Date
+    comment: string
+}

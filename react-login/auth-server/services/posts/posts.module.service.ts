@@ -1,8 +1,9 @@
-import { NewPost, PostComment, SkillPost, Categories} from "./posts.module.index";
+import { NewPost, PostComment, SkillPost, Categories, Comment} from "./posts.module.index";
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
+import { get } from "http";
 
 export class PostService {
     public async newPost(body: NewPost, user_id: string): Promise<boolean | undefined> {
@@ -67,7 +68,7 @@ export class PostService {
             const postDocSnapshot = await getDoc(postDocRef);
             const comment_uuid = uuidv4();
             const comment = {
-                postID: body.postID,
+                // postID: body.postID,
                 postingUserID: user_id,
                 comment: body.comment,
                 comment_id: comment_uuid,
@@ -105,7 +106,7 @@ export class PostService {
             // console.log(data);
             if (data.posts && Array.isArray(data.posts)) { // if they have a valid doc, with at least one post
                 for (let i = 0; i < data.posts.length; i += 1) { // loop through all posts made by a single user
-                    const post_obj = JSON.parse(data.posts[i])
+                    const post_obj = JSON.parse(data.posts[i]);
                     const next_post = {
                         id: post_obj.post_id,
                         username: data.poster_uuid,
@@ -122,5 +123,37 @@ export class PostService {
         });
         // console.log(allPosts);
         return allPosts;
+    }
+    public async getAllComments(post_id: string | undefined): Promise <Comment[]> {
+        if (post_id === undefined) {
+            return [];
+        }
+        let allComments = new Array<Comment>();
+        const commentsSnapshotRef = doc(db, 'comments', post_id);
+        try {
+            const commentsDocSnapshot = await getDoc(commentsSnapshotRef);
+            if (commentsDocSnapshot.exists()) {
+                const commentsData = commentsDocSnapshot.data();
+                if (commentsData) {
+                    for (let i = 0; i < commentsData.comment.length; i += 1) {
+                        const post_obj = JSON.parse(commentsData.comment[i]);
+                        const next_comment = {
+                            comment_id: post_obj.comment_id,
+                            poster_id: post_obj.user_id,
+                            date: post_obj.createdAt,
+                            comment: post_obj.comment
+                        }
+                        allComments.push(next_comment);
+                    }
+                }
+                return allComments;
+            }
+            return [];
+        }
+        catch (error) {
+            console.error(error);
+            return [];
+        }
+        
     }
 }

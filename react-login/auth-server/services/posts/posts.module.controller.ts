@@ -13,7 +13,7 @@ import {
 import express from 'express'
 
 import { PostService } from './posts.module.service';
-import { NewPost, PostComment, SkillPost, Categories } from './posts.module.index';
+import { NewPost, PostComment, SkillPost, Categories, Comment } from './posts.module.index';
 
 @Route('createPost')
 export class NewPostController extends Controller {
@@ -73,5 +73,19 @@ export class GetLocalPostsController extends Controller {
         return new PostService().getLocalPosts(body).then(async (posts: SkillPost[]): Promise <SkillPost[]> => {
             return posts;
         });
+    }
+}
+
+@Route('getAllComments')
+export class getAllCommentsController extends Controller {
+    @Get()
+    @Response('500', 'Internal Error')
+    @SuccessResponse('200', 'Comments Retrieved')
+    public async getAllComments(
+        @Query() post_id: string | undefined
+    ): Promise <Comment[]> {
+        return new PostService().getAllComments(post_id).then(async (comments: Comment[]): Promise <Comment[]> => {
+            return comments;
+        })
     }
 }
