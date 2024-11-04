@@ -169,12 +169,12 @@ function ServiceSearch({ selectedCategories }) {
                     username={post.username}
                     date={post.date}
                     content={post.content}
-                    keyword={keyword} // Pass the keyword to the ServicePost component
+                    keyword={keyword} 
                   />
                 </div>
               ))
             ) : (
-              <p>No posts available for the selected categories.</p>
+              <p>No posts available.</p>
             )}
           </div>
         </section>

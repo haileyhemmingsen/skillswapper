@@ -35,16 +35,22 @@ function ServicePost({ username, date, content, keyword }) {
   const highlightedContent = keyword ? (
     content.split('\n').map((line, lineIndex) => (
       <p key={lineIndex} className={styles.contentLine}>
-        {line.split(new RegExp(`(${keyword})`, 'gi')).map((part, partIndex) => (
-          <span key={partIndex}>
-            {/* If the part matches the keyword, highlight it */}
-            {part.toLowerCase() === keyword.toLowerCase() ? (
-              <span className={styles.highlight}>{part}</span>
-            ) : (
-              part // Otherwise, just render the part as is
-            )}
-          </span>
-        ))}
+        {line.split(/(Services Seeking: |Services Offering: )/gi).map((part, partIndex) => {
+          if (part.match(/Services Seeking: |Services Offering: /gi)) {
+            return <span key={partIndex}>{part}</span>;
+          } else {
+            return part.split(new RegExp(`(${keyword.split(' ').join('|')})`, 'gi')).map((subPart, subPartIndex) => (
+              <span key={`${partIndex}-${subPartIndex}`}>
+                {/* If the subPart matches any of the keywords, highlight it */}
+                {keyword.split(' ').includes(subPart.toLowerCase()) ? (
+                  <span className={styles.highlight}>{subPart}</span>
+                ) : (
+                  subPart // Otherwise, just render the subPart as is
+                )}
+              </span>
+            ));
+          }
+        })}
       </p>
     ))
   ) : (
