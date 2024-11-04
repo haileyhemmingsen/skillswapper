@@ -72,12 +72,14 @@ function ServicePost({ username, date, content, keyword }) {
               className={styles.userAvatar}
               onClick={handleIconClick}
             />
-            <div ref={popupRef} className={styles.popupContainer}>
+            {/* here would be where each OTHER user's icon will be clicked and 
+            reroute to THEIR profile */}
+            {/* <div ref={popupRef} className={styles.popupContainer}>
               <ProfilePopup 
                 username={username}
                 isVisible={isProfileVisible}
               />
-            </div>
+            </div> */}
           </div>
           <span className={styles.username}>{username}</span>
         </div>
