@@ -88,7 +88,7 @@ function CreatePost() {
         desireSkills: serviceSeeked,
         haveSkills: serviceOffered,
         description: description,
-        categories: category_tags
+        categories: selectedCategories.map(category => category.alt),
     };
     try {
         const response = await axios.post('http://localhost:3080/api/v0/createPost', 

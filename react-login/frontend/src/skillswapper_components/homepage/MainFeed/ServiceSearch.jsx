@@ -71,6 +71,7 @@ function ServiceSearch({ selectedCategories }) {
         });     
         
         setPosts(parsedPosts); 
+        samplePosts.length = 0; //clearing the array
         samplePosts.push(...parsedPosts); 
       } catch (error) {
         console.error("Error fetching posts:", error);
