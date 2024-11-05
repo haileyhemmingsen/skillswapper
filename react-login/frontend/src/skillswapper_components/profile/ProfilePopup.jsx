@@ -4,6 +4,7 @@ import profileImage from '../../images/profile_light.svg';
 
 const ProfilePopup = ({ username, isVisible }) => {
   if (!isVisible) return null;
+  console.log('username:' + username);
   
   return (
     <div className={styles.profilePopup}>
