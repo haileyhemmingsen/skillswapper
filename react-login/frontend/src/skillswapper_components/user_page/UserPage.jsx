@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import userImage from '../../images/user.svg';
 import userGrayImage from '../../images/user_gray.svg';
@@ -9,36 +9,36 @@ import editGray from '../../images/edit_gray.svg';
 import archiveGray from '../../images/archive_gray.svg';
 import styles from './UserPage.module.css';
 
-const samplePosts = [
+const initialPosts = [
   { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
-  { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: true },
+  { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
   { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
   { id: 4, username: "Username4", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
   { id: 5, username: "Username5", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false }
 ];
 
-function Post({ username, date, content, isArchived }) {
-  const [seeking, offer] = content.split('\n');
+function Post({ post, onArchiveToggle }) {
+  const [seeking, offer] = post.content.split('\n');
   
   return (
-    <div className={`${styles.postContainer} ${isArchived ? styles.archivedPost : ''}`}>
+    <div className={`${styles.postContainer} ${post.isArchived ? styles.archivedPost : ''}`}>
       <div className={styles.postHeader}>
         <div className={styles.userInfo}>
           <img 
-            src={isArchived ? userGrayImage : userImage}
+            src={post.isArchived ? userGrayImage : userImage}
             alt="User avatar" 
             className={styles.userAvatar}
           />
-          <span className={`${styles.username} ${isArchived ? styles.archivedText : ''}`}>
-            {username}
+          <span className={`${styles.username} ${post.isArchived ? styles.archivedText : ''}`}>
+            {post.username}
           </span>
         </div>
         <div className={styles.postMeta}>
-          <span className={`${styles.postDate} ${isArchived ? styles.archivedText : ''}`}>
-            {date}
+          <span className={`${styles.postDate} ${post.isArchived ? styles.archivedText : ''}`}>
+            {post.date}
           </span>
           <img 
-            src={isArchived ? editGray : editOrange}
+            src={post.isArchived ? editGray : editOrange}
             alt="Edit post" 
             className={styles.actionIcon}
           />
@@ -47,17 +47,19 @@ function Post({ username, date, content, isArchived }) {
       
       <div className={styles.postBody}>
         <div className={styles.contentLine}>
-          <span className={`${styles.contentText} ${isArchived ? styles.archivedText : ''}`}>
+          <span className={`${styles.contentText} ${post.isArchived ? styles.archivedText : ''}`}>
             {seeking}
           </span>
           <img 
-            src={isArchived ? archiveGray : archiveOrange}
+            src={post.isArchived ? archiveGray : archiveOrange}
             alt="Archive post" 
             className={styles.actionIcon}
+            onClick={() => onArchiveToggle(post.id)}
+            style={{ cursor: 'pointer' }}
           />
         </div>
         <div className={styles.contentLine}>
-          <span className={`${styles.contentText} ${isArchived ? styles.archivedText : ''}`}>
+          <span className={`${styles.contentText} ${post.isArchived ? styles.archivedText : ''}`}>
             {offer}
           </span>
         </div>
@@ -67,6 +69,18 @@ function Post({ username, date, content, isArchived }) {
 }
 
 function UserPage() {
+  const [posts, setPosts] = useState(initialPosts);
+
+  const handleArchiveToggle = (postId) => {
+    setPosts(prevPosts => 
+      prevPosts.map(post => 
+        post.id === postId 
+          ? { ...post, isArchived: !post.isArchived }
+          : post
+      )
+    );
+  };
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.profileSection}>
@@ -88,13 +102,11 @@ function UserPage() {
       <div className={styles.archiveSection}>
         <h2 className={styles.archiveTitle}>My Posts</h2>
         <div className={styles.postsContainer}>
-          {samplePosts.map(post => (
+          {posts.map(post => (
             <Post
               key={post.id}
-              username={post.username}
-              date={post.date}
-              content={post.content}
-              isArchived={post.isArchived}
+              post={post}
+              onArchiveToggle={handleArchiveToggle}
             />
           ))}
         </div>
