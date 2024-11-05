@@ -1,20 +1,13 @@
-<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from "react";
-=======
-import React from "react";
-import {useState, useEffect } from 'react';
->>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
 import { useNavigate } from 'react-router-dom';
 import styles from './ServiceSearch.module.css';
 import ServicePost from './ServicePost';
 import searchImage from '../../../images/search.svg';
 import logoImage from '../../../images/logo.svg';
 import userImage from '../../../images/user.svg';
-<<<<<<< HEAD
 import ProfilePopup from '../../profile/ProfilePopup';
-=======
+import dropdownImage from '../../../images/dropdown.svg'
 import axios from 'axios'
->>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
 
 // export const samplePosts = [
 //   { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", categories: ["Sports", "Music"] },
@@ -25,27 +18,26 @@ import axios from 'axios'
 
 export let samplePosts = undefined;
 
-<<<<<<< HEAD
 function ServiceSearch({ selectedCategories }) {
   const [showHeaderPopup, setShowHeaderPopup] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [sortOption, setSortOption] = useState('newest');
+
   const headerPopupRef = useRef(null);
   const headerIconRef = useRef(null);
+  const sortDropdownRef = useRef(null);
   const navigate = useNavigate();
-  
-=======
-function ServiceSearch( { selectedCategories } ) {
   const [samplePosts, setSamplePosts] = useState([]);
   const post = {
     desireSkills: 'body.desireSkills',
     haveSkills: 'body.haveSkills',
     description: 'body.description',
     categories: ['body.categories'],
-    // post_id: 'postuuid',
-    // createdAt: new Date() 
-}
-const post_string = JSON.stringify(post);
-console.log(post_string);
-console.log(typeof(post_string))
+  }
+
+  const post_string = JSON.stringify(post);
+  console.log(post_string);
+  console.log(typeof(post_string))
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -68,12 +60,30 @@ console.log(typeof(post_string))
     fetchPosts();
   }, [selectedCategories]);
 
->>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
   const filteredPosts = selectedCategories.length === 0 
     ? samplePosts
     : samplePosts.filter(post =>
         post.categories.some(category => selectedCategories.includes(category))
       );
+
+  const handleSortClick = () => {
+    setShowSortDropdown(!showSortDropdown);
+  };
+
+  const handleSortOption = (option) => {
+    setSortOption(option);
+    setShowSortDropdown(false);
+    
+    const sortedPosts = [...samplePosts].sort((a, b) => {
+      if (option === 'newest') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      }
+    });
+    
+    setSamplePosts(sortedPosts);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,12 +93,13 @@ console.log(typeof(post_string))
           !headerIconRef.current.contains(event.target)) {
         setShowHeaderPopup(false);
       }
+
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target)) {
+        setShowSortDropdown(false);
+      }
     };
 
-    if (showHeaderPopup) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    
+    document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showHeaderPopup]);
 
@@ -103,14 +114,10 @@ console.log(typeof(post_string))
     navigate(`/posting/${postId}`);
   };
 
-<<<<<<< HEAD
-=======
   const handleMakePostClick = () => {
     navigate('/createpost');
   }
 
-
->>>>>>> 37a66db66222f879c832379725a078cd110bb7fe
   return (
     <main className={styles.container}>
       <header className={styles.header}>
@@ -151,7 +158,42 @@ console.log(typeof(post_string))
               </div>
             </div>
           </form>
-          <button type="button" className={styles.postButton} onClick={()=> handleMakePostClick()}>Make a post</button>
+          
+          <div className={styles.actionContainer}>
+            <button type="button" className={styles.postButton} onClick={handleMakePostClick}>
+              Make a post
+            </button>
+            <div className={`${styles.sortDropdownContainer}`} ref={sortDropdownRef}>
+              <button 
+                className={`${styles.sortButton} ${showSortDropdown ? styles.active : ''}`}
+                onClick={handleSortClick}
+              >
+                <span>sort by</span>
+                <img 
+                  src={dropdownImage} 
+                  alt="Sort options"
+                  className={`${styles.dropdownIcon} ${showSortDropdown ? styles.rotated : ''}`}
+                />
+              </button>
+              {showSortDropdown && (
+                <div className={styles.sortOptions}>
+                  <button 
+                    onClick={() => handleSortOption('newest')}
+                    className={styles.sortOption}
+                  >
+                    Newest
+                  </button>
+                  <button 
+                    onClick={() => handleSortOption('oldest')}
+                    className={styles.sortOption}
+                  >
+                    Oldest
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className={styles.postsContainer}>
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
@@ -168,7 +210,7 @@ console.log(typeof(post_string))
             )}
           </div>
         </section>
-      </div> 
+      </div>
     </main>
   );
 }
