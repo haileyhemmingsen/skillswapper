@@ -31,15 +31,19 @@ const ProfilePopup = ({ username, isVisible }) => {
             View Profile
           </button>
         </Link>
-        <button 
-          className={styles.actionBtn}
+
+        <Link 
+          to="/login" 
+          className={styles.linkReset}
           onClick={(e) => {
             e.stopPropagation();
             console.log('Logout clicked');
           }}
         >
-          Log out
-        </button>
+          <button className={styles.actionBtn}>
+            Log out
+          </button>
+        </Link>
       </div>
     </div>
   );
