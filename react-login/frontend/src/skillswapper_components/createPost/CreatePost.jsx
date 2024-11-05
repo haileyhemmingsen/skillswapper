@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import styles from './CreatePost.module.css';
-import ImageGallery from '../../skillswapper_components/createPost/tagMenu/ImageGallery';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import dropdownIcon from '../../images/dropdownIcon.svg';
+import userAvatar from '../../images/userAvatar.svg';
+import decorativeIcon from '../../images/decorativeIcon.svg';
+import ImageGallery from '../../skillswapper_components/createPost/tagMenu/ImageGallery';
+
 
 
 
@@ -114,9 +118,9 @@ function CreatePost() {
         <Link to="/homepage">
         <img  
             loading="lazy" 
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/cfdc61dafac0285a079f24b0b6281e077a22c077a2b773601af0abc34588e6ab?placeholderIfAbsent=true&apiKey=d4809dff43a0497eb3b4b1f0b8ac743d" 
+            src={decorativeIcon} 
             className={styles.decorativeIcon} 
-            alt=""
+            alt="Decorative icon"
           />
         </Link>
       </div>
@@ -125,7 +129,7 @@ function CreatePost() {
           <div className={styles.userInfo}>
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/0892ef7e5481f4d70f5efe3be9f0db1227ca1971dc54c137c4973438e6803815?placeholderIfAbsent=true&apiKey=d4809dff43a0497eb3b4b1f0b8ac743d"
+              src={userAvatar}
               className={styles.userAvatar}
               alt="User avatar"
             />
@@ -181,9 +185,9 @@ function CreatePost() {
               </div>
               <img
                 loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/c02708517ae2b44f99b87ca2e0ac883ae58942efb0d1107fbb89944fd25a51ea?placeholderIfAbsent=true&apiKey=d4809dff43a0497eb3b4b1f0b8ac743d"
+                src={dropdownIcon}
                 className={styles.dropdownIcon}
-                alt=""
+                alt="Dropdown icon"s
                 onClick={handleIconClick}
               />
             </div>
