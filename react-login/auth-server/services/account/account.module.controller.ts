@@ -88,7 +88,6 @@ export class LogInController extends Controller {
                 setCookieResponse(200, valid, {
                     'Set-Cookie': `accessToken=${valid.accessToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`
                 });
-
                 return valid;
             });
     }

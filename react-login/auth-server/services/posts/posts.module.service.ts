@@ -122,6 +122,7 @@ export class PostService {
                     const username = await getUsernameByUUID(data.poster_uuid); // Now you can await here
                     const next_post = {
                         id: post_obj.post_id,
+                        poster_uuid: data.poster_uuid,
                         username: username, // Use the resolved username
                         date: post_obj.createdAt,
                         skillsAsked: post_obj.desireSkills,

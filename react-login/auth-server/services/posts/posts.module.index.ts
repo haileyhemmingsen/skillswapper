@@ -7,12 +7,13 @@ export interface NewPost {
 
 export interface PostComment {
     postID: string,
-    postingUserID: string,
+    // postingUserID: string,
     comment: string
 }
 
 export interface SkillPost {
     id: string,
+    poster_uuid: string,
     username: string,
     date: Date,
     location?: string,
