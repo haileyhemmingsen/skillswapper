@@ -2,7 +2,7 @@ import { NewPost, PostComment, SkillPost, Categories, Comment} from "./posts.mod
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
-import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion, query, where } from 'firebase/firestore';
 import { get } from "http";
 
 export class PostService {
@@ -100,18 +100,30 @@ export class PostService {
         const postsSnapshot = await getDocs(collection(db, 'posts'));
         // console.log(postsSnapshot.empty);
         let allPosts = new Array<SkillPost>();
-        postsSnapshot.forEach((doc) => { // loop through every doc (so looping through every user who has posted something)
-            // console.log('we have gathered docs ')
-            const data = doc.data();
-            // console.log(data);
-            if (data.posts && Array.isArray(data.posts)) { // if they have a valid doc, with at least one post
-                for (let i = 0; i < data.posts.length; i += 1) { // loop through all posts made by a single user
+
+        async function getUsernameByUUID(uuid: string): Promise<string> {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', uuid));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0];
+              const userData = userDoc.data();
+              return `${userData.firstname} ${userData.lastname}`;
+            }
+            return 'Unknown User'; // Fallback if user not found
+          }
+
+          for (const doc of postsSnapshot.docs) { // Use for...of instead of forEach
+            const data = doc.data(); 
+            if (data.posts && Array.isArray(data.posts)) {
+                for (let i = 0; i < data.posts.length; i += 1) {
                     const post_obj = JSON.parse(data.posts[i]);
+                    const username = await getUsernameByUUID(data.poster_uuid); // Now you can await here
                     const next_post = {
                         id: post_obj.post_id,
-                        username: data.poster_uuid,
+                        username: username, // Use the resolved username
                         date: post_obj.createdAt,
-                        // location:
                         skillsAsked: post_obj.desireSkills,
                         skillsOffered: post_obj.haveSkills,
                         description: post_obj.description,
@@ -120,7 +132,7 @@ export class PostService {
                     allPosts.push(next_post);
                 }
             }
-        });
+        }
         // console.log(allPosts);
         return allPosts;
     }

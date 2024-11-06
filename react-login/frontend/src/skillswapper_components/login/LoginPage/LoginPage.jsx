@@ -7,12 +7,16 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
+import { LoginContext } from '../../../context/Login.tsx';
+
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const loginContext = React.useContext(LoginContext);
 
   const navigate = useNavigate();
 
@@ -58,6 +62,10 @@ const Login = (props) => {
 
         props.setLoggedIn(true);
         props.setEmail(email);
+        console.log('name: ' + res.data.name);
+        loginContext.setAccessToken(accessToken);
+        loginContext.setUserName(res.data.name);
+        loginContext.setId(id);
         navigate('/homepage');
     }).catch((err) => {
       console.log(err);

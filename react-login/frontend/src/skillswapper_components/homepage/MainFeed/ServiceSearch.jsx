@@ -8,6 +8,8 @@ import userImage from "../../../images/user.svg";
 import ProfilePopup from '../../profile/ProfilePopup';
 import axios from "axios";
 
+import { LoginContext } from "../../../context/Login.tsx";
+
 export const samplePosts = [];
 
 function ServiceSearch({ selectedCategories }) {
@@ -17,6 +19,8 @@ function ServiceSearch({ selectedCategories }) {
   const navigate = useNavigate();
   const [posts, setPosts] = useState(samplePosts); 
   const [keyword, setKeyword] = useState("");
+
+  const loginContext = React.useContext(LoginContext);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -129,7 +133,7 @@ function ServiceSearch({ selectedCategories }) {
           {showHeaderPopup && (
             <div ref={headerPopupRef} className={styles.headerPopupContainer}>
               <ProfilePopup 
-                username="Username"
+                username={loginContext.userName}
                 isVisible={showHeaderPopup}
               />
             </div>
