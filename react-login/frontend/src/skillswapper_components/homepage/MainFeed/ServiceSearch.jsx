@@ -62,16 +62,30 @@ function ServiceSearch({ selectedCategories }) {
     
         const posts = response.data; 
         const parsedPosts = posts.map(post => {
-          return {
-            post_id: post.id,
-            username: post.username,
-            date: new Date(post.date).toLocaleDateString(),
-            content: 
-              `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
-              `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
-              `${post.description ? `${post.description}` : ''}`,
-            categories: post.categories || []
-          };
+            if (post.username === ' ') {
+                return {
+                    post_id: post.id,
+                    username: post.poster_uuid,
+                    date: new Date(post.date).toLocaleDateString(),
+                    content: 
+                        `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
+                        `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
+                        `${post.description ? `${post.description}` : ''}`,
+                    categories: post.categories || []
+              };
+            }
+            else {
+                return {
+                    post_id: post.id,
+                    username: post.username,
+                    date: new Date(post.date).toLocaleDateString(),
+                    content: 
+                        `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
+                        `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
+                        `${post.description ? `${post.description}` : ''}`,
+                    categories: post.categories || []
+              };
+            }
         });     
         
         setPosts(parsedPosts); 
@@ -100,8 +114,11 @@ function ServiceSearch({ selectedCategories }) {
         return includesCategory && includesKeyword;
       });
 
-  const handlePostClick = (postId) => {
-    navigate(`/posting/${postId}`);
+  const handlePostClick = (post) => {
+    // send post data to session storage
+    const string_post = JSON.stringify(post);
+    sessionStorage.setItem('postInfo', string_post);
+    navigate(`/posting/${post.post_id}`);
   };
 
 
@@ -166,7 +183,7 @@ function ServiceSearch({ selectedCategories }) {
               filteredPosts.map((post) => (
                 <div
                   key={post.post_id}
-                  onClick={() => handlePostClick(post.post_id)}
+                  onClick={() => handlePostClick(post)}
                   style={{ cursor: "pointer" }}
                 >
                   <ServicePost

@@ -64,7 +64,12 @@ const Login = (props) => {
         props.setEmail(email);
         console.log('name: ' + res.data.name);
         loginContext.setAccessToken(accessToken);
-        loginContext.setUserName(res.data.name);
+        if (res.data.name === '') {
+            loginContext.setUserName(id);
+        }
+        else {
+            loginContext.setUserName(res.data.name);
+        }
         loginContext.setId(id);
         navigate('/homepage');
     }).catch((err) => {
