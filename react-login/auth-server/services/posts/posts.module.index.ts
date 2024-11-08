@@ -30,6 +30,7 @@ export interface Categories {
 export interface Comment {
     comment_id: string,
     poster_id: string,
+    poster_username: string,
     date: Date
     comment: string
 }

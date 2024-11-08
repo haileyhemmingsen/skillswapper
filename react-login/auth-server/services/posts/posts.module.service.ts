@@ -143,6 +143,19 @@ export class PostService {
         }
         let allComments = new Array<Comment>();
         const commentsSnapshotRef = doc(db, 'comments', post_id);
+
+        async function getUsernameByUUID(uuid: string): Promise<string> {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', uuid));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                const userData = userDoc.data();
+                return `${userData.firstname} ${userData.lastname}`;
+            }
+            return 'Unknown User'; // Fallback if user not found
+        }
+
         try {
             const commentsDocSnapshot = await getDoc(commentsSnapshotRef);
             if (commentsDocSnapshot.exists()) {
@@ -150,9 +163,15 @@ export class PostService {
                 if (commentsData) {
                     for (let i = 0; i < commentsData.comment.length; i += 1) {
                         const post_obj = JSON.parse(commentsData.comment[i]);
+                        let username = await getUsernameByUUID(post_obj.postingUserID);
+                        if (username === ' ') {
+                            // username dn exist. 
+                            username = post_obj.postingUserID;
+                        }
                         const next_comment = {
                             comment_id: post_obj.comment_id,
-                            poster_id: post_obj.user_id,
+                            poster_id: post_obj.postingUserID,
+                            poster_username: username,
                             date: post_obj.createdAt,
                             comment: post_obj.comment
                         }

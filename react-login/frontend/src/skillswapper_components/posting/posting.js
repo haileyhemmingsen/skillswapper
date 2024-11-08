@@ -90,7 +90,7 @@ const Posting = (props) => {
                 const parsedComments = comments.map(comment => {
                     return {
                         comment_id: comment.comment_id,
-                        username: comment.poster_id,
+                        username: comment.poster_username,
                         date: comment.date,
                         content: comment.comment
                     };
