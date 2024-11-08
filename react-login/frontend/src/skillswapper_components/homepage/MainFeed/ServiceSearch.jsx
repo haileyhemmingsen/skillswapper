@@ -5,6 +5,7 @@ import ServicePost from "./ServicePost";
 import searchImage from "../../../images/search.svg";
 import logoImage from "../../../images/logo.svg";
 import userImage from "../../../images/user.svg";
+import dropdownImage from "../../../images/dropdown.svg";
 import ProfilePopup from '../../profile/ProfilePopup';
 import axios from "axios";
 
@@ -14,6 +15,8 @@ export const samplePosts = [];
 
 function ServiceSearch({ selectedCategories }) {
   const [showHeaderPopup, setShowHeaderPopup] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const sortDropdownRef = useRef(null);
   const headerPopupRef = useRef(null);
   const headerIconRef = useRef(null);
   const navigate = useNavigate();
@@ -30,14 +33,14 @@ function ServiceSearch({ selectedCategories }) {
           !headerIconRef.current.contains(event.target)) {
         setShowHeaderPopup(false);
       }
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target)) {
+        setShowSortDropdown(false);
+      }
     };
 
-    if (showHeaderPopup) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    
+    document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showHeaderPopup]);
+  }, [showHeaderPopup, showSortDropdown]);
 
   const handleHeaderIconClick = (e) => {
     e.preventDefault();
@@ -134,6 +137,14 @@ function ServiceSearch({ selectedCategories }) {
     event.preventDefault();
   };
 
+  const handleSortClick = () => {
+    setShowSortDropdown(!showSortDropdown);
+  };
+
+  const handleSortOption = (option) => {
+    console.log("Selected sort option:", option);
+    setShowSortDropdown(false);
+  };
 
   return (
     <main className={styles.container}>
@@ -177,7 +188,25 @@ function ServiceSearch({ selectedCategories }) {
               </div>
             </div>
           </form>
-          <button type="button" className={styles.postButton} onClick={handleMakePostClick}>Make a post</button>
+          <div className={styles.actionContainer}>
+            <button type="button" className={styles.postButton} onClick={handleMakePostClick}>Make a post</button>
+            <div className={styles.sortDropdownContainer} ref={sortDropdownRef}>
+              <button className={styles.sortButton} onClick={handleSortClick}>
+                sort by
+                <img 
+                  src={dropdownImage} 
+                  alt="Sort options" 
+                  className={`${styles.dropdownIcon} ${showSortDropdown ? styles.flipIcon : ''}`}
+                />
+              </button>
+              {showSortDropdown && (
+                <div className={styles.sortOptions}>
+                  <button className={styles.sortOption} onClick={() => handleSortOption('newest')}>Newest</button>
+                  <button className={styles.sortOption} onClick={() => handleSortOption('oldest')}>Oldest</button>
+                </div>
+              )}
+            </div>
+          </div>
           <div className={styles.postsContainer}>
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
