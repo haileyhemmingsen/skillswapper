@@ -229,17 +229,21 @@ border: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between; 
   width: 100%;
   margin-top: 30px;
-  position: relative;
+  position: relative; 
+}
+
+.postButton {
+  position: absolute; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  margin: 0;
 }
 
 .sortDropdownContainer {
-  position: relative;
-  z-index: 10001;
-  width: 120px; /* Fixed width for container */
+  margin-left: auto;
 }
 
 .sortButton {
