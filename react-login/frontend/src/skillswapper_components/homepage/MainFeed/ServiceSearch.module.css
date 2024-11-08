@@ -90,7 +90,7 @@
   flex-basis: 0;
   width: 100%;
   align-items: center;
-  height: 500px;
+  height: 900px;
 }
 
 @media (max-width: 991px) {
@@ -259,7 +259,8 @@ border: 0;
   cursor: pointer;
   transition: all 0.2s ease;
   height: 40px;
-  width: 100%; /* Take full width of container */
+  width: auto; /* Allow the button to resize based on content */
+  white-space: nowrap; 
 }
 
 .dropdownIcon {
