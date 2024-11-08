@@ -1,8 +1,11 @@
 import React from 'react';
 import styles from './ProfilePopup.module.css';
 import profileImage from '../../images/profile_light.svg';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePopup = ({ username, isVisible }) => {
+  const navigate = useNavigate();
+
   if (!isVisible) return null;
   console.log('username:' + username);
   
@@ -23,6 +26,7 @@ const ProfilePopup = ({ username, isVisible }) => {
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
+            navigate('/userpage');
             console.log('View Profile clicked');
           }}
         >
