@@ -28,6 +28,7 @@ const ProfilePopup = ({ username, isVisible }) => {
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
+            navigate('/userpage');
             console.log('View Profile clicked');
             navigate('/userpage');
           }}
