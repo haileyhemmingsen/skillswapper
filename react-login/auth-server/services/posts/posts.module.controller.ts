@@ -13,7 +13,7 @@ import {
 import express from 'express'
 
 import { PostService } from './posts.module.service';
-import { NewPost, PostComment, SkillPost, Categories, Comment } from './posts.module.index';
+import { NewPost, PostComment, SkillPost, Categories, Comment, Archive } from './posts.module.index';
 
 @Route('createPost')
 export class NewPostController extends Controller {
@@ -75,9 +75,21 @@ export class GetLocalPostsController extends Controller {
         });
     }
 }
+@Route('getUserPosts')
+export class GetUserPostsController extends Controller {
+    @Get()
+    @Security('jwt')
+    @Response('500', 'Internal Error')
+    @SuccessResponse('200', 'Posts Retrieved')
+    public async getUserPosts(@Request() request: express.Request): Promise <SkillPost[]>  {
+        return new PostService().getUserPosts(`${request.user?.id}`).then(async (posts: SkillPost[]): Promise <SkillPost[]> => {
+            return posts;
+        })
+    }
+}
 
 @Route('getAllComments')
-export class getAllCommentsController extends Controller {
+export class GetAllCommentsController extends Controller {
     @Get()
     @Response('500', 'Internal Error')
     @SuccessResponse('200', 'Comments Retrieved')
@@ -87,5 +99,45 @@ export class getAllCommentsController extends Controller {
         return new PostService().getAllComments(post_id).then(async (comments: Comment[]): Promise <Comment[]> => {
             return comments;
         })
+    }
+}
+
+@Route('ArchiveUpdate')
+export class ArchiveUpdaterController extends Controller {
+    @Post()
+    @Security('jwt')
+    @Response('500', 'Internal Error')
+    @Response('401', 'Unauthorized')
+    @SuccessResponse('200', 'Post Updated')
+    public async archiveStatusUpdate(
+        @Body() body: Archive,
+        @Request() request: express.Request 
+    ): Promise<boolean | undefined> {
+        return new PostService().archiveStatusUpdate(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise<boolean | undefined> => {
+            if (identifier === undefined) {
+                this.setStatus(401);
+            }
+            if (identifier === false) {
+                this.setStatus(500);
+            }
+            return identifier;
+        });
+    }
+}
+
+@Route('EditPost')
+export class EditPostController extends Controller {
+    @Post()
+    @Security('jwt')
+    @Response('500', 'Internal Error')
+    @Response('401', 'Unauthorized')
+    @SuccessResponse('200', 'Post Updated')
+    public async EditPost(
+        @Body() body: SkillPost,
+        @Request() request: express.Request
+    ): Promise <boolean | undefined> {
+        return new PostService().editPost(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise <boolean | undefined> => {
+            return identifier;
+        });
     }
 }

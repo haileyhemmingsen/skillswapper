@@ -20,7 +20,8 @@ export interface SkillPost {
     skillsAsked: string,
     skillsOffered: string,
     description: string,
-    categories: string[]
+    categories: string[],
+    archive: boolean
 }
 
 export interface Categories {
@@ -31,6 +32,11 @@ export interface Comment {
     comment_id: string,
     poster_id: string,
     poster_username: string,
-    date: Date
+    date: Date,
     comment: string
+}
+
+export interface Archive {
+    archive: boolean,
+    postID: string
 }

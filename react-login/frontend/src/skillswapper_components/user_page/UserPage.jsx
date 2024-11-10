@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import userImage from '../../images/user.svg';
 import userGrayImage from '../../images/user_gray.svg';
@@ -8,37 +8,34 @@ import archiveOrange from '../../images/archive_orange.svg';
 import editGray from '../../images/edit_gray.svg';
 import archiveGray from '../../images/archive_gray.svg';
 import styles from './UserPage.module.css';
+import axios from 'axios';
 
-const initialPosts = [
-  { id: 1, username: "Username1", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
-  { id: 2, username: "Username2", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
-  { id: 3, username: "Username3", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
-  { id: 4, username: "Username4", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false },
-  { id: 5, username: "Username5", date: "mm/dd/yyyy", content: "Seeking for...\nOffer...", isArchived: false }
-];
 
 function Post({ post, onArchiveToggle }) {
-  const [seeking, offer] = post.content.split('\n');
+    const seeking = `Services Seeking: ${post.skillsAsked}`;
+    const offer = ` Services Offering: ${post.skillsOffered}`;
+    const description = post.description;
+//   const [seeking, offer] = post.content.split('\n');
   
   return (
-    <div className={`${styles.postContainer} ${post.isArchived ? styles.archivedPost : ''}`}>
+    <div className={`${styles.postContainer} ${post.archive ? styles.archivedPost : ''}`}>
       <div className={styles.postHeader}>
         <div className={styles.userInfo}>
           <img 
-            src={post.isArchived ? userGrayImage : userImage}
+            src={post.archive ? userGrayImage : userImage}
             alt="User avatar" 
             className={styles.userAvatar}
           />
-          <span className={`${styles.username} ${post.isArchived ? styles.archivedText : ''}`}>
+          <span className={`${styles.username} ${post.archive ? styles.archivedText : ''}`}>
             {post.username}
           </span>
         </div>
         <div className={styles.postMeta}>
-          <span className={`${styles.postDate} ${post.isArchived ? styles.archivedText : ''}`}>
+          <span className={`${styles.postDate} ${post.archive ? styles.archivedText : ''}`}>
             {post.date}
           </span>
           <img 
-            src={post.isArchived ? editGray : editOrange}
+            src={post.archive ? editGray : editOrange}
             alt="Edit post" 
             className={styles.actionIcon}
           />
@@ -47,11 +44,11 @@ function Post({ post, onArchiveToggle }) {
       
       <div className={styles.postBody}>
         <div className={styles.contentLine}>
-          <span className={`${styles.contentText} ${post.isArchived ? styles.archivedText : ''}`}>
+          <span className={`${styles.contentText} ${post.archive ? styles.archivedText : ''}`}>
             {seeking}
           </span>
           <img 
-            src={post.isArchived ? archiveGray : archiveOrange}
+            src={post.archive ? archiveGray : archiveOrange}
             alt="Archive post" 
             className={styles.actionIcon}
             onClick={() => onArchiveToggle(post.id)}
@@ -59,8 +56,13 @@ function Post({ post, onArchiveToggle }) {
           />
         </div>
         <div className={styles.contentLine}>
-          <span className={`${styles.contentText} ${post.isArchived ? styles.archivedText : ''}`}>
+          <span className={`${styles.contentText} ${post.archive ? styles.archivedText : ''}`}>
             {offer}
+          </span>
+        </div>
+        <div className={styles.contentLine}>
+          <span className={`${styles.contentText} ${post.archive ? styles.archivedText : ''}`}>
+            {description}
           </span>
         </div>
       </div>
@@ -69,16 +71,60 @@ function Post({ post, onArchiveToggle }) {
 }
 
 function UserPage() {
-  const [posts, setPosts] = useState(initialPosts);
+    const [posts, setPosts] = useState([]);
+    useEffect(() => {
+        const fetchMyPosts = async () => {
+            try {
+                const response = await axios.get("http://localhost:3080/api/v0/getUserPosts",
+                    { headers: {"Content-Type": "application/json"}, withCredentials: true });
+
+                const posts = response.data;
+                setPosts(posts);
+            }
+            catch (error) {
+                console.error(error)
+            }
+        }
+    fetchMyPosts();
+    },[]);
+    
+//   setPosts(initialPosts);
 
   const handleArchiveToggle = (postId) => {
-    setPosts(prevPosts => 
-      prevPosts.map(post => 
-        post.id === postId 
-          ? { ...post, isArchived: !post.isArchived }
-          : post
-      )
-    );
+    try {
+        setPosts(prevPosts => 
+            prevPosts.map(post => {
+                if (post.id === postId) {
+                    const cur_archive_state = post.archive;
+                    const dto = {
+                        archive: !cur_archive_state,
+                        postID: post.id
+                    }
+                    const response = axios.post('http://localhost:3080/api/v0/ArchiveUpdate', 
+                        dto,
+                        { headers: {"Content-Type": "application/json"}, withCredentials: true }
+                    );
+                    if (response.data) {
+                        console.log(response.data);
+                        return { ...post, archive: !post.archive };
+                    }
+                    else {
+                        return post;
+                    }
+                    
+                }
+                else {
+                    return post;
+                }
+            })
+        );
+    }
+    catch (error) {
+        console.error(error);
+        return;
+    }
+
+    
   };
 
   return (

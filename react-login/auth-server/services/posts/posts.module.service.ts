@@ -1,4 +1,4 @@
-import { NewPost, PostComment, SkillPost, Categories, Comment} from "./posts.module.index";
+import { NewPost, PostComment, SkillPost, Categories, Comment, Archive } from "./posts.module.index";
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
@@ -18,7 +18,7 @@ export class PostService {
 
         // const user_id = 'INSERT_UUID_HERE';
         try {
-            console.log(user_id);
+            // console.log(user_id);
             if (user_id === '') {
                 return undefined;
             }
@@ -26,6 +26,7 @@ export class PostService {
             const postDocSnapshot = await getDoc(postDocRef);
             const postuuid = uuidv4();
             const post = {
+                archive: false,
                 desireSkills: body.desireSkills,
                 haveSkills: body.haveSkills,
                 description: body.description,
@@ -59,6 +60,117 @@ export class PostService {
         
 
         return true;
+    }
+
+    public async editPost(body: SkillPost, user_id: string): Promise <boolean | undefined> {
+        const postDocRef = doc(db, 'posts', user_id);
+        try {
+            const postDocSnapshot = await getDoc(postDocRef);
+            if(postDocSnapshot.exists()) {
+                const postData = postDocSnapshot.data();
+
+                if (postData.poster_uuid === user_id) {
+                    let found = false;
+                    for (let i =0; i < postData.posts.length; i += 1) {
+                        const cur_post = JSON.parse(postData.posts[i]);
+                        if (cur_post.post_id === body.id) {
+                            // post has been found
+                            found = true;
+                            // update relevant info
+                            cur_post.skillsAsked = body.skillsAsked;
+                            cur_post.skillsOffered = body.skillsOffered;
+                            cur_post.description = body.description;
+                            cur_post.categories = body.categories;
+
+                            JSON.stringify(cur_post);
+                            postData.posts[i] = cur_post;
+                            await updateDoc(postDocRef, postData);
+                            break;
+                        }
+                    }
+                    if (found === false) {
+                        console.log('Post does not exist');
+                        return false;
+                    }
+                }
+                else {
+                    // user is not creator of these posts
+                    console.log('Incorrect and invalid user attempting to update this post');
+                    return undefined;
+                }
+            }
+            else {
+                console.log('User has no posts');
+                return false;
+                // throw new Error('Post does not exist')
+            }
+        }
+        catch (error) {
+            console.error(error);
+            return false;
+        }
+        return true;
+    }
+
+
+    public async getUserPosts(user_id: string): Promise <SkillPost[]> {
+        const postDocRef = doc(db, 'posts', user_id);
+        let allPosts = new Array<SkillPost>();
+
+        async function getUsernameByUUID(uuid: string): Promise<string> {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', uuid));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                const userData = userDoc.data();
+                return `${userData.firstname} ${userData.lastname}`;
+            }
+            return 'Unknown User'; // Fallback if user not found
+        }
+        try {
+            const postDocSnapshot = await getDoc(postDocRef);
+            if(postDocSnapshot.exists()) {
+                const postData = postDocSnapshot.data();
+                if (postData.poster_uuid === user_id) {
+                    
+                    for (let i =0; i < postData.posts.length; i += 1) {
+                        const cur_post = JSON.parse(postData.posts[i]);
+                        
+                        const username = await getUsernameByUUID(postData.poster_uuid); // Now you can await here
+                        const next_post = {
+                            id: cur_post.post_id,
+                            poster_uuid: postData.poster_uuid,
+                            username: username, // Use the resolved username
+                            date: cur_post.createdAt,
+                            skillsAsked: cur_post.desireSkills,
+                            skillsOffered: cur_post.haveSkills,
+                            description: cur_post.description,
+                            categories: cur_post.categories,
+                            archive: cur_post.archive 
+                        }
+                        allPosts.push(next_post);        
+                    }
+                }
+                else {
+                    // user is not creator of these posts
+                    console.log('Incorrect and invalid user attempting to read these posts');
+                    return [];
+                }
+            }
+            else {
+                console.log('User has no posts');
+                return [];
+                // throw new Error('Post does not exist')
+            }
+            
+        }
+        catch (error) {
+            console.error(error);
+            return [];
+        }
+        return allPosts;
     }
 
     public async newComment(body: PostComment, user_id: string): Promise <boolean | undefined> {
@@ -100,7 +212,12 @@ export class PostService {
         const postsSnapshot = await getDocs(collection(db, 'posts'));
         // console.log(postsSnapshot.empty);
         let allPosts = new Array<SkillPost>();
-
+        let categories_exist = false;
+        if(!!body) {
+            if (body?.categories.length !== 0) {
+                categories_exist = true;
+            }
+        }
         async function getUsernameByUUID(uuid: string): Promise<string> {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', uuid));
@@ -119,18 +236,24 @@ export class PostService {
             if (data.posts && Array.isArray(data.posts)) {
                 for (let i = 0; i < data.posts.length; i += 1) {
                     const post_obj = JSON.parse(data.posts[i]);
-                    const username = await getUsernameByUUID(data.poster_uuid); // Now you can await here
-                    const next_post = {
-                        id: post_obj.post_id,
-                        poster_uuid: data.poster_uuid,
-                        username: username, // Use the resolved username
-                        date: post_obj.createdAt,
-                        skillsAsked: post_obj.desireSkills,
-                        skillsOffered: post_obj.haveSkills,
-                        description: post_obj.description,
-                        categories: post_obj.categories
+                    // if categories_exist: check to ensure that all categories in the doc also exist in list of categories with this post
+
+                    if (!post_obj.archive) {
+                        const username = await getUsernameByUUID(data.poster_uuid); // Now you can await here
+                        const next_post = {
+                            id: post_obj.post_id,
+                            poster_uuid: data.poster_uuid,
+                            username: username, // Use the resolved username
+                            date: post_obj.createdAt,
+                            skillsAsked: post_obj.desireSkills,
+                            skillsOffered: post_obj.haveSkills,
+                            description: post_obj.description,
+                            categories: post_obj.categories,
+                            archive: post_obj.archive
+                        }
+                        allPosts.push(next_post);
                     }
-                    allPosts.push(next_post);
+                    
                 }
             }
         }
@@ -188,4 +311,61 @@ export class PostService {
         }
         
     }
+
+    public async archiveStatusUpdate(archive: Archive, user_id: string): Promise <boolean | undefined> {
+        const postDocRef = doc(db, 'posts', user_id);
+        try {
+            const postDocSnapshot = await getDoc(postDocRef);
+            if(postDocSnapshot.exists()) {
+                const postData = postDocSnapshot.data();
+
+                if (postData.poster_uuid === user_id) {
+                    let found = false;
+                    for (let i =0; i < postData.posts.length; i += 1) {
+                        const cur_post = JSON.parse(postData.posts[i]);
+                        if (cur_post.post_id === archive.postID) {
+                            // post has been found
+                            found = true;
+                            cur_post.archive = archive.archive;
+                            const return_post = JSON.stringify(cur_post);
+                            postData.posts[i] = return_post;
+                            await updateDoc(postDocRef, postData);
+                            break;
+                        }
+                    }
+                    if (found === false) {
+                        console.log('Post does not exist');
+                        return false;
+                    }
+                }
+                else {
+                    // user is not creator of these posts
+                    console.log('Incorrect and invalid user attempting to update this post');
+                    return undefined;
+                }
+            }
+            else {
+                console.log('User has no posts');
+                return false;
+                // throw new Error('Post does not exist')
+            }
+            
+        }
+        catch (error) {
+            console.error(error);
+            return false;
+        }
+            
+        // find post
+        // if post doesnt exist, return false
+        // check if post belongs to this poster
+        // if yes update
+        // if no, return undefined
+        
+        //if update fails, return false
+        // if update succeeds, return true
+        return true;
+    }
+
+
 }

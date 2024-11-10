@@ -50,7 +50,7 @@ function ServiceSearch({ selectedCategories }) {
   useEffect(() => {
     const fetchPosts = async () => {
       console.log("selected categories: ", selectedCategories);
-      const payload = { categories: selectedCategories.length > 0 ? selectedCategories : ['useless'] };
+      const payload = { categories: selectedCategories.length > 0 ? selectedCategories : [] };
     
       try {
         const response = await axios.post(
