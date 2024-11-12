@@ -12,8 +12,8 @@ import axios from 'axios';
 
 
 function Post({ post, onArchiveToggle }) {
-    const seeking = `Services Seeking: ${post.skillsAsked}`;
-    const offer = ` Services Offering: ${post.skillsOffered}`;
+    const seeking = `Services Seeking: ${post.skillsAsked || 'N/A'}\n`;
+    const offer = ` Services Offering: ${post.skillsOffered || 'N/A'}\n`;
     const description = post.description;
 //   const [seeking, offer] = post.content.split('\n');
   
