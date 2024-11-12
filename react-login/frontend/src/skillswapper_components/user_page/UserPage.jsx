@@ -90,42 +90,44 @@ function UserPage() {
     
 //   setPosts(initialPosts);
 
-  const handleArchiveToggle = (postId) => {
-    try {
-        setPosts(prevPosts => 
-            prevPosts.map(post => {
-                if (post.id === postId) {
-                    const cur_archive_state = post.archive;
-                    const dto = {
-                        archive: !cur_archive_state,
-                        postID: post.id
-                    }
-                    const response = axios.post('http://localhost:3080/api/v0/ArchiveUpdate', 
-                        dto,
-                        { headers: {"Content-Type": "application/json"}, withCredentials: true }
-                    );
-                    if (response.data) {
-                        console.log(response.data);
-                        return { ...post, archive: !post.archive };
-                    }
-                    else {
-                        return post;
-                    }
-                    
-                }
-                else {
-                    return post;
-                }
-            })
-        );
-    }
-    catch (error) {
-        console.error(error);
-        return;
-    }
+const handleArchiveToggle = async (postId) => {
+  try {
+    // Update the UI immediately by setting the new archive state optimistically
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId ? { ...post, archive: !post.archive } : post
+      )
+    );
 
+    // Send the archive toggle request to the server
+    const post = posts.find(post => post.id === postId);
+    const dto = { archive: !post.archive, postID: post.id };
     
-  };
+    const response = await axios.post(
+      'http://localhost:3080/api/v0/ArchiveUpdate', 
+      dto,
+      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+    );
+
+    if (!response.data) {
+      // Revert the change if the request fails on the server side
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post.id === postId ? { ...post, archive: post.archive } : post
+        )
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    // Roll back the change if the request fails
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId ? { ...post, archive: post.archive } : post
+      )
+    );
+  }
+};
+
 
   return (
     <div className={styles.pageContainer}>
