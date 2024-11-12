@@ -50,27 +50,35 @@ const Posting = (props) => {
         e.preventDefault();
         console.log("Submitting comment:", comment);
         try {
-            const dto = {
-                postID: postID,
-                // postingUserID: string,
-                comment: comment
-            }
-            axios.post('http://localhost:3080/api/v0/createComment', 
-                dto,
-                {header: {'Content-Type': 'application/json'}, withCredentials: true}).then((res) => {
-                    console.log(res);
-                    if(res.data) {
-                        // success, refresh 
-                        setComment(''); 
-                        setIsInputFocused(false); 
-                    }
+          const dto = {
+            postID: postID,
+            comment: comment
+          }
+          axios.post('http://localhost:3080/api/v0/createComment', 
+            dto, 
+            {header: {'Content-Type': 'application/json'}, 
+            withCredentials: true})
+            .then((res) => {
+              console.log(res);
+              if(res.data) {
+                // Success, update comments state with new comment
+                const newComment = {
+                  comment_id: res.data.comment_id, 
+                  username: postData.username, 
+                  date: new Date().toLocaleString(),
+                  content: comment
                 }
-            );
-        }
+                setComments([...comments, newComment]); // Add new comment to existing comments
+      
+                setComment('');
+                setIsInputFocused(false);
+              }
+            });
+        } 
         catch (error) {
-            console.error(error);
+          console.error(error);
         }
-        
+
     };
 
     const handlePostClick = () => {
