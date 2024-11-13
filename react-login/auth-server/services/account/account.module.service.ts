@@ -124,7 +124,7 @@ export class LoginService {
       return undefined;
     }
   }
-  public async changeUsername(body: UpdateUsername): Promise<boolean|undefined> {
-      return true;
-  }
+  // public async changeUsername(body: UpdateUsername): Promise<boolean|undefined> {
+  //     return true;
+  // }
 }
