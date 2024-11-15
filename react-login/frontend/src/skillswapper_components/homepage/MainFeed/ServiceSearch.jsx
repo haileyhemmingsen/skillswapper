@@ -8,6 +8,7 @@ import userImage from "../../../images/user.svg";
 import dropdownImage from "../../../images/dropdown.svg";
 import ProfilePopup from '../../profile/ProfilePopup';
 import axios from "axios";
+import { getDistanceByZip } from "../../../utils/zipcodeUtils"; 
 
 import { LoginContext } from "../../../context/Login.tsx";
 
@@ -22,8 +23,14 @@ function ServiceSearch({ selectedCategories }) {
   const navigate = useNavigate();
   const [posts, setPosts] = useState(samplePosts); 
   const [keyword, setKeyword] = useState("");
-  const [sortOrder, setSortOrder] = useState(""); // New state for sort order
-  const [sortLabel, setSortLabel] = useState("sort by"); // New state for sort button label
+  const [sortOrder, setSortOrder] = useState(""); 
+  const [sortLabel, setSortLabel] = useState("sort by"); 
+  const [userZipCode] = useState("94087");
+  const [filteredPosts, setFilteredPosts] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [distancesCalculated, setDistancesCalculated] = useState(false);
+  const [showLoadingText, setShowLoadingText] = useState(false); // State to control loading text visibility
+  const loadingTimeoutRef = useRef(null);
 
   const loginContext = React.useContext(LoginContext);
 
@@ -63,34 +70,25 @@ function ServiceSearch({ selectedCategories }) {
           { headers: { "Content-Type": "application/json" } }
         );
         console.log("Response data:", response.data); 
+        console.log("Response data location:", response.data[0]); 
     
         const posts = response.data; 
         const parsedPosts = posts.map(post => {
-            if (post.username === ' ') {
-                return {
-                    post_id: post.id,
-                    username: post.poster_uuid,
-                    date: new Date(post.date).toLocaleDateString(),
-                    content: 
-                        `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
-                        `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
-                        `${post.description ? `${post.description}` : ''}`,
-                    categories: post.categories || []
-              };
-            }
-            else {
-                return {
-                    post_id: post.id,
-                    username: post.username,
-                    date: new Date(post.date).toLocaleDateString(),
-                    content: 
-                        `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
-                        `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
-                        `${post.description ? `${post.description}` : ''}`,
-                    categories: post.categories || []
-              };
-            }
-        });     
+          // Determine the username based on the condition
+          const username = post.username.trim() === '' ? post.poster_uuid : post.username;
+  
+          return {
+            post_id: post.id,
+            username: username,
+            date: new Date(post.date).toLocaleDateString(),
+            content: 
+              `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
+              `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
+              `${post.description || ''}`, 
+            categories: post.categories || [],
+            zipcode: post.location || "00000"
+          };
+        });   
         
         setPosts(parsedPosts); 
         samplePosts.length = 0; //clearing the array
@@ -103,26 +101,68 @@ function ServiceSearch({ selectedCategories }) {
     fetchPosts();
   }, [selectedCategories]);
 
-  const filteredPosts = posts
-    .filter((post) => {
-      const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
-      if (selectedCategories.length === 0) {
-        return includesKeyword;
-      } else {
-        const includesCategory = post.categories.some((category) =>
-          selectedCategories.includes(category)
-        );
-        return includesCategory && includesKeyword;
+  useEffect(() => {
+    const updateFilteredPosts = async () => {
+      let postsWithDistances = posts; // Start with the original posts
+
+      // Calculate distances only on the first load
+      if (!distancesCalculated) {
+        postsWithDistances = await calculateDistances(posts, userZipCode);
+        setDistancesCalculated(true); // Mark distances as calculated
       }
-    })
-    .sort((a, b) => {
-      if (sortOrder === 'newest') {
-        return new Date(b.date) - new Date(a.date);
-      } else if (sortOrder === 'oldest') {
-        return new Date(a.date) - new Date(b.date);
-      }
-      return 0;
-    });
+
+      setIsLoading(true); 
+      loadingTimeoutRef.current = setTimeout(() => {
+        setShowLoadingText(true); 
+      }, 100);
+
+      const filtered = postsWithDistances
+        .filter((post) => {
+          const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
+          if (selectedCategories.length === 0) {
+            return includesKeyword;
+          } else {
+            const includesCategory = post.categories.some((category) =>
+              selectedCategories.includes(category)
+            );
+            return includesCategory && includesKeyword;
+          }
+        })
+        .sort((a, b) => {
+          switch (sortOrder) {
+            case 'newest':
+              return new Date(b.date) - new Date(a.date);
+            case 'oldest':
+              return new Date(a.date) - new Date(b.date);
+            case 'nearest':
+              if (a.zipcode === "00000" && b.zipcode !== "00000") return 1;
+              if (b.zipcode === "00000" && a.zipcode !== "00000") return -1;
+              return a.distance - b.distance;
+            default:
+              return 0;
+          }
+        });
+
+      setFilteredPosts(filtered); 
+      setIsLoading(false);
+      setShowLoadingText(false); 
+      clearTimeout(loadingTimeoutRef.current); // Clear the timeout
+    };
+
+    updateFilteredPosts();
+    return () => {
+      clearTimeout(loadingTimeoutRef.current);
+    };
+  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated]);
+
+  // Function to calculate distances for all posts
+  async function calculateDistances(posts, userZipCode) {
+    const postsWithDistances = await Promise.all(posts.map(async (post) => {
+      const distance = post.zipcode !== "00000" ? await getDistanceByZip(userZipCode, post.zipcode) : Infinity;
+      return { ...post, distance }; 
+    }));
+    return postsWithDistances;
+  }
 
   const handlePostClick = (post) => {
     // send post data to session storage
@@ -152,6 +192,7 @@ function ServiceSearch({ selectedCategories }) {
     setSortOrder(option);
     setSortLabel(`sort by ${option}`); // Update the button label
     setShowSortDropdown(false);
+    setIsLoading(true); // Start loading when sorting
   };
 
   return (
@@ -211,28 +252,29 @@ function ServiceSearch({ selectedCategories }) {
                 <div className={styles.sortOptions}>
                   <button className={styles.sortOption} onClick={() => handleSortOption('newest')}>Newest</button>
                   <button className={styles.sortOption} onClick={() => handleSortOption('oldest')}>Oldest</button>
+                  <button className={styles.sortOption} onClick={() => handleSortOption('nearest')}>Nearest</button>
                 </div>
               )}
             </div>
           </div>
           <div className={styles.postsContainer}>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
-                <div
-                  key={post.post_id}
-                  onClick={() => handlePostClick(post)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <ServicePost
-                    username={post.username}
-                    date={post.date}
-                    content={post.content}
-                    keyword={keyword} 
-                  />
-                </div>
-              ))
+          {isLoading && showLoadingText ? (
+              <div className={styles.loadingSpinner}>Loading...</div>
             ) : (
-              <p>No posts available.</p>
+              filteredPosts.length > 0 ? (
+                filteredPosts.map((post) => (
+                  <div key={post.post_id} onClick={() => handlePostClick(post)} style={{ cursor: "pointer" }}>
+                    <ServicePost
+                      username={post.username}
+                      date={post.date}
+                      content={post.content}
+                      keyword={keyword} 
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>No posts available.</p>
+              )
             )}
           </div>
         </section>
