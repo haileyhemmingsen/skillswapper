@@ -22,7 +22,8 @@ export interface DatabaseCredentials {
 export interface Authenticated { 
     id: string,
     accessToken: string,
-    name: string
+    name: string,
+    zip?: string,
 }
 
 export interface UpdatePassword {

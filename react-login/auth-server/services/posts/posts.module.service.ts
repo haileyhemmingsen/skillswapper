@@ -32,7 +32,7 @@ export class PostService {
                 description: body.description,
                 categories: body.categories,
                 post_id: postuuid,
-                createdAt: new Date() 
+                createdAt: new Date()
             }
             const post_string = JSON.stringify(post);
 
@@ -113,32 +113,38 @@ export class PostService {
     }
 
 
-    public async getUserPosts(user_id: string): Promise <SkillPost[]> {
+    public async getUserPosts(user_id: string): Promise<SkillPost[]> {
         const postDocRef = doc(db, 'posts', user_id);
         let allPosts = new Array<SkillPost>();
-
-        async function getUsernameByUUID(uuid: string): Promise<string> {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('uuid', '==', uuid));
-            const querySnapshot = await getDocs(q);
-            
-            if (!querySnapshot.empty) {
-                const userDoc = querySnapshot.docs[0];
-                const userData = userDoc.data();
-                return `${userData.firstname} ${userData.lastname}`;
-            }
-            return 'Unknown User'; // Fallback if user not found
-        }
+        
         try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', user_id));
+            const userSnapshot = await getDocs(q);
+            if (userSnapshot.empty) {
+                console.log('User not found');
+                return [];
+            }
+
+
+            const userDoc = userSnapshot.docs[0];
+            const userData = userDoc.data();
+            let username = `${userData.firstname} ${userData.lastname}`;
+            if (username === ' ') {
+                // first name does not exist, thus last name does not exist, thus username should be uuid
+                username = user_id
+            }
+            // we are looking at our own posts, getting zip is unnecessary
+            // const userZip = userData.zip;
+
+
             const postDocSnapshot = await getDoc(postDocRef);
             if(postDocSnapshot.exists()) {
                 const postData = postDocSnapshot.data();
                 if (postData.poster_uuid === user_id) {
-                    
-                    for (let i =0; i < postData.posts.length; i += 1) {
+                    for (let i = 0; i < postData.posts.length; i += 1) {
                         const cur_post = JSON.parse(postData.posts[i]);
                         
-                        const username = await getUsernameByUUID(postData.poster_uuid); // Now you can await here
                         const next_post = {
                             id: cur_post.post_id,
                             poster_uuid: postData.poster_uuid,
@@ -162,9 +168,7 @@ export class PostService {
             else {
                 console.log('User has no posts');
                 return [];
-                // throw new Error('Post does not exist')
             }
-            
         }
         catch (error) {
             console.error(error);
@@ -218,7 +222,7 @@ export class PostService {
                 categories_exist = true;
             }
         }
-        async function getUsernameByUUID(uuid: string): Promise<string> {
+        async function getUsernameByUUID(uuid: string): Promise<[string, string | undefined]> {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', uuid));
             const querySnapshot = await getDocs(q);
@@ -226,9 +230,15 @@ export class PostService {
             if (!querySnapshot.empty) {
               const userDoc = querySnapshot.docs[0];
               const userData = userDoc.data();
-              return `${userData.firstname} ${userData.lastname}`;
+              const zip = userData.zip;
+              let username = `${userData.firstname} ${userData.lastname}`
+              if (username === ' ') {
+                // first name does not exist, thus last name does not exist, thus username should be uuid
+                username = uuid
+              }
+              return [username, zip];
             }
-            return 'Unknown User'; // Fallback if user not found
+            return ['Unknown User', undefined]; // Fallback if user not found
           }
 
           for (const doc of postsSnapshot.docs) { // Use for...of instead of forEach
@@ -239,7 +249,7 @@ export class PostService {
                     // if categories_exist: check to ensure that all categories in the doc also exist in list of categories with this post
 
                     if (!post_obj.archive) {
-                        const username = await getUsernameByUUID(data.poster_uuid); // Now you can await here
+                        const [username, zip] = await getUsernameByUUID(data.poster_uuid); // Now you can await here
                         const next_post = {
                             id: post_obj.post_id,
                             poster_uuid: data.poster_uuid,
@@ -249,7 +259,8 @@ export class PostService {
                             skillsOffered: post_obj.haveSkills,
                             description: post_obj.description,
                             categories: post_obj.categories,
-                            archive: post_obj.archive
+                            archive: post_obj.archive,
+                            location: zip
                         }
                         allPosts.push(next_post);
                     }

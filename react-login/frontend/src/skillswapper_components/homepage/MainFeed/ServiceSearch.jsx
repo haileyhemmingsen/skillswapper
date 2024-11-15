@@ -8,6 +8,7 @@ import userImage from "../../../images/user.svg";
 import dropdownImage from "../../../images/dropdown.svg";
 import ProfilePopup from '../../profile/ProfilePopup';
 import axios from "axios";
+import { getDistanceByZip } from "../../../utils/zipcodeUtils"; 
 
 import { LoginContext } from "../../../context/Login.tsx";
 
@@ -22,8 +23,12 @@ function ServiceSearch({ selectedCategories }) {
   const navigate = useNavigate();
   const [posts, setPosts] = useState(samplePosts); 
   const [keyword, setKeyword] = useState("");
-  const [sortOrder, setSortOrder] = useState(""); // New state for sort order
-  const [sortLabel, setSortLabel] = useState("sort by"); // New state for sort button label
+  const [sortOrder, setSortOrder] = useState(""); 
+  const [sortLabel, setSortLabel] = useState("sort by"); 
+  const [userZipCode, setUserZipcode] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]); 
+  const [distancesCalculated, setDistancesCalculated] = useState(false);
+  const [isPostsLoaded, setIsPostsLoaded] = useState(false);
 
   const loginContext = React.useContext(LoginContext);
 
@@ -63,66 +68,97 @@ function ServiceSearch({ selectedCategories }) {
           { headers: { "Content-Type": "application/json" } }
         );
         console.log("Response data:", response.data); 
+        console.log("Response data location:", response.data[0]); 
     
         const posts = response.data; 
         const parsedPosts = posts.map(post => {
-            if (post.username === ' ') {
-                return {
-                    post_id: post.id,
-                    username: post.poster_uuid,
-                    date: new Date(post.date).toLocaleDateString(),
-                    content: 
-                        `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
-                        `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
-                        `${post.description ? `${post.description}` : ''}`,
-                    categories: post.categories || []
-              };
-            }
-            else {
-                return {
-                    post_id: post.id,
-                    username: post.username,
-                    date: new Date(post.date).toLocaleDateString(),
-                    content: 
-                        `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
-                        `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
-                        `${post.description ? `${post.description}` : ''}`,
-                    categories: post.categories || []
-              };
-            }
-        });     
+          // Determine the username based on the condition
+          const username = post.username.trim() === '' ? post.poster_uuid : post.username;
+  
+          return {
+            post_id: post.id,
+            username: username,
+            date: new Date(post.date).toLocaleDateString(),
+            content: 
+              `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
+              `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
+              `${post.description || ''}`, 
+            categories: post.categories || [],
+            zipcode: post.location || undefined
+          };
+        });   
         
         setPosts(parsedPosts); 
         samplePosts.length = 0; //clearing the array
         samplePosts.push(...parsedPosts); 
+        setIsPostsLoaded(true);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setIsPostsLoaded(true);
       }
     };
 
     fetchPosts();
   }, [selectedCategories]);
+  // this effect doesnt finish before this next useeffect 105 requires previous to finish
 
-  const filteredPosts = posts
-    .filter((post) => {
-      const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
-      if (selectedCategories.length === 0) {
-        return includesKeyword;
-      } else {
-        const includesCategory = post.categories.some((category) =>
-          selectedCategories.includes(category)
-        );
-        return includesCategory && includesKeyword;
-      }
-    })
-    .sort((a, b) => {
-      if (sortOrder === 'newest') {
-        return new Date(b.date) - new Date(a.date);
-      } else if (sortOrder === 'oldest') {
-        return new Date(a.date) - new Date(b.date);
-      }
-      return 0;
-    });
+  useEffect(() => {
+    
+    if (!isPostsLoaded) return; // Wait until posts are loaded
+
+    const updateFilteredPosts = async () => {
+      let postsWithDistances = posts; 
+      // loginContext.zip for getting the user's zipcode
+
+      // Calculate distances only on the first load
+    if (!distancesCalculated) {
+      postsWithDistances = await calculateDistances(posts, "94087");
+      setPosts(postsWithDistances); // Update posts with distances
+      setDistancesCalculated(true); // Mark distances as calculated
+      console.log("Posts with distances calculated:", postsWithDistances);
+    }
+
+      const filtered = postsWithDistances
+        .filter((post) => {
+          const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
+          if (selectedCategories.length === 0) {
+            return includesKeyword;
+          } else {
+            const includesCategory = post.categories.some((category) =>
+              selectedCategories.includes(category)
+            );
+            return includesCategory && includesKeyword;
+          }
+        })
+        .sort((a, b) => {
+          switch (sortOrder) {
+            case 'newest':
+              return new Date(b.date) - new Date(a.date);
+            case 'oldest':
+              return new Date(a.date) - new Date(b.date);
+            case 'nearest':
+              if (a.zipcode === undefined && b.zipcode !== undefined) return 1;
+              if (b.zipcode === undefined && a.zipcode !== undefined) return -1;
+              return a.distance - b.distance;
+            default:
+              return 0;
+          }
+        });
+
+      setFilteredPosts(filtered); 
+    };
+
+    updateFilteredPosts();
+  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated, isPostsLoaded]);
+
+  // Function to calculate distances for all posts
+  async function calculateDistances(posts, userZipCode) {
+    const postsWithDistances = await Promise.all(posts.map(async (post) => {
+      const distance = post.zipcode !== undefined ? await getDistanceByZip(userZipCode, post.zipcode) : Infinity;
+      return { ...post, distance }; 
+    }));
+    return postsWithDistances;
+  }
 
   const handlePostClick = (post) => {
     // send post data to session storage
@@ -211,12 +247,13 @@ function ServiceSearch({ selectedCategories }) {
                 <div className={styles.sortOptions}>
                   <button className={styles.sortOption} onClick={() => handleSortOption('newest')}>Newest</button>
                   <button className={styles.sortOption} onClick={() => handleSortOption('oldest')}>Oldest</button>
+                  <button className={styles.sortOption} onClick={() => handleSortOption('nearest')}>Nearest</button>
                 </div>
               )}
             </div>
           </div>
           <div className={styles.postsContainer}>
-            {filteredPosts.length > 0 ? (
+          {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
                 <div
                   key={post.post_id}

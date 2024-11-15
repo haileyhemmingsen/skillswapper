@@ -2,7 +2,6 @@ import * as jwt from "jsonwebtoken";
 
 import {SessionUser} from '../types/express';
 import {User} from '.';
-import { auth } from "firebase";
 
 // Global AuthService that can be called in Routes using the 
 // @Security decorator within the Route
