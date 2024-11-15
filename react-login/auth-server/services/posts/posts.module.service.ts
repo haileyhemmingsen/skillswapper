@@ -219,7 +219,7 @@ export class PostService {
                 categories_exist = true;
             }
         }
-        async function getUsernameByUUID(uuid: string): Promise<[string, string]> {
+        async function getUsernameByUUID(uuid: string): Promise<[string, string | undefined]> {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', uuid));
             const querySnapshot = await getDocs(q);
@@ -230,7 +230,7 @@ export class PostService {
               const zip = userData.zip;
               return [`${userData.firstname} ${userData.lastname}`, zip];
             }
-            return ['Unknown User', '00000']; // Fallback if user not found
+            return ['Unknown User', undefined]; // Fallback if user not found
           }
 
           for (const doc of postsSnapshot.docs) { // Use for...of instead of forEach
