@@ -59,6 +59,7 @@ const Login = (props) => {
         console.log(res);
         const accessToken = res.data.accessToken;
         const id = res.data.id;
+        const zip = res.data.zip;
 
         props.setLoggedIn(true);
         props.setEmail(email);
@@ -71,6 +72,7 @@ const Login = (props) => {
             loginContext.setUserName(res.data.name);
         }
         loginContext.setId(id);
+        loginContext.setZip(zip);
         navigate('/homepage');
     }).catch((err) => {
       console.log(err);

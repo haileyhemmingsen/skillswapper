@@ -38,7 +38,7 @@ async function getCoordinatesByZip(zip) {
 
 // Main function to calculate distance between two zip codes
 export async function getDistanceByZip(zip1, zip2) {
-    if (!zip1 || zip1 === "00000" || !zip2 || zip2 === "00000") {
+    if (!zip1 || zip1 === undefined || !zip2 || zip2 === undefined) {
       console.warn("Invalid zip code(s) provided:", zip1, zip2);
       return Infinity; // Set distance to infinity so these posts appear last in sorting
     }

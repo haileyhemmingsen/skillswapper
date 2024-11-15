@@ -25,12 +25,9 @@ function ServiceSearch({ selectedCategories }) {
   const [keyword, setKeyword] = useState("");
   const [sortOrder, setSortOrder] = useState(""); 
   const [sortLabel, setSortLabel] = useState("sort by"); 
-  const [userZipCode] = useState("94087");
+  const [userZipCode, setUserZipcode] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]); 
-  const [isLoading, setIsLoading] = useState(false);
   const [distancesCalculated, setDistancesCalculated] = useState(false);
-  const [showLoadingText, setShowLoadingText] = useState(false); // State to control loading text visibility
-  const loadingTimeoutRef = useRef(null);
 
   const loginContext = React.useContext(LoginContext);
 
@@ -86,7 +83,7 @@ function ServiceSearch({ selectedCategories }) {
               `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
               `${post.description || ''}`, 
             categories: post.categories || [],
-            zipcode: post.location || "00000"
+            zipcode: post.location || undefined
           };
         });   
         
@@ -100,21 +97,19 @@ function ServiceSearch({ selectedCategories }) {
 
     fetchPosts();
   }, [selectedCategories]);
+  // this effect doesnt finish before this next useeffect 105 requires previous to finish
 
   useEffect(() => {
     const updateFilteredPosts = async () => {
       let postsWithDistances = posts; // Start with the original posts
+      // loginContext.zip for getting the user's zipcode
 
       // Calculate distances only on the first load
       if (!distancesCalculated) {
-        postsWithDistances = await calculateDistances(posts, userZipCode);
+        postsWithDistances = await calculateDistances(posts, "94087");
         setDistancesCalculated(true); // Mark distances as calculated
+        console.log("posts with distances: ", postsWithDistances);
       }
-
-      setIsLoading(true); 
-      loadingTimeoutRef.current = setTimeout(() => {
-        setShowLoadingText(true); 
-      }, 100);
 
       const filtered = postsWithDistances
         .filter((post) => {
@@ -135,8 +130,8 @@ function ServiceSearch({ selectedCategories }) {
             case 'oldest':
               return new Date(a.date) - new Date(b.date);
             case 'nearest':
-              if (a.zipcode === "00000" && b.zipcode !== "00000") return 1;
-              if (b.zipcode === "00000" && a.zipcode !== "00000") return -1;
+              if (a.zipcode === undefined && b.zipcode !== undefined) return 1;
+              if (b.zipcode === undefined && a.zipcode !== undefined) return -1;
               return a.distance - b.distance;
             default:
               return 0;
@@ -144,21 +139,15 @@ function ServiceSearch({ selectedCategories }) {
         });
 
       setFilteredPosts(filtered); 
-      setIsLoading(false);
-      setShowLoadingText(false); 
-      clearTimeout(loadingTimeoutRef.current); // Clear the timeout
     };
 
     updateFilteredPosts();
-    return () => {
-      clearTimeout(loadingTimeoutRef.current);
-    };
   }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated]);
 
   // Function to calculate distances for all posts
   async function calculateDistances(posts, userZipCode) {
     const postsWithDistances = await Promise.all(posts.map(async (post) => {
-      const distance = post.zipcode !== "00000" ? await getDistanceByZip(userZipCode, post.zipcode) : Infinity;
+      const distance = post.zipcode !== undefined ? await getDistanceByZip(userZipCode, post.zipcode) : Infinity;
       return { ...post, distance }; 
     }));
     return postsWithDistances;
@@ -192,7 +181,6 @@ function ServiceSearch({ selectedCategories }) {
     setSortOrder(option);
     setSortLabel(`sort by ${option}`); // Update the button label
     setShowSortDropdown(false);
-    setIsLoading(true); // Start loading when sorting
   };
 
   return (
@@ -258,23 +246,23 @@ function ServiceSearch({ selectedCategories }) {
             </div>
           </div>
           <div className={styles.postsContainer}>
-          {isLoading && showLoadingText ? (
-              <div className={styles.loadingSpinner}>Loading...</div>
+          {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
+                <div
+                  key={post.post_id}
+                  onClick={() => handlePostClick(post)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <ServicePost
+                    username={post.username}
+                    date={post.date}
+                    content={post.content}
+                    keyword={keyword} 
+                  />
+                </div>
+              ))
             ) : (
-              filteredPosts.length > 0 ? (
-                filteredPosts.map((post) => (
-                  <div key={post.post_id} onClick={() => handlePostClick(post)} style={{ cursor: "pointer" }}>
-                    <ServicePost
-                      username={post.username}
-                      date={post.date}
-                      content={post.content}
-                      keyword={keyword} 
-                    />
-                  </div>
-                ))
-              ) : (
-                <p>No posts available.</p>
-              )
+              <p>No posts available.</p>
             )}
           </div>
         </section>
