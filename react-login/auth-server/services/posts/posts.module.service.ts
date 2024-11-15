@@ -115,66 +115,80 @@ export class PostService {
 
     public async getUserPosts(user_id: string): Promise<SkillPost[]> {
         const postDocRef = doc(db, 'posts', user_id);
-        let allPosts: SkillPost[] = [];
-    
+        let allPosts = new Array<SkillPost>();
+        
+        // get username once
+        async function getUsernameByUUID(uuid: string): Promise<string> {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', uuid));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                const userData = userDoc.data();
+                return `${userData.firstname} ${userData.lastname}`;
+            }
+            return 'Unknown User'; // Fallback if user not found
+        }
         try {
-            // Fetch user data (username and location) once
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', user_id));
             const userSnapshot = await getDocs(q);
-    
             if (userSnapshot.empty) {
                 console.log('User not found');
                 return [];
             }
-    
+
+
             const userDoc = userSnapshot.docs[0];
             const userData = userDoc.data();
-            const username = `${userData.firstname} ${userData.lastname}`;
-            const userZip = userData.zip;
-    
-            // Fetch the user's posts
+            let username = `${userData.firstname} ${userData.lastname}`;
+            if (username === ' ') {
+                // first name does not exist, thus last name does not exist, thus username should be uuid
+                username = user_id
+            }
+            // we are looking at our own posts, getting zip is unnecessary
+            // const userZip = userData.zip;
+
+
             const postDocSnapshot = await getDoc(postDocRef);
-    
-            if (postDocSnapshot.exists()) {
+            if(postDocSnapshot.exists()) {
                 const postData = postDocSnapshot.data();
-    
                 if (postData.poster_uuid === user_id) {
-                    // Loop through posts
                     for (let i = 0; i < postData.posts.length; i += 1) {
-                        const curPost = JSON.parse(postData.posts[i]);
-    
-                        const nextPost: SkillPost = {
-                            id: curPost.post_id,
-                            poster_uuid: user_id,
+                        const cur_post = JSON.parse(postData.posts[i]);
+                        
+                        const next_post = {
+                            id: cur_post.post_id,
+                            poster_uuid: postData.poster_uuid,
                             username: username, // Use the resolved username
-                            date: curPost.createdAt,
-                            skillsAsked: curPost.desireSkills,
-                            skillsOffered: curPost.haveSkills,
-                            description: curPost.description,
-                            categories: curPost.categories,
-                            archive: curPost.archive,
-                            location: userZip, // Use the resolved zip
-                        };
-    
-                        allPosts.push(nextPost);
+                            date: cur_post.createdAt,
+                            skillsAsked: cur_post.desireSkills,
+                            skillsOffered: cur_post.haveSkills,
+                            description: cur_post.description,
+                            categories: cur_post.categories,
+                            archive: cur_post.archive 
+                        }
+                        allPosts.push(next_post);        
                     }
-                } else {
+                }
+                else {
+                    // user is not creator of these posts
                     console.log('Incorrect and invalid user attempting to read these posts');
                     return [];
                 }
-            } else {
+            }
+            else {
                 console.log('User has no posts');
                 return [];
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.error(error);
             return [];
         }
-    
         return allPosts;
     }
-    
 
     public async newComment(body: PostComment, user_id: string): Promise <boolean | undefined> {
         // every single comment will be added to a single document for the correct post. So each post will have a "comment" document;
@@ -230,7 +244,12 @@ export class PostService {
               const userDoc = querySnapshot.docs[0];
               const userData = userDoc.data();
               const zip = userData.zip;
-              return [`${userData.firstname} ${userData.lastname}`, zip];
+              let username = `${userData.firstname} ${userData.lastname}`
+              if (username === ' ') {
+                // first name does not exist, thus last name does not exist, thus username should be uuid
+                username = uuid
+              }
+              return [username, zip];
             }
             return ['Unknown User', undefined]; // Fallback if user not found
           }
