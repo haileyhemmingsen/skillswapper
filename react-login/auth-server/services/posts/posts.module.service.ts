@@ -32,7 +32,7 @@ export class PostService {
                 description: body.description,
                 categories: body.categories,
                 post_id: postuuid,
-                createdAt: new Date() 
+                createdAt: new Date()
             }
             const post_string = JSON.stringify(post);
 
@@ -148,7 +148,8 @@ export class PostService {
                             skillsOffered: cur_post.haveSkills,
                             description: cur_post.description,
                             categories: cur_post.categories,
-                            archive: cur_post.archive 
+                            archive: cur_post.archive,
+                            location: cur_post.zip
                         }
                         allPosts.push(next_post);        
                     }
@@ -218,7 +219,7 @@ export class PostService {
                 categories_exist = true;
             }
         }
-        async function getUsernameByUUID(uuid: string): Promise<string> {
+        async function getUsernameByUUID(uuid: string): Promise<[string, string]> {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', uuid));
             const querySnapshot = await getDocs(q);
@@ -226,9 +227,10 @@ export class PostService {
             if (!querySnapshot.empty) {
               const userDoc = querySnapshot.docs[0];
               const userData = userDoc.data();
-              return `${userData.firstname} ${userData.lastname}`;
+              const zip = userData.zip;
+              return [`${userData.firstname} ${userData.lastname}`, zip];
             }
-            return 'Unknown User'; // Fallback if user not found
+            return ['Unknown User', '00000']; // Fallback if user not found
           }
 
           for (const doc of postsSnapshot.docs) { // Use for...of instead of forEach
@@ -239,7 +241,7 @@ export class PostService {
                     // if categories_exist: check to ensure that all categories in the doc also exist in list of categories with this post
 
                     if (!post_obj.archive) {
-                        const username = await getUsernameByUUID(data.poster_uuid); // Now you can await here
+                        const [username, zip] = await getUsernameByUUID(data.poster_uuid); // Now you can await here
                         const next_post = {
                             id: post_obj.post_id,
                             poster_uuid: data.poster_uuid,
@@ -249,7 +251,8 @@ export class PostService {
                             skillsOffered: post_obj.haveSkills,
                             description: post_obj.description,
                             categories: post_obj.categories,
-                            archive: post_obj.archive
+                            archive: post_obj.archive,
+                            location: zip
                         }
                         allPosts.push(next_post);
                     }

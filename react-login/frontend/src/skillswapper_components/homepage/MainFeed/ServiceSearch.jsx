@@ -28,6 +28,7 @@ function ServiceSearch({ selectedCategories }) {
   const [userZipCode, setUserZipcode] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]); 
   const [distancesCalculated, setDistancesCalculated] = useState(false);
+  const [isPostsLoaded, setIsPostsLoaded] = useState(false);
 
   const loginContext = React.useContext(LoginContext);
 
@@ -90,8 +91,10 @@ function ServiceSearch({ selectedCategories }) {
         setPosts(parsedPosts); 
         samplePosts.length = 0; //clearing the array
         samplePosts.push(...parsedPosts); 
+        setIsPostsLoaded(true);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setIsPostsLoaded(true);
       }
     };
 
@@ -100,16 +103,20 @@ function ServiceSearch({ selectedCategories }) {
   // this effect doesnt finish before this next useeffect 105 requires previous to finish
 
   useEffect(() => {
+    
+    if (!isPostsLoaded) return; // Wait until posts are loaded
+
     const updateFilteredPosts = async () => {
-      let postsWithDistances = posts; // Start with the original posts
+      let postsWithDistances = posts; 
       // loginContext.zip for getting the user's zipcode
 
       // Calculate distances only on the first load
-      if (!distancesCalculated) {
-        postsWithDistances = await calculateDistances(posts, "94087");
-        setDistancesCalculated(true); // Mark distances as calculated
-        console.log("posts with distances: ", postsWithDistances);
-      }
+    if (!distancesCalculated) {
+      postsWithDistances = await calculateDistances(posts, "94087");
+      setPosts(postsWithDistances); // Update posts with distances
+      setDistancesCalculated(true); // Mark distances as calculated
+      console.log("Posts with distances calculated:", postsWithDistances);
+    }
 
       const filtered = postsWithDistances
         .filter((post) => {
@@ -142,7 +149,7 @@ function ServiceSearch({ selectedCategories }) {
     };
 
     updateFilteredPosts();
-  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated]);
+  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated, isPostsLoaded]);
 
   // Function to calculate distances for all posts
   async function calculateDistances(posts, userZipCode) {
