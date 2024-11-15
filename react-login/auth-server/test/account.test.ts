@@ -104,6 +104,14 @@ describe('Account Endpoint Tests', () => {
       });
   });
 
+  test('Login with Invalid AccessToken', async () => {
+    await supertest(server)
+      .post('/api/v0/changePassword')
+      .set('Cookie', 'nope')
+      .send(validUser)
+      .expect(401)
+  });
+
   test('Login With Wrong Password', async () => {
     await supertest(server)
       .post('/api/v0/login')

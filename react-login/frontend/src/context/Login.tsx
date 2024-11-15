@@ -1,11 +1,8 @@
-import React from "react";
-import { PropsWithChildren, useState, createContext } from "react";
- 
+import React, { useState, useEffect, createContext, PropsWithChildren } from "react";
+
 export const LoginContext = createContext({
   userName: '',
   setUserName: (userName: string) => {},
-  accessToken: '',
-  setAccessToken: (accessToken: string) => {},
   id: '',
   setId: (id: string) => {},
   zip: '',
@@ -13,12 +10,35 @@ export const LoginContext = createContext({
 });
 
 export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [userName, setUserName] = useState('');
-  const [accessToken, setAccessToken] = useState('');
-  const [id, setId] = useState('');
-  const [zip, setZip] = useState('');
+  const [userName, setUserName] = useState(() => sessionStorage.getItem('userName') || '');
+  const [id, setId] = useState(() => sessionStorage.getItem('id') || '');
+  const [zip, setZip] = useState(() => sessionStorage.getItem('zip') || '');
+
+  // Sync state changes to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('userName', userName);
+  }, [userName]);
+
+  useEffect(() => {
+    sessionStorage.setItem('id', id);
+  }, [id]);
+
+  useEffect(() => {
+    sessionStorage.setItem('zip', zip);
+  }, [zip]);
+
+
   return (
-    <LoginContext.Provider value={{ userName, setUserName, accessToken, setAccessToken, id, setId, zip, setZip}}>
+    <LoginContext.Provider
+      value={{
+        userName,
+        setUserName,
+        id,
+        setId,
+        zip,
+        setZip,
+      }}
+    >
       {children}
     </LoginContext.Provider>
   );

@@ -9,6 +9,7 @@ export class AuthService {
   public async check(cookieAuthHeader?: string, scopes?: string[]): Promise<SessionUser> {
     return new Promise((resolve, reject) => {
       if (!cookieAuthHeader) {
+        // console.log("No Cookie Provided");
         reject(new Error("Unauthorized"));
       }
       else {
@@ -21,6 +22,7 @@ export class AuthService {
             }
         }
         if (token === undefined) {
+          // console.log("No Token Provided");
             reject(new Error("No Token Provided"));
             return;
         }

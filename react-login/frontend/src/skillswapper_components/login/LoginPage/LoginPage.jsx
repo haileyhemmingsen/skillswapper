@@ -57,14 +57,12 @@ const Login = (props) => {
       }
     ).then((res) => {
         console.log(res);
-        const accessToken = res.data.accessToken;
         const id = res.data.id;
         const zip = res.data.zip;
 
         props.setLoggedIn(true);
         props.setEmail(email);
         console.log('name: ' + res.data.name);
-        loginContext.setAccessToken(accessToken);
         if (res.data.name === '') {
             loginContext.setUserName(id);
         }

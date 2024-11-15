@@ -6,7 +6,7 @@ import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion, query,
 import { get } from "http";
 
 export class PostService {
-    public async newPost(body: NewPost, user_id: string): Promise<boolean | undefined> {
+    public async newPost(body: NewPost, user_id: string): Promise<string | undefined> {
         // needs to create post ID and send all info to DB
         // needs to grab the date
         // grab their username/UUID
@@ -19,9 +19,10 @@ export class PostService {
         // const user_id = 'INSERT_UUID_HERE';
         try {
             // console.log(user_id);
-            if (user_id === '') {
-                return undefined;
-            }
+            // The middleware will throw an error before it even reaches this part of the function
+            // if (user_id === '') {
+            //     return undefined;
+            // }
             const postDocRef = doc(db, 'posts', user_id);
             const postDocSnapshot = await getDoc(postDocRef);
             const postuuid = uuidv4();
@@ -35,8 +36,8 @@ export class PostService {
                 createdAt: new Date()
             }
             const post_string = JSON.stringify(post);
-
             if (postDocSnapshot.exists()) {
+                // console.log('Post already exists');
                 // post already exists, thus update
                 
                 await updateDoc(doc(db, 'posts', user_id), {
@@ -47,19 +48,18 @@ export class PostService {
             else {
                 // account has never posted before, thus create new post
                 //create uuid for the post itself (identifying for commenting later)
+                // console.log('never posted before');
                 await setDoc(doc(db, 'posts', user_id), {
                     poster_uuid: user_id,
                     posts: [post_string]
                 });
             }
+            return postuuid;
         }
         catch (error) {
             console.error(error);
-            return false;
+            return undefined;
         }
-        
-
-        return true;
     }
 
     public async editPost(body: SkillPost, user_id: string): Promise <boolean | undefined> {
