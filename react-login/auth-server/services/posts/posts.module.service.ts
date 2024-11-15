@@ -117,19 +117,6 @@ export class PostService {
         const postDocRef = doc(db, 'posts', user_id);
         let allPosts = new Array<SkillPost>();
         
-        // get username once
-        async function getUsernameByUUID(uuid: string): Promise<string> {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('uuid', '==', uuid));
-            const querySnapshot = await getDocs(q);
-            
-            if (!querySnapshot.empty) {
-                const userDoc = querySnapshot.docs[0];
-                const userData = userDoc.data();
-                return `${userData.firstname} ${userData.lastname}`;
-            }
-            return 'Unknown User'; // Fallback if user not found
-        }
         try {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', user_id));
