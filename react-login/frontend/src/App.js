@@ -6,6 +6,8 @@ import Posting from './skillswapper_components/posting/posting';
 import './App.css';
 import { useEffect, useState } from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
+import ChatPage from './skillswapper_components/chatui/ChatPage'; 
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -45,6 +47,7 @@ function App() {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/posting/:id" element={<Posting />} />
           <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
+          <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </BrowserRouter>
     </div>
