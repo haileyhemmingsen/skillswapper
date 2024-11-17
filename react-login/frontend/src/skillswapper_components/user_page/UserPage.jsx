@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import userImage from '../../images/user.svg';
 import userGrayImage from '../../images/user_gray.svg';
 import backArrow from '../../images/bubble_arrow.svg';
@@ -72,6 +72,7 @@ function Post({ post, onArchiveToggle, editPost }) {
 }
 
 function UserPage() {
+    const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     useEffect(() => {
         const fetchMyPosts = async () => {
@@ -131,6 +132,9 @@ const handleArchiveToggle = async (postId) => {
 
 const handleEditPost = async (post) => {
     console.log('edit post clicked');
+    const string_post = JSON.stringify(post);
+    sessionStorage.setItem('editPostData', string_post);
+    navigate(`/editpost/${post.id}`);
 }
 
 

@@ -13,7 +13,7 @@ import {
 import express from 'express'
 
 import { PostService } from './posts.module.service';
-import { NewPost, PostComment, SkillPost, Categories, Comment, Archive } from './posts.module.index';
+import { NewPost, PostComment, SkillPost, Categories, Comment, Archive, EditPost } from './posts.module.index';
 
 @Route('createPost')
 export class NewPostController extends Controller {
@@ -133,7 +133,7 @@ export class EditPostController extends Controller {
     @Response('401', 'Unauthorized')
     @SuccessResponse('200', 'Post Updated')
     public async EditPost(
-        @Body() body: SkillPost,
+        @Body() body: EditPost,
         @Request() request: express.Request
     ): Promise <boolean | undefined> {
         return new PostService().editPost(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise <boolean | undefined> => {

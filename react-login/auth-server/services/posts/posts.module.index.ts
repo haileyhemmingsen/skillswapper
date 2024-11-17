@@ -5,9 +5,16 @@ export interface NewPost {
     categories: string[]
 }
 
+export interface EditPost {
+    id: string,
+    skillsAsked: string,
+    skillsOffered: string,
+    description: string,
+    categories: string[]
+}
+
 export interface PostComment {
     postID: string,
-    // postingUserID: string,
     comment: string
 }
 

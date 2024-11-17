@@ -8,6 +8,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
 import { LoginProvider } from './context/Login.tsx';
+import EditPost from './skillswapper_components/user_page/editPost/EditPost.jsx';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -49,6 +50,7 @@ function App() {
             <Route path="/posting/:id" element={<Posting />} />
             <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
             <Route path="/userpage" element={<UserPage />} />
+            <Route path="/editpost/:id" element={<EditPost />} />
           </Routes>
         </BrowserRouter>
       </LoginProvider>

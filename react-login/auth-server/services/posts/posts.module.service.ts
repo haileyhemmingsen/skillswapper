@@ -1,4 +1,4 @@
-import { NewPost, PostComment, SkillPost, Categories, Comment, Archive } from "./posts.module.index";
+import { NewPost, PostComment, SkillPost, Categories, Comment, Archive, EditPost } from "./posts.module.index";
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
@@ -62,7 +62,7 @@ export class PostService {
         }
     }
 
-    public async editPost(body: SkillPost, user_id: string): Promise <boolean | undefined> {
+    public async editPost(body: EditPost, user_id: string): Promise <boolean | undefined> {
         const postDocRef = doc(db, 'posts', user_id);
         try {
             const postDocSnapshot = await getDoc(postDocRef);
@@ -72,7 +72,7 @@ export class PostService {
                 if (postData.poster_uuid === user_id) {
                     let found = false;
                     for (let i =0; i < postData.posts.length; i += 1) {
-                        const cur_post = JSON.parse(postData.posts[i]);
+                        let cur_post = JSON.parse(postData.posts[i]);
                         if (cur_post.post_id === body.id) {
                             // post has been found
                             found = true;
@@ -82,8 +82,9 @@ export class PostService {
                             cur_post.description = body.description;
                             cur_post.categories = body.categories;
 
-                            JSON.stringify(cur_post);
+                            cur_post = JSON.stringify(cur_post);
                             postData.posts[i] = cur_post;
+                            // console.log(postData)
                             await updateDoc(postDocRef, postData);
                             break;
                         }
