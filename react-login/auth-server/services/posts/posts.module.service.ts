@@ -77,8 +77,8 @@ export class PostService {
                             // post has been found
                             found = true;
                             // update relevant info
-                            cur_post.skillsAsked = body.skillsAsked;
-                            cur_post.skillsOffered = body.skillsOffered;
+                            cur_post.desireSkills = body.skillsAsked;
+                            cur_post.haveSkills = body.skillsOffered;
                             cur_post.description = body.description;
                             cur_post.categories = body.categories;
 

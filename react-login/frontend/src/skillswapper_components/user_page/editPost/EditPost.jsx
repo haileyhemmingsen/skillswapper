@@ -110,6 +110,12 @@ function EditPost() {
                 navigate('/userpage');
             }
         });
+        if (response.data) {
+            console.log('update succeeded');
+        }
+        else {
+            console.log('update failed');
+        }
     }
     catch (error) {
         console.error(error);
