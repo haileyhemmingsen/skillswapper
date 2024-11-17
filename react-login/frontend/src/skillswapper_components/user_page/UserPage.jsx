@@ -11,7 +11,7 @@ import styles from './UserPage.module.css';
 import axios from 'axios';
 
 
-function Post({ post, onArchiveToggle }) {
+function Post({ post, onArchiveToggle, editPost }) {
     const seeking = `Services Seeking: ${post.skillsAsked || 'N/A'}\n`;
     const offer = ` Services Offering: ${post.skillsOffered || 'N/A'}\n`;
     const description = post.description;
@@ -32,12 +32,13 @@ function Post({ post, onArchiveToggle }) {
         </div>
         <div className={styles.postMeta}>
           <span className={`${styles.postDate} ${post.archive ? styles.archivedText : ''}`}>
-            {post.date}
+            {new Date(post.date).toLocaleDateString()}
           </span>
           <img 
             src={post.archive ? editGray : editOrange}
             alt="Edit post" 
             className={styles.actionIcon}
+            onClick={() => editPost(post)}
           />
         </div>
       </div>
@@ -128,6 +129,10 @@ const handleArchiveToggle = async (postId) => {
   }
 };
 
+const handleEditPost = async (post) => {
+    console.log('edit post clicked');
+}
+
 
   return (
     <div className={styles.pageContainer}>
@@ -155,6 +160,7 @@ const handleArchiveToggle = async (postId) => {
               key={post.id}
               post={post}
               onArchiveToggle={handleArchiveToggle}
+              editPost={handleEditPost}
             />
           ))}
         </div>

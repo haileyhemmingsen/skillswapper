@@ -205,7 +205,7 @@ function ServiceSearch({ selectedCategories }) {
           {showHeaderPopup && (
             <div ref={headerPopupRef} className={styles.headerPopupContainer}>
               <ProfilePopup 
-                username={loginContext.userName}
+                username={loginContext.userFirstName}
                 isVisible={showHeaderPopup}
               />
             </div>

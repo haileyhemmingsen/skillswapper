@@ -8,7 +8,7 @@ import userAvatar from '../../images/userAvatar.svg';
 import decorativeIcon from '../../images/decorativeIcon.svg';
 import ImageGallery from '../../skillswapper_components/createPost/tagMenu/ImageGallery';
 
-
+import { LoginContext } from "../../context/Login.tsx";
 
 
 // import Kantumruy pro font
@@ -21,9 +21,9 @@ import ImageGallery from '../../skillswapper_components/createPost/tagMenu/Image
 function CreatePost() {
     let category_tags = [];
     const navigate = useNavigate();
-  const [tagMenuVisible, setTagMenuVisible] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-
+    const [tagMenuVisible, setTagMenuVisible] = useState(false);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const loginContext = React.useContext(LoginContext);
     // all variables for strings that can be written in
     const [serviceSeeked, setServiceSeeked] = useState('');
     const [serviceOffered, setServiceOffered] = useState('');
@@ -32,6 +32,7 @@ function CreatePost() {
     const [serviceSeekedError, setServiceSeekedError] = useState('');
     const [serviceOfferedError, setServiceOfferedError] = useState('');
 
+    const username = loginContext.userLastName === '' ? loginContext.userFirstName : `${loginContext.userFirstName} ${loginContext.userLastName}`;
   const handleIconClick = () => {
     setTagMenuVisible(!tagMenuVisible);
   };
@@ -133,7 +134,7 @@ function CreatePost() {
               className={styles.userAvatar}
               alt="User avatar"
             />
-            <div className={styles.username}>Username</div>
+            <div className={styles.username}>{username}</div>
 
 
           </div>

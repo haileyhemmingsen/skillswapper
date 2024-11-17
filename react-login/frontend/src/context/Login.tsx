@@ -1,8 +1,10 @@
 import React, { useState, useEffect, createContext, PropsWithChildren } from "react";
 
 export const LoginContext = createContext({
-  userName: '',
-  setUserName: (userName: string) => {},
+  userFirstName: '',
+  setUserFirstName: (userFirstName: string) => {},
+  userLastName: '',
+  setUserLastName: (userLastName: string) => {},
   id: '',
   setId: (id: string) => {},
   zip: '',
@@ -10,14 +12,18 @@ export const LoginContext = createContext({
 });
 
 export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [userName, setUserName] = useState(() => sessionStorage.getItem('userName') || '');
+  const [userFirstName, setUserFirstName] = useState(() => sessionStorage.getItem('userFirstName') || '');
+  const [userLastName, setUserLastName] = useState(() => sessionStorage.getItem('userLastName') || '');
   const [id, setId] = useState(() => sessionStorage.getItem('id') || '');
   const [zip, setZip] = useState(() => sessionStorage.getItem('zip') || '');
 
   // Sync state changes to sessionStorage
   useEffect(() => {
-    sessionStorage.setItem('userName', userName);
-  }, [userName]);
+    sessionStorage.setItem('userFirstName', userFirstName);
+  }, [userFirstName]);
+  useEffect(() => {
+    sessionStorage.setItem('userLastName', userLastName);
+  }, [userLastName]);
 
   useEffect(() => {
     sessionStorage.setItem('id', id);
@@ -31,8 +37,10 @@ export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
   return (
     <LoginContext.Provider
       value={{
-        userName,
-        setUserName,
+        userFirstName,
+        setUserFirstName,
+        userLastName,
+        setUserLastName,
         id,
         setId,
         zip,

@@ -62,12 +62,14 @@ const Login = (props) => {
 
         props.setLoggedIn(true);
         props.setEmail(email);
-        console.log('name: ' + res.data.name);
-        if (res.data.name === '') {
-            loginContext.setUserName(id);
+        console.log('name: ' + res.data.firstName);
+        if (res.data.firstName === '') {
+            loginContext.setUserFirstName(id);
+            loginContext.setUserLastName('');
         }
         else {
-            loginContext.setUserName(res.data.name);
+            loginContext.setUserFirstName(res.data.firstName);
+            loginContext.setUserLastName(res.data.lastName);
         }
         loginContext.setId(id);
         loginContext.setZip(zip);

@@ -65,7 +65,7 @@ export class LoginService {
             expiresIn: '1d',
             algorithm: 'HS256'
           });
-          return {id: userData.uuid, accessToken: accessToken, name: userData.firstname, zip: userData.zip};
+          return {id: userData.uuid, accessToken: accessToken, firstName: userData.firstname, lastName: userData.lastname, zip: userData.zip};
       } else {
         return undefined;
       }
