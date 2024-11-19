@@ -60,15 +60,15 @@
 
 .headerPopupContainer {
   position: fixed;
-  top: 20px; 
-  right: 20px; /* offset from right edge */
-  z-index: 10000;
+  top: 20px;
+  right: 20px;
+  z-index: 10005; 
 }
 
 .clickableUserArea {
   position: relative;
   cursor: pointer;
-  z-index: 101; /* higher than header */
+  z-index: 10003;
 }
 
 .mainContent {
@@ -81,6 +81,8 @@
   flex-wrap: wrap;
   object-position: center;
   width: 90%;
+  position: relative; /* Add this */
+  z-index: 1; /* Ensure it's below the popup and user area */
 }
 
 .searchSection {
@@ -244,6 +246,8 @@ border: 0;
 
 .sortDropdownContainer {
   margin-left: auto;
+  position: relative;
+  z-index: 10001; /* Keep this lower than the popup */
 }
 
 .sortButton {
