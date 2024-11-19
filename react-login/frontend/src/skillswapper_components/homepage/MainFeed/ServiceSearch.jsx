@@ -118,14 +118,29 @@ function ServiceSearch({ selectedCategories }) {
       console.log("Posts with distances calculated:", postsWithDistances);
     }
 
-      const filtered = postsWithDistances
-      .filter((post) => {
-          const searchWords = keyword.toLowerCase().split(' ').filter(Boolean); // Split keyword by spaces
-          const postContent = post.content.toLowerCase();
+      const filtered = postsWithDistances.filter((post) => {
+        const searchWords = keyword.toLowerCase().split(' ').filter(Boolean);
       
-          // Check if all words from the search are in the post content
-          const includesAllKeywords = searchWords.every((word) => postContent.includes(word));
-      
+          // Exclude "Services Seeking" and "Services Offering" prefixes from the search
+          const searchableContent = post.content
+            .split('\n')
+            .map((line) => {
+              if (
+                line.toLowerCase().startsWith("services seeking:") ||
+                line.toLowerCase().startsWith("services offering:")
+              ) {
+                return line.substring(line.indexOf(':') + 1).trim(); // Remove prefix
+              }
+              return line;
+            })
+            .join(' ')
+            .toLowerCase();
+        
+          // Check if all words from the search are in the searchable content
+          const includesAllKeywords = searchWords.every((word) =>
+            searchableContent.includes(word)
+          );
+        
           if (selectedCategories.length === 0) {
             return includesAllKeywords;
           } else {
@@ -134,23 +149,8 @@ function ServiceSearch({ selectedCategories }) {
             );
             return includesCategory && includesAllKeywords;
           }
-        })
-        .sort((a, b) => {
-          switch (sortOrder) {
-            case 'newest':
-              return new Date(b.date) - new Date(a.date);
-            case 'oldest':
-              return new Date(a.date) - new Date(b.date);
-            case 'nearest':
-              if (a.zipcode === undefined && b.zipcode !== undefined) return 1;
-              if (b.zipcode === undefined && a.zipcode !== undefined) return -1;
-              return a.distance - b.distance;
-            default:
-              return 0;
-          }
         });
-  
-
+    
       setFilteredPosts(filtered); 
     };
 

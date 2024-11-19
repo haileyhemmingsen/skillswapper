@@ -31,20 +31,36 @@ function ServicePost({ username, date, content, keyword }) {
   };
 
   const highlightText = (text, keyword) => {
-    // Split the input keyword string by spaces to handle multiple keywords
-    const keywords = keyword.split(' ').filter(Boolean); // filter(Boolean) removes empty strings
+    const keywords = keyword.split(' ').filter(Boolean); // Extract keywords
+    const lines = text.split('\n'); // Split content into lines
   
-    const lines = text.split('\n');
-    const highlightedLines = lines.map((line) => {
-      const words = line.split(' ');
+    const highlightedLines = lines.map((line, index) => {
+      // Check if the line starts with the specified prefixes
+      const isSeekingLine = line.trim().toLowerCase().startsWith("services seeking:");
+      const isOfferingLine = line.trim().toLowerCase().startsWith("services offering:");
+  
+      let prefix = '';
+      let content = line;
+  
+      // Separate the prefix from the line content
+      if (isSeekingLine) {
+        prefix = "Services Seeking: ";
+        content = line.substring(prefix.length).trim();
+      } else if (isOfferingLine) {
+        prefix = "Services Offering: ";
+        content = line.substring(prefix.length).trim();
+      }
+  
+      // Highlight the content excluding the prefix
+      const words = content.split(' ');
       const highlightedWords = words.map((word) => {
         const lowerCaseWord = word.toLowerCase();
-        const matchingKeyword = keywords.find(keyword => lowerCaseWord.includes(keyword.toLowerCase()));
+        const matchingKeyword = keywords.find((kw) => lowerCaseWord.includes(kw.toLowerCase()));
   
         if (matchingKeyword) {
           const parts = word.split(new RegExp(`(${matchingKeyword})`, 'gi'));
-          return parts.map((part, index) => (
-            <span key={index} className={index % 2 === 1 ? styles.highlight : ''}>
+          return parts.map((part, partIndex) => (
+            <span key={partIndex} className={partIndex % 2 === 1 ? styles.highlight : ''}>
               {part}
             </span>
           ));
@@ -52,10 +68,15 @@ function ServicePost({ username, date, content, keyword }) {
           return word;
         }
       });
+  
       return (
-        <p key={line} className={styles.contentLine}>
-          {highlightedWords.map((word, index) => (
-            <span key={index}>{word}{index < words.length - 1 ? ' ' : ''}</span>
+        <p key={index} className={styles.contentLine}>
+          {prefix}
+          {highlightedWords.map((word, wordIndex) => (
+            <span key={wordIndex}>
+              {word}
+              {wordIndex < words.length - 1 ? ' ' : ''}
+            </span>
           ))}
         </p>
       );
@@ -63,6 +84,7 @@ function ServicePost({ username, date, content, keyword }) {
   
     return highlightedLines;
   };
+  
 
   const highlightedContent = highlightText(content, keyword);
 
@@ -99,3 +121,4 @@ function ServicePost({ username, date, content, keyword }) {
 }
 
 export default ServicePost;
+
