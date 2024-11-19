@@ -149,6 +149,20 @@ function ServiceSearch({ selectedCategories }) {
             );
             return includesCategory && includesAllKeywords;
           }
+        })
+        .sort((a, b) => {
+          switch (sortOrder) {
+            case 'newest':
+              return new Date(b.date) - new Date(a.date);
+            case 'oldest':
+              return new Date(a.date) - new Date(b.date);
+            case 'nearest':
+              if (a.zipcode === undefined && b.zipcode !== undefined) return 1;
+              if (b.zipcode === undefined && a.zipcode !== undefined) return -1;
+              return a.distance - b.distance;
+            default:
+              return 0;
+          }
         });
     
       setFilteredPosts(filtered); 
