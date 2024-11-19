@@ -8,7 +8,7 @@ import app from '../services/app';
 dotenv.config();
 
 let server: any;
-let testEnv: any;
+let accountTestEnv: any;
 let db;
 
 // Sample users
@@ -26,25 +26,25 @@ let accessToken: string;
 
 // Set up Firebase test environment and server before all tests
 beforeAll(async () => {
-    server = http.createServer(app);
-    await new Promise((resolve) => server.listen(resolve));
+  server = http.createServer(app);
+  await new Promise((resolve) => server.listen(resolve));
 
-    testEnv = await initializeTestEnvironment({
-        projectId: 'test-project', // replace with your Firebase project ID
-        firestore: {
-            host: 'localhost',
-            port: 8080,
-        },
-    });
+  accountTestEnv = await initializeTestEnvironment({
+      projectId: 'account-test', // Replace with your Firebase project ID
+      firestore: {
+          host: 'localhost',
+          port: 8080,
+      },
+  });
 
-    db = testEnv.unauthenticatedContext().firestore(); // Use this `db` for all Firestore operations in tests
-    await testEnv.clearFirestore(); // Clear any data before running tests
+  db = accountTestEnv.unauthenticatedContext().firestore(); // Use this `db` for all Firestore operations in tests
+  await accountTestEnv.clearFirestore(); // Clear any data before running tests
 });
 
 // Tear down Firebase test environment and server after all tests
 afterAll(async () => {
-    await testEnv.cleanup();
-    server.close();
+  await accountTestEnv.cleanup();
+  await new Promise((resolve) => server.close(resolve)); // Safely close the server
 });
 
 describe('Account Endpoint Tests', () => {
@@ -98,7 +98,8 @@ describe('Account Endpoint Tests', () => {
       .then((res) => {
           expect(res).toBeDefined();
           expect(res.body).toBeDefined();
-          expect(res.body.name).toEqual('John');
+          expect(res.body.firstName).toEqual('John');
+          expect(res.body.lastName).toEqual('Doe');
           expect(res.body.accessToken).toBeDefined();
           accessToken = res.body.accessToken; // Store token for further use
       });
@@ -163,7 +164,7 @@ describe('Account Endpoint Tests', () => {
       .then((res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body.name).toEqual('John');
+        expect(res.body.firstName).toEqual('John');
         expect(res.body.accessToken).toBeDefined();
         accessToken = res.body.accessToken; // Store token for further use
       });
@@ -225,7 +226,7 @@ describe('Account Endpoint Tests', () => {
       .then((res) => {
           expect(res).toBeDefined();
           expect(res.body).toBeDefined();
-          expect(res.body.name).toEqual('John');
+          expect(res.body.firstName).toEqual('John');
           expect(res.body.accessToken).toBeDefined();
           accessToken = res.body.accessToken; // Store token for further use
       });

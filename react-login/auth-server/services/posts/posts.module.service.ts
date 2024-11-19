@@ -180,6 +180,12 @@ export class PostService {
 
     public async newComment(body: PostComment, user_id: string): Promise <boolean | undefined> {
         // every single comment will be added to a single document for the correct post. So each post will have a "comment" document;
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+        // Validate postID
+        if (!uuidRegex.test(body.postID)) {
+            return undefined; // Invalid postId, i.e. it's not a UUID
+        }
         try {
             const postDocRef = doc(db, 'comments', body.postID);
             const postDocSnapshot = await getDoc(postDocRef);
@@ -331,7 +337,7 @@ export class PostService {
             if(postDocSnapshot.exists()) {
                 const postData = postDocSnapshot.data();
 
-                if (postData.poster_uuid === user_id) {
+                // if (postData.poster_uuid === user_id) {
                     let found = false;
                     for (let i =0; i < postData.posts.length; i += 1) {
                         const cur_post = JSON.parse(postData.posts[i]);
@@ -349,12 +355,12 @@ export class PostService {
                         console.log('Post does not exist');
                         return false;
                     }
-                }
-                else {
-                    // user is not creator of these posts
-                    console.log('Incorrect and invalid user attempting to update this post');
-                    return undefined;
-                }
+                // }
+                // else {
+                //     // user is not creator of these posts
+                //     console.log('Incorrect and invalid user attempting to update this post');
+                //     return undefined;
+                // }
             }
             else {
                 console.log('User has no posts');

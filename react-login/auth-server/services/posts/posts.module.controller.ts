@@ -114,9 +114,9 @@ export class ArchiveUpdaterController extends Controller {
         @Request() request: express.Request 
     ): Promise<boolean | undefined> {
         return new PostService().archiveStatusUpdate(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise<boolean | undefined> => {
-            if (identifier === undefined) {
-                this.setStatus(401);
-            }
+            // if (identifier === undefined) {
+            //     this.setStatus(401);
+            // }
             if (identifier === false) {
                 this.setStatus(500);
             }
