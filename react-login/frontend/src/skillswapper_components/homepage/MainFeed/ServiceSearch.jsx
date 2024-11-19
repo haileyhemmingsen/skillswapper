@@ -112,22 +112,27 @@ function ServiceSearch({ selectedCategories }) {
 
       // Calculate distances only on the first load
     if (!distancesCalculated) {
-      postsWithDistances = await calculateDistances(posts, "94087");
+      postsWithDistances = await calculateDistances(posts, loginContext.zip);
       setPosts(postsWithDistances); // Update posts with distances
       setDistancesCalculated(true); // Mark distances as calculated
       console.log("Posts with distances calculated:", postsWithDistances);
     }
 
       const filtered = postsWithDistances
-        .filter((post) => {
-          const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
+      .filter((post) => {
+          const searchWords = keyword.toLowerCase().split(' ').filter(Boolean); // Split keyword by spaces
+          const postContent = post.content.toLowerCase();
+      
+          // Check if all words from the search are in the post content
+          const includesAllKeywords = searchWords.every((word) => postContent.includes(word));
+      
           if (selectedCategories.length === 0) {
-            return includesKeyword;
+            return includesAllKeywords;
           } else {
             const includesCategory = post.categories.some((category) =>
               selectedCategories.includes(category)
             );
-            return includesCategory && includesKeyword;
+            return includesCategory && includesAllKeywords;
           }
         })
         .sort((a, b) => {
@@ -144,6 +149,7 @@ function ServiceSearch({ selectedCategories }) {
               return 0;
           }
         });
+  
 
       setFilteredPosts(filtered); 
     };

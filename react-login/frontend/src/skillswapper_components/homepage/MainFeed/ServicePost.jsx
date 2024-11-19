@@ -31,14 +31,20 @@ function ServicePost({ username, date, content, keyword }) {
   };
 
   const highlightText = (text, keyword) => {
+    // Split the input keyword string by spaces to handle multiple keywords
+    const keywords = keyword.split(' ').filter(Boolean); // filter(Boolean) removes empty strings
+  
     const lines = text.split('\n');
     const highlightedLines = lines.map((line) => {
       const words = line.split(' ');
       const highlightedWords = words.map((word) => {
-        if (keyword && word.toLowerCase().includes(keyword.toLowerCase())) {
-          const parts = word.split(new RegExp(`(${keyword})`, 'gi'));
+        const lowerCaseWord = word.toLowerCase();
+        const matchingKeyword = keywords.find(keyword => lowerCaseWord.includes(keyword.toLowerCase()));
+  
+        if (matchingKeyword) {
+          const parts = word.split(new RegExp(`(${matchingKeyword})`, 'gi'));
           return parts.map((part, index) => (
-            <span key={index} className={index === 1 ? styles.highlight : ''}>
+            <span key={index} className={index % 2 === 1 ? styles.highlight : ''}>
               {part}
             </span>
           ));
@@ -54,7 +60,7 @@ function ServicePost({ username, date, content, keyword }) {
         </p>
       );
     });
-
+  
     return highlightedLines;
   };
 
