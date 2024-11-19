@@ -2,7 +2,7 @@ import { Message } from "./chat.module.index";
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
-import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion, addDoc, where, query, or } from 'firebase/firestore';
 import { get } from "http";
 
 /*
@@ -75,7 +75,8 @@ export class ChatService {
                 id: message_uuid,
                 senderID: message.sender,
                 message: message.message,
-                timestamp: message.timestamp
+                timestamp: message.timestamp,
+                read: false
             })
             
             // upon creating new chat, need to add sender ID to chat doc, receiver ID to chat doc, 
@@ -97,8 +98,29 @@ export class ChatService {
     // }
 
     public async retrieveMessage(receiver: string, id: string): Promise <boolean | undefined> {
-        
+        const chat_collection_ref = collection(db, 'chats');
 
+        try {
+            const q = query(chat_collection_ref, or(where("user1", '==', receiver), where("user2", '==', receiver)));
+            const chats = await getDocs(q);
+            for (const chat of chats.docs) {
+                const data = chat.data();
+                // i need to get the most recent message
+
+                if(data.senderID === receiver) { // this is currently wrong, 
+                                                 // i need to use the senderID of the most recent message of the current chat
+                    // then person checking is the same as sent, thus messages are read REGARDLESS of actually read status
+                    
+                }
+            }
+
+            // internal to the for-each, I need to grab the sender ID of the "newest" message (sorted via timestamp), and then compare that ID to the 
+            // "reciever" string that is passed as an argument. If they are not the same, then update the chat as read and move on. If they match, 
+            // ignore the "read" tag
+        }
+        catch (error) {
+            console.error(error);
+        }
 
         return true;
     }
