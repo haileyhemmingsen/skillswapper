@@ -29,6 +29,7 @@ function ServiceSearch({ selectedCategories }) {
   const [filteredPosts, setFilteredPosts] = useState([]); 
   const [distancesCalculated, setDistancesCalculated] = useState(false);
   const [isPostsLoaded, setIsPostsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loginContext = React.useContext(LoginContext);
 
@@ -166,6 +167,7 @@ function ServiceSearch({ selectedCategories }) {
         });
     
       setFilteredPosts(filtered); 
+      setIsLoading(false);
     };
 
     updateFilteredPosts();
@@ -273,8 +275,10 @@ function ServiceSearch({ selectedCategories }) {
             </div>
           </div>
           <div className={styles.postsContainer}>
-          {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
+            {isLoading ? (
+              <p className={styles.loadingMessage}>Loading posts, please wait...</p>
+            ) : filteredPosts.length > 0 ? (
+              filteredPosts.map(post => (
                 <div
                   key={post.post_id}
                   onClick={() => handlePostClick(post)}
@@ -284,12 +288,12 @@ function ServiceSearch({ selectedCategories }) {
                     username={post.username}
                     date={post.date}
                     content={post.content}
-                    keyword={keyword} 
+                    keyword={keyword}
                   />
                 </div>
               ))
             ) : (
-              <p>No posts available.</p>
+              keyword && <p>No posts match your search criteria.</p>
             )}
           </div>
         </section>
