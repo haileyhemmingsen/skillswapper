@@ -76,6 +76,13 @@ const Login = (props) => {
         navigate('/homepage');
     }).catch((err) => {
       console.log(err);
+
+      // Check for backend response errors
+      if (err.response && err.response.status === 401) {
+        setPasswordError('Incorrect password. Please try again.');
+      } else {
+        setPasswordError('An error occurred. Please try again later.');
+      }
     })
   };
 
