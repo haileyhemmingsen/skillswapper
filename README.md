@@ -6,7 +6,7 @@ Welcome to SkillSwapper! This is a full-stack application designed to connect us
 ## Clone the Repository
 To get a local copy of the project, clone it using Git: <br />
 `git clone https://github.com/haileyhemmingsen/skillswapper.git`
-npm install
+
 ## Installation
 Navigate to the project directory: <br />
 `cd skillswapper`
