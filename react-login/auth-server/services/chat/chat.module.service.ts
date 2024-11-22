@@ -1,8 +1,8 @@
-import { Message } from "./chat.module.index";
+import { Chat_Front, Message, Chat, Returning_Message } from "./chat.module.index";
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
-import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion, addDoc, where, query, or } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, updateDoc, arrayUnion, addDoc, where, query, or, orderBy } from 'firebase/firestore';
 import { get } from "http";
 
 /*
@@ -66,6 +66,7 @@ export class ChatService {
                 chat_id: chat_uuid,
                 user_1: message.sender,
                 user_2: message.receiver,
+                read: false
             });
             const chat_ref = doc(db, 'chats', chat_uuid);
             // create new collection
@@ -76,7 +77,6 @@ export class ChatService {
                 senderID: message.sender,
                 message: message.message,
                 timestamp: message.timestamp,
-                read: false
             })
             
             // upon creating new chat, need to add sender ID to chat doc, receiver ID to chat doc, 
@@ -97,20 +97,45 @@ export class ChatService {
     //     return true;
     // }
 
-    public async retrieveMessage(receiver: string, id: string): Promise <boolean | undefined> {
+
+
+
+    // ive realized a new issue. I cannot mark a chat as read instantly. I instead actually need to retrieve all chats, and know what their "read" status is, without updating it, and then only retrieve messages for a chat once I have the user click into that chat
+    // furthermore, I can still actually retrieve the most 
+
+    // this function SOLELY RETURNS ALL OF THE CHATS, MARKING THEM AS READ OR NOT, THEIR ID, AND THE MOST RECENT MESSAGE. THIS GOES NO DEEPER. IT WILL ORDER THEM CORRECTLY
+    public async retrieveChats(receiver: string, id: string): Promise <Chat_Front[] | undefined> {
+        let fronts = new Array<Chat_Front>();
         const chat_collection_ref = collection(db, 'chats');
 
         try {
-            const q = query(chat_collection_ref, or(where("user1", '==', receiver), where("user2", '==', receiver)));
+            const q = query(chat_collection_ref, or(where("user_1", '==', receiver), where("user_2", '==', receiver)));
             const chats = await getDocs(q);
             for (const chat of chats.docs) {
-                const data = chat.data();
-                // i need to get the most recent message
-
-                if(data.senderID === receiver) { // this is currently wrong, 
-                                                 // i need to use the senderID of the most recent message of the current chat
-                    // then person checking is the same as sent, thus messages are read REGARDLESS of actually read status
+                const chat_data = chat.data();
+                let read = chat_data.read;
+                // get reference to a particular set of message documents
+                const message_collection_ref = collection(chat.ref, "messages");
+                // query sorting by timestamp with most recent timestamp first
+                const message_q = query(message_collection_ref, orderBy("timestamp", "desc"));
+                // get the snapshot of this query
+                const messages = await getDocs(message_q);
+                
+                const message_array = messages.docs;
+                if (message_array.length > 0) {
+                    // messages exist
+                    const recent_message_data = message_array[0].data();
+                    if (!read && (recent_message_data.senderID === receiver)) {
+                        read = true
+                    }
                     
+                    const front : Chat_Front = {
+                        id: chat_data.chat_id,
+                        read: read,
+                        recent_message: recent_message_data.message,
+                        time_sent: recent_message_data.timestamp
+                    }
+                    fronts.push(front);
                 }
             }
 
@@ -121,8 +146,115 @@ export class ChatService {
         catch (error) {
             console.error(error);
         }
-
-        return true;
+        
+        const sorted_fronts = fronts.sort((a,b) => {
+            if(a.read !== b.read) {
+                return a.read ? 1 : -1;
+            }
+            return a.time_sent.getTime() - b.time_sent.getTime();
+        })
+        return sorted_fronts;
     }
 
+    // NOW WHEN A CHAT IS CLICKED ON, THEN WE CAN MARK THE CHAT AS READ IF IT IS NOT YET READ, AND 
+
+
+    // public async retrieveMessage(receiver: string, id: string): Promise <boolean | undefined> {
+    //     const chat_collection_ref = collection(db, 'chats');
+
+    //     try {
+    //         const q = query(chat_collection_ref, or(where("user1", '==', receiver), where("user2", '==', receiver)));
+    //         const chats = await getDocs(q);
+    //         for (const chat of chats.docs) {
+    //             // const data = chat.data();
+    //             // get reference to a particular set of message documents
+    //             const message_collection_ref = collection(chat.ref, "messages");
+    //             // query sorting by timestamp with most recent timestamp first
+    //             const message_q = query(message_collection_ref, orderBy("timestamp", "desc"));
+    //             // get the snapshot of this query
+    //             const messages = await getDocs(message_q);
+                
+    //             const message_array = messages.docs;
+    //             if (message_array.length > 0) {
+    //                 // messages exist
+    //                 const recent_message_data = message_array[0].data();
+
+    //                 if (recent_message_data.senderID === receiver) {
+    //                     // the most recent message's sender is the person retrieving, do not update the "read" status, and assume the chat to be marked as read = true
+
+    //                 }
+    //                 else {
+    //                     // "read status must be set to true"
+    //                     await updateDoc(chat.ref, {
+    //                         read: true
+    //                     })
+                        
+    //                 }
+    //             }
+                
+    //         }
+
+    //         // internal to the for-each, I need to grab the sender ID of the "newest" message (sorted via timestamp), and then compare that ID to the 
+    //         // "reciever" string that is passed as an argument. If they are not the same, then update the chat as read and move on. If they match, 
+    //         // ignore the "read" tag
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //     }
+    //     return true;
+    // }
+
+
+    public async retrieveChatHistory(receiver: string, user_id: string, chat_id: string): Promise<Chat | undefined> {
+        const chat_collection_ref = collection(db, 'chats');
+        try {
+            const q = query(chat_collection_ref, where("chat_id", "==", chat_id));
+            const chat = await getDocs(q);
+            const chat_doc = chat.docs;
+            if (chat_doc.length === 0) {
+                console.error(`no chat with id ${chat_id} exists`);
+            }
+            else if (chat_doc.length > 1) {
+                console.error(`more than one chat with id ${chat_id} exists`);
+            }
+            else {
+                // only one chat exists as it should
+                // get the chat info necessary
+                const chat_data = chat_doc[0].data();
+                let other_user : string = "";
+                if(chat_data.user_1 === receiver) {
+                    other_user = chat_data.user_2;
+                }
+                else {
+                    other_user = chat_data.user_1;
+                }
+
+                const message_collection_ref = collection(chat_doc[0].ref, "messages");
+                const message_q = query(message_collection_ref, orderBy("timestamp", "desc"));
+                const messages = await getDocs(message_q);
+                let message_array = new Array<Returning_Message>();
+                for (const message of messages.docs) {
+                    const message_data = message.data();
+                    const return_message : Returning_Message = {
+                        sender: message_data.senderID,
+                        message: message_data.message,
+                        time_sent: message_data.timestamp
+                    }
+                    message_array.push(return_message);
+                }
+
+
+                const chat_to_return : Chat = {
+                    second_chatter: other_user,
+                    chatID: chat_data.chat_id,
+                    messages: message_array
+                }
+                return chat_to_return;
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+        return undefined;
+    }
 }

@@ -13,7 +13,7 @@ import {
 import express from 'express'
 
 import { ChatService } from './chat.module.service';
-import { Message } from './chat.module.index';
+import { Message, Chat_Front, Chat } from './chat.module.index';
 
 @Route('sendMessage')
 export class createMessageController extends Controller {
@@ -53,21 +53,43 @@ export class createMessageController extends Controller {
 //     }
 // }
 
-@Route('retrieveMessage')
-export class retrieveMessageController extends Controller {
+@Route('retrieveChatHistory')
+export class retrieveChatHistoryController extends Controller {
     @Post()
     @Security('jwt')
     @Response('500', 'Internal Error')
     @SuccessResponse('200', 'Messages Retrieved')
-    public async retrieveMessages (
+    public async retrieveChatHistory (
         @Body() body: {receiver: string},
-        @Request() request: express.Request
-    ): Promise <boolean | undefined> {
-        return new ChatService().retrieveMessage(body.receiver, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise <boolean | undefined> => {
-            if(!identifier) {
+        @Request() request: express.Request,
+        @Query() chat_id: string
+    ): Promise <Chat | undefined> {
+        return new ChatService().retrieveChatHistory(body.receiver, `${request.user?.id}`, chat_id).then(async (chat: Chat | undefined): Promise <Chat | undefined> => {
+            if(chat === undefined) {
+                this.setStatus(500);
+                return chat
+            }
+            return chat;
+        });
+    }
+}
+
+@Route('retrieveChats')
+export class retrieveChatsController extends Controller {
+    @Get()
+    @Security('jwt')
+    @Response('500', 'Internal Error')
+    @SuccessResponse('200', 'Message Fronts Retrieved')
+    public async retrieveChats (
+        // @Body() body: {receiver: string},
+        @Request() request: express.Request,
+    ): Promise <Chat_Front[] | undefined> {
+        const receiver = `${request.user?.id}`;
+        return new ChatService().retrieveChats( receiver, `${request.user?.id}`).then(async (chats: Chat_Front[] | undefined): Promise <Chat_Front[] | undefined> => {
+            if (chats === undefined) {
                 this.setStatus(500);
             }
-            return identifier;
+            return chats;
         });
     }
 }

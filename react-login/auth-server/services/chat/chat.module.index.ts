@@ -5,3 +5,22 @@ export interface Message {
     receiver: string,
     timestamp: Date
 }
+
+export interface Chat {
+    second_chatter: string,
+    chatID: string,
+    messages: Returning_Message[]
+}
+
+export interface Returning_Message {
+    sender: string,
+    message: string
+    time_sent: Date
+}
+
+export interface Chat_Front {
+    id: string,
+    recent_message: string,
+    read: boolean,
+    time_sent: Date
+}
