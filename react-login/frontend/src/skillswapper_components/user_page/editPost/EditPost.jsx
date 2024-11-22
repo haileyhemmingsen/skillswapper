@@ -127,7 +127,7 @@ function EditPost() {
     <main className={styles.editPost}>
       <div className={styles.postContainer}>
       <div className={styles.topIcons}>
-        <Link to="/homepage">
+        <Link to="/userpage">
         <img  
             loading="lazy" 
             src={decorativeIcon} 

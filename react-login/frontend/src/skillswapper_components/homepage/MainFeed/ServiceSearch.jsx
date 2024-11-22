@@ -112,7 +112,7 @@ function ServiceSearch({ selectedCategories }) {
       // loginContext.zip for getting the user's zipcode
 
       // Calculate distances only on the first load
-    if (!distancesCalculated) {
+    if (!distancesCalculated && userZipCode) {
       postsWithDistances = await calculateDistances(posts, loginContext.zip);
       setPosts(postsWithDistances); // Update posts with distances
       setDistancesCalculated(true); // Mark distances as calculated
@@ -175,6 +175,8 @@ function ServiceSearch({ selectedCategories }) {
 
   // Function to calculate distances for all posts
   async function calculateDistances(posts, userZipCode) {
+    if (!userZipCode) return posts;
+    
     const postsWithDistances = await Promise.all(posts.map(async (post) => {
       const distance = post.zipcode !== undefined ? await getDistanceByZip(userZipCode, post.zipcode) : Infinity;
       return { ...post, distance }; 
@@ -269,7 +271,9 @@ function ServiceSearch({ selectedCategories }) {
                 <div className={styles.sortOptions}>
                   <button className={styles.sortOption} onClick={() => handleSortOption('newest')}>Newest</button>
                   <button className={styles.sortOption} onClick={() => handleSortOption('oldest')}>Oldest</button>
+                  {loginContext.zip && (
                   <button className={styles.sortOption} onClick={() => handleSortOption('nearest')}>Nearest</button>
+                  )}
                 </div>
               )}
             </div>
