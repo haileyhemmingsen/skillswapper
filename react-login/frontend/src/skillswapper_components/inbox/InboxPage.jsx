@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState }from 'react';
 import styles from './InboxPage.module.css';
 import { MessageCard } from './MessageCard';
 import userProfile from '../../images/userAvatar.svg';
 import exit from '../../images/exit.svg';
+import axios from 'axios';
 
 // hard coded chats for now
 const messages = [
@@ -28,7 +29,31 @@ const messages = [
   }
 ];
 
-export function InboxPage() {
+function InboxPage() {
+    const [chats, setChats] = useState([]); 
+    try {
+        const response = axios.get("http://localhost:3080/api/v0/retrieveChats", 
+            { headers: { "Content-Type": "application/json" }, withCredentials: true });
+        const chats = response.data;
+        console.log(chats);
+        if(chats.exists()) {
+            // map function should preserve order
+            const parsed_chats = chats.map(chat => {
+                return {
+                    username: chat.other_user_name,
+                    chat_id: chat.id,
+                    read: chat.read,
+                    message: chat.recent_message,
+                    timestamp: chat.time_sent
+                }
+            });
+            setChats(parsed_chats);
+        }
+    }
+    catch(error) {
+        console.error(error);
+    }
+
   return (
     <main className={styles.inboxContainer}>
       <img 

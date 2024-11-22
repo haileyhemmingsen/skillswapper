@@ -108,6 +108,28 @@ export class ChatService {
         let fronts = new Array<Chat_Front>();
         const chat_collection_ref = collection(db, 'chats');
 
+        async function getUsernameByUUID(uuid: string): Promise<string> {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', uuid));
+            try {
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const userDoc = querySnapshot.docs[0];
+                    const userData = userDoc.data();
+                    let username = `${userData.firstname} ${userData.lastname}`
+                    if (username === ' ') {
+                        // first name does not exist, thus last name does not exist, thus username should be uuid
+                        username = uuid
+                    }
+                    return username;
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+            return 'Unknown User'; // Fallback if user not found
+        }
+
         try {
             const q = query(chat_collection_ref, or(where("user_1", '==', receiver), where("user_2", '==', receiver)));
             const chats = await getDocs(q);
@@ -129,8 +151,12 @@ export class ChatService {
                         read = true
                     }
                     
+                    // get username for the other person in the chat
+                    const username = await getUsernameByUUID(receiver === chat_data.user_1 ? chat_data.user_1 : chat_data.user_2);
+
                     const front : Chat_Front = {
                         id: chat_data.chat_id,
+                        other_user_name: username,
                         read: read,
                         recent_message: recent_message_data.message,
                         time_sent: recent_message_data.timestamp
