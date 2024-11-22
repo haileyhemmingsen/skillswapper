@@ -3,11 +3,12 @@ import axios from 'axios';
 import styles from './chatui.module.css';
 
 const ChatComponent = ({ currentUser, otherUser }) => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-
-  const chatId = [currentUser.id, otherUser.id].sort().join('_'); // Unique chat ID for each user pair
-
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [chatID, setChatID] = useState('');
+//   const chatId = [currentUser.id, otherUser.id].sort().join('_'); // Unique chat ID for each user pair
+    setChatID(sessionStorage.getItem('chat_id'));
+//   get messages
   useEffect(() => {
     axios.post('http://localhost:3080/api/v0/unsubscribe', {
       data: 'hi'
@@ -16,18 +17,26 @@ const ChatComponent = ({ currentUser, otherUser }) => {
     })
     return;
     // return unsubscribe; // Cleanup listener on component unmount
-  }, [chatId]);
+  }, [chatID]);
 
   const handleSendMessage = () => {
 
-    axios.post('http://localhost:3080/api/v0/sendMessage', {
-      message: newMessage,
-      sender: currentUser,
-      receiver: otherUser,
-      timestamp: Date()
-    }).then((res) => {
-      console.log(res);
-      setNewMessage(''); // Clear the input field
+    const dto = {
+        message: newMessage,
+        sender: currentUser,
+        receiver: otherUser,
+        timestamp: Date(),
+        chatID: chatID === "NewChat" ? undefined : chatID
+    }
+    axios.post('http://localhost:3080/api/v0/sendMessage',
+        dto, 
+        {headers: { "Content-Type": "application/json" }, 
+        withCredentials: true, 
+        params: {
+            chat_id: chatID === "NewChat" ? undefined : chatID
+        }}).then((res) => {
+            console.log(res);
+            setNewMessage(''); // Clear the input field
     });
   };
 

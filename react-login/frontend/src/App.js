@@ -47,7 +47,7 @@ function App() {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/posting/:id" element={<Posting />} />
           <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat/:id" element={<ChatPage />} />
           <Route path="/inbox" element={<InboxPage />} />
         </Routes>
       </BrowserRouter>

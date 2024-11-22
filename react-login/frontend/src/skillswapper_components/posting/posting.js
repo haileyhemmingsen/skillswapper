@@ -62,6 +62,13 @@ const Posting = (props) => {
   };
 
   const handleMessageClick = () => {
+    const chat_info = {
+        chat_id: "NewChat",
+        receiver_id: "id"
+    }
+    const chat_info_string = JSON.stringify(chat_info)
+    sessionStorage.setItem('chat_info', chat_info_string);
+    navigate('/chat/NewChat');
     console.log("Message user clicked");
     setIsMenuOpen(false);
   };

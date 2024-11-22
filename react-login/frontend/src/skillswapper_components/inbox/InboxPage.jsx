@@ -4,6 +4,7 @@ import { MessageCard } from './MessageCard';
 import userProfile from '../../images/userAvatar.svg';
 import exit from '../../images/exit.svg';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // hard coded chats for now
 const messages = [

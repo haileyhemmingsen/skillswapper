@@ -29,7 +29,7 @@ export class ChatService {
     //     });
       
     // }
-    public async sendMessage(message: Message, user_id: string): Promise<boolean | undefined> {
+    public async sendMessage(message: Message, user_id: string, chat_id: string): Promise<boolean | undefined> {
         // we are sending a message here
         if(message.chatID !== undefined) {
             // then chat already exists
@@ -47,7 +47,7 @@ export class ChatService {
                 const message_uuid = uuidv4();
                 await setDoc(doc(chat_ref, 'messages', message_uuid), {
                     id: message_uuid,
-                    senderID: message.sender,
+                    senderID: user_id,
                     message: message.message,
                     timestamp: message.timestamp
                 });
@@ -64,7 +64,7 @@ export class ChatService {
 
             await setDoc(doc(db, 'chats', chat_uuid), {
                 chat_id: chat_uuid,
-                user_1: message.sender,
+                user_1: user_id,
                 user_2: message.receiver,
                 read: false
             });
@@ -74,7 +74,7 @@ export class ChatService {
             const message_uuid = uuidv4(); 
             await setDoc(doc(message_ref, 'messages', message_uuid), {
                 id: message_uuid,
-                senderID: message.sender,
+                senderID: user_id,
                 message: message.message,
                 timestamp: message.timestamp,
             })
@@ -104,7 +104,7 @@ export class ChatService {
     // furthermore, I can still actually retrieve the most 
 
     // this function SOLELY RETURNS ALL OF THE CHATS, MARKING THEM AS READ OR NOT, THEIR ID, AND THE MOST RECENT MESSAGE. THIS GOES NO DEEPER. IT WILL ORDER THEM CORRECTLY
-    public async retrieveChats(receiver: string, id: string): Promise <Chat_Front[] | undefined> {
+    public async retrieveChats(receiver_id: string): Promise <Chat_Front[] | undefined> {
         let fronts = new Array<Chat_Front>();
         const chat_collection_ref = collection(db, 'chats');
 
@@ -131,7 +131,7 @@ export class ChatService {
         }
 
         try {
-            const q = query(chat_collection_ref, or(where("user_1", '==', receiver), where("user_2", '==', receiver)));
+            const q = query(chat_collection_ref, or(where("user_1", '==', receiver_id), where("user_2", '==', receiver_id)));
             const chats = await getDocs(q);
             for (const chat of chats.docs) {
                 const chat_data = chat.data();
@@ -147,12 +147,12 @@ export class ChatService {
                 if (message_array.length > 0) {
                     // messages exist
                     const recent_message_data = message_array[0].data();
-                    if (!read && (recent_message_data.senderID === receiver)) {
+                    if (!read && (recent_message_data.senderID === receiver_id)) {
                         read = true
                     }
                     
                     // get username for the other person in the chat
-                    const username = await getUsernameByUUID(receiver === chat_data.user_1 ? chat_data.user_1 : chat_data.user_2);
+                    const username = await getUsernameByUUID(receiver_id === chat_data.user_1 ? chat_data.user_2 : chat_data.user_1);
 
                     const front : Chat_Front = {
                         id: chat_data.chat_id,
@@ -231,7 +231,7 @@ export class ChatService {
     // }
 
 
-    public async retrieveChatHistory(receiver: string, user_id: string, chat_id: string): Promise<Chat | undefined> {
+    public async retrieveChatHistory(receiver_id: string, chat_id: string): Promise<Chat | undefined> {
         const chat_collection_ref = collection(db, 'chats');
         try {
             const q = query(chat_collection_ref, where("chat_id", "==", chat_id));
@@ -248,7 +248,7 @@ export class ChatService {
                 // get the chat info necessary
                 const chat_data = chat_doc[0].data();
                 let other_user : string = "";
-                if(chat_data.user_1 === receiver) {
+                if(chat_data.user_1 === receiver_id) {
                     other_user = chat_data.user_2;
                 }
                 else {
