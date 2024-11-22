@@ -7,7 +7,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
 import ChatPage from './skillswapper_components/chatui/ChatPage'; 
-
+import InboxPage from './skillswapper_components/inbox/InboxPage'; 
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -48,6 +48,7 @@ function App() {
           <Route path="/posting/:id" element={<Posting />} />
           <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/inbox" element={<InboxPage />} />
         </Routes>
       </BrowserRouter>
     </div>

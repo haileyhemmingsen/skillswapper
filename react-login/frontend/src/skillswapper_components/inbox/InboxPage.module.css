@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.inboxContainer {
+    display: flex;
+    flex-direction: column;
+    font-family: Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
+    padding: 0 0;
+  }
+  
+  /* Exit (X) icon */
+  .exitIcon {
+    width: 40px;
+    align-self: end;
+    margin-right: 40px;
+    margin-top: 20px;
+  }
+  
+  .headerSection {
+    display: flex;
+    margin-left: 16px;
+    flex-direction: column;
+    width: 300px;
+    max-width: 100%;
+    
+    font-size: 40px;
+    color: #E06B1D;
+    font-weight: bold;
+    font-family: Kantumruy Pro;
+  }
+  
+  /* Top username header */
+  .userHeader {
+    display: flex;
+    margin-left: 0;
+    gap: 35px;
+    
+  }
+  
+  /* top profile picture of user */
+  .userAvatar {
+    /* object-fit: contain; */
+    /* object-position: left; */
+    /* align-self: left; */
+    width: 115px;
+    max-width: 100%;
+  }
+  
+  .userName {
+    font-size: 40px;
+  }
+  
+  /* inbox title header */
+  .inboxTitle {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: -10px;
+  }
+  
+  .messagesContainer {
+    display: flex;
+    margin-top: 51px;
+    width: 100%;
+    flex-direction: column;
+    font-weight: 400;
+    padding: 0 80px;
+  }
+  
+  /* @media (max-width: 991px) {
+    .headerSection {
+      white-space: initial;
+    }
+    
+    .userHeader {
+      white-space: initial;
+    }
+    
+    .inboxTitle {
+      margin-top: 40px;
+    }
+    
+    .messagesContainer {
+      max-width: 100%;
+      margin-top: 40px;
+      padding: 0 20px;
+    }
+  } */

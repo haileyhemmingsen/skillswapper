@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.messageCard {
+    border-radius: 20px;
+    background-color: rgba(226, 122, 43, 0.25);
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 30px;
+  }
+  
+  .messageCard:first-child {
+    margin-top: 0;
+  }
+  
+  .userInfo {
+    display: flex;
+    gap: 20px;
+    color: #E06B1D;
+    margin-bottom: 0;
+  }
+  
+  /* messenger username profile picture */
+  .userAvatar {
+    width: 55px;
+    margin-left: 20px;
+    margin-top: -10px;
+  }
+  
+  /* messenger username title */
+  .userName {
+    flex-basis: auto;
+    font-size: 32px;
+    font-weight: normal;
+    color: #E06B1D;
+  }
+  
+  /* message text snippet */
+  .messagePreview {
+    color: rgba(224, 107, 29, 0.6);
+    font-size: 24px;
+    margin-left: 100px;
+    margin-bottom: 15px;
+    margin-top: -10px;
+  }
+  
+  /* @media (max-width: 991px) {
+    .messageCard {
+      max-width: 100%;
+      padding-right: 20px;
+    }
+    
+    .userInfo {
+      white-space: initial;
+    }
+    
+    .messagePreview {
+      margin-left: 10px;
+    }
+  } */
