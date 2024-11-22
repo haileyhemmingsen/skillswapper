@@ -194,16 +194,18 @@ font-family: "Kantumruy Pro";
 
 .menu {
     position: absolute;
-    top: 40px;
-    right: 0;
+    top: 48px;
+    right: 102px;
     background-color: white;
     border: 1px solid #E06B1D; 
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
-  }
-  
-  .menuOption {
+    padding: 0; /* Ensure no padding here */
+}
+
+
+.menuOption {
     padding: 10px 20px;
     background-color: transparent;
     border: none;
@@ -213,13 +215,15 @@ font-family: "Kantumruy Pro";
     text-align: left;
     width: 100%;
     outline: none;
-  }
-  
-  .menuOption:hover {
+    padding-top: 15px;
+    padding-bottom: 13px;
+}
+
+.menuOption:hover {
     background-color: rgba(226, 122, 43, 0.25); 
-  }
-  
-  .menuOption:active {
+}
+
+.menuOption:active {
     background-color: rgba(226, 122, 43, 0.4);
-  }
+}
   
