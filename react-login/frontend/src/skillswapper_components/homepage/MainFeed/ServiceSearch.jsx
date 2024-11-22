@@ -5,18 +5,33 @@ import ServicePost from "./ServicePost";
 import searchImage from "../../../images/search.svg";
 import logoImage from "../../../images/logo.svg";
 import userImage from "../../../images/user.svg";
+import dropdownImage from "../../../images/dropdown.svg";
 import ProfilePopup from '../../profile/ProfilePopup';
 import axios from "axios";
+import { getDistanceByZip } from "../../../utils/zipcodeUtils"; 
+
+import { LoginContext } from "../../../context/Login.tsx";
 
 export const samplePosts = [];
 
 function ServiceSearch({ selectedCategories }) {
   const [showHeaderPopup, setShowHeaderPopup] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const sortDropdownRef = useRef(null);
   const headerPopupRef = useRef(null);
   const headerIconRef = useRef(null);
   const navigate = useNavigate();
   const [posts, setPosts] = useState(samplePosts); 
   const [keyword, setKeyword] = useState("");
+  const [sortOrder, setSortOrder] = useState(""); 
+  const [sortLabel, setSortLabel] = useState("sort by"); 
+  const [userZipCode, setUserZipcode] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]); 
+  const [distancesCalculated, setDistancesCalculated] = useState(false);
+  const [isPostsLoaded, setIsPostsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loginContext = React.useContext(LoginContext);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -26,14 +41,14 @@ function ServiceSearch({ selectedCategories }) {
           !headerIconRef.current.contains(event.target)) {
         setShowHeaderPopup(false);
       }
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target)) {
+        setShowSortDropdown(false);
+      }
     };
 
-    if (showHeaderPopup) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    
+    document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showHeaderPopup]);
+  }, [showHeaderPopup, showSortDropdown]);
 
   const handleHeaderIconClick = (e) => {
     e.preventDefault();
@@ -42,11 +57,10 @@ function ServiceSearch({ selectedCategories }) {
     setShowHeaderPopup(!showHeaderPopup);
   };
 
-
   useEffect(() => {
     const fetchPosts = async () => {
       console.log("selected categories: ", selectedCategories);
-      const payload = { categories: selectedCategories.length > 0 ? selectedCategories : ['useless'] };
+      const payload = { categories: selectedCategories.length > 0 ? selectedCategories : [] };
     
       try {
         const response = await axios.post(
@@ -55,51 +69,127 @@ function ServiceSearch({ selectedCategories }) {
           { headers: { "Content-Type": "application/json" } }
         );
         console.log("Response data:", response.data); 
+        console.log("Response data location:", response.data[0]); 
     
         const posts = response.data; 
         const parsedPosts = posts.map(post => {
+          // Determine the username based on the condition
+          const username = post.username.trim() === '' ? post.poster_uuid : post.username;
+  
           return {
             post_id: post.id,
-            username: post.username,
+            username: username,
             date: new Date(post.date).toLocaleDateString(),
             content: 
               `Services Seeking: ${post.skillsAsked || 'N/A'}\n` +
               `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
-              `${post.description ? `${post.description}` : ''}`,
-            categories: post.categories || []
+              `${post.description || ''}`, 
+            categories: post.categories || [],
+            zipcode: post.location || undefined
           };
-        });     
+        });   
         
         setPosts(parsedPosts); 
         samplePosts.length = 0; //clearing the array
         samplePosts.push(...parsedPosts); 
+        setIsPostsLoaded(true);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setIsPostsLoaded(true);
       }
     };
 
     fetchPosts();
   }, [selectedCategories]);
+  // this effect doesnt finish before this next useeffect 105 requires previous to finish
 
-  const filteredPosts =
-  selectedCategories.length === 0
-    ? posts.filter((post) => {
-        // Check if the content includes the keyword (case-insensitive)
-        return post.content.toLowerCase().includes(keyword.toLowerCase());
-      })
-    : posts.filter((post) => {
-        const includesCategory = post.categories.some((category) =>
-          selectedCategories.includes(category)
-        );
-        // Check if the content includes the keyword (case-insensitive)
-        const includesKeyword = post.content.toLowerCase().includes(keyword.toLowerCase());
-        return includesCategory && includesKeyword;
-      });
+  useEffect(() => {
+    
+    if (!isPostsLoaded) return; // Wait until posts are loaded
 
-  const handlePostClick = (postId) => {
-    navigate(`/posting/${postId}`);
+    const updateFilteredPosts = async () => {
+      let postsWithDistances = posts; 
+      // loginContext.zip for getting the user's zipcode
+
+      // Calculate distances only on the first load
+    if (!distancesCalculated && userZipCode) {
+      postsWithDistances = await calculateDistances(posts, loginContext.zip);
+      setPosts(postsWithDistances); // Update posts with distances
+      setDistancesCalculated(true); // Mark distances as calculated
+      console.log("Posts with distances calculated:", postsWithDistances);
+    }
+
+      const filtered = postsWithDistances.filter((post) => {
+        const searchWords = keyword.toLowerCase().split(' ').filter(Boolean);
+      
+          // Exclude "Services Seeking" and "Services Offering" prefixes from the search
+          const searchableContent = post.content
+            .split('\n')
+            .map((line) => {
+              if (
+                line.toLowerCase().startsWith("services seeking:") ||
+                line.toLowerCase().startsWith("services offering:")
+              ) {
+                return line.substring(line.indexOf(':') + 1).trim(); // Remove prefix
+              }
+              return line;
+            })
+            .join(' ')
+            .toLowerCase();
+        
+          // Check if all words from the search are in the searchable content
+          const includesAllKeywords = searchWords.every((word) =>
+            searchableContent.includes(word)
+          );
+        
+          if (selectedCategories.length === 0) {
+            return includesAllKeywords;
+          } else {
+            const includesCategory = post.categories.some((category) =>
+              selectedCategories.includes(category)
+            );
+            return includesCategory && includesAllKeywords;
+          }
+        })
+        .sort((a, b) => {
+          switch (sortOrder) {
+            case 'newest':
+              return new Date(b.date) - new Date(a.date);
+            case 'oldest':
+              return new Date(a.date) - new Date(b.date);
+            case 'nearest':
+              if (a.zipcode === undefined && b.zipcode !== undefined) return 1;
+              if (b.zipcode === undefined && a.zipcode !== undefined) return -1;
+              return a.distance - b.distance;
+            default:
+              return 0;
+          }
+        });
+    
+      setFilteredPosts(filtered); 
+      setIsLoading(false);
+    };
+
+    updateFilteredPosts();
+  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated, isPostsLoaded]);
+
+  // Function to calculate distances for all posts
+  async function calculateDistances(posts, userZipCode) {
+    if (!userZipCode) return posts;
+    
+    const postsWithDistances = await Promise.all(posts.map(async (post) => {
+      const distance = post.zipcode !== undefined ? await getDistanceByZip(userZipCode, post.zipcode) : Infinity;
+      return { ...post, distance }; 
+    }));
+    return postsWithDistances;
+  }
+
+  const handlePostClick = (post) => {
+    // send post data to session storage
+    const string_post = JSON.stringify(post);
+    sessionStorage.setItem('postInfo', string_post);
+    navigate(`/posting/${post.post_id}`);
   };
-
 
   const handleMakePostClick = () => {
     navigate("/createpost");
@@ -113,6 +203,16 @@ function ServiceSearch({ selectedCategories }) {
     event.preventDefault();
   };
 
+  const handleSortClick = () => {
+    setShowSortDropdown(!showSortDropdown);
+  };
+
+  const handleSortOption = (option) => {
+    console.log("Selected sort option:", option);
+    setSortOrder(option);
+    setSortLabel(`sort by ${option}`); // Update the button label
+    setShowSortDropdown(false);
+  };
 
   return (
     <main className={styles.container}>
@@ -129,7 +229,7 @@ function ServiceSearch({ selectedCategories }) {
           {showHeaderPopup && (
             <div ref={headerPopupRef} className={styles.headerPopupContainer}>
               <ProfilePopup 
-                username="Username"
+                username={loginContext.userFirstName}
                 isVisible={showHeaderPopup}
               />
             </div>
@@ -156,25 +256,48 @@ function ServiceSearch({ selectedCategories }) {
               </div>
             </div>
           </form>
-          <button type="button" className={styles.postButton} onClick={handleMakePostClick}>Make a post</button>
+          <div className={styles.actionContainer}>
+            <button type="button" className={styles.postButton} onClick={handleMakePostClick}>Make a post</button>
+            <div className={styles.sortDropdownContainer} ref={sortDropdownRef}>
+              <button className={styles.sortButton} onClick={handleSortClick}>
+                {sortLabel}
+                <img 
+                  src={dropdownImage} 
+                  alt="Sort options" 
+                  className={`${styles.dropdownIcon} ${showSortDropdown ? styles.flipIcon : ''}`}
+                />
+              </button>
+              {showSortDropdown && (
+                <div className={styles.sortOptions}>
+                  <button className={styles.sortOption} onClick={() => handleSortOption('newest')}>Newest</button>
+                  <button className={styles.sortOption} onClick={() => handleSortOption('oldest')}>Oldest</button>
+                  {loginContext.zip && (
+                  <button className={styles.sortOption} onClick={() => handleSortOption('nearest')}>Nearest</button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
           <div className={styles.postsContainer}>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
+            {isLoading ? (
+              <p className={styles.loadingMessage}>Loading posts, please wait...</p>
+            ) : filteredPosts.length > 0 ? (
+              filteredPosts.map(post => (
                 <div
                   key={post.post_id}
-                  onClick={() => handlePostClick(post.post_id)}
+                  onClick={() => handlePostClick(post)}
                   style={{ cursor: "pointer" }}
                 >
                   <ServicePost
                     username={post.username}
                     date={post.date}
                     content={post.content}
-                    keyword={keyword} 
+                    keyword={keyword}
                   />
                 </div>
               ))
             ) : (
-              <p>No posts available.</p>
+              keyword && <p>No posts match your search criteria.</p>
             )}
           </div>
         </section>

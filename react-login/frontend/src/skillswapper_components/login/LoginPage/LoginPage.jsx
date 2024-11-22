@@ -7,12 +7,16 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
+import { LoginContext } from '../../../context/Login.tsx';
+
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const loginContext = React.useContext(LoginContext);
 
   const navigate = useNavigate();
 
@@ -53,14 +57,32 @@ const Login = (props) => {
       }
     ).then((res) => {
         console.log(res);
-        const accessToken = res.data.accessToken;
         const id = res.data.id;
+        const zip = res.data.zip;
 
         props.setLoggedIn(true);
         props.setEmail(email);
+        console.log('name: ' + res.data.firstName);
+        if (res.data.firstName === '') {
+            loginContext.setUserFirstName(id);
+            loginContext.setUserLastName('');
+        }
+        else {
+            loginContext.setUserFirstName(res.data.firstName);
+            loginContext.setUserLastName(res.data.lastName);
+        }
+        loginContext.setId(id);
+        loginContext.setZip(zip);
         navigate('/homepage');
     }).catch((err) => {
       console.log(err);
+
+      // Check for backend response errors
+      if (err.response && err.response.status === 401) {
+        setPasswordError('Incorrect password. Please try again.');
+      } else {
+        setPasswordError('An error occurred. Please try again later.');
+      }
     })
   };
 

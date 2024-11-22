@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams} from 'react-router-dom';
 import styles from './posting.module.css';
-import { samplePosts } from '../homepage/MainFeed/ServiceSearch';
 import userAvatar from '../../images/user.svg';
 import menuIcon from '../../images/3dots.svg';
 import closeIcon from '../../images/bubble_arrow.svg';
+import axios from 'axios';
 
 // import Kantumruy pro font
 <style>
@@ -13,10 +13,13 @@ import closeIcon from '../../images/bubble_arrow.svg';
 
 
 const Posting = (props) => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const [comment, setComment] = useState('');
     const [isInputFocused, setIsInputFocused] = useState(false);
+    const [postID, setPostID] = useState('');
+    const [postUserName, setPostUserName] = useState('');
+    const [postDate, setPostDate] = useState('');
+    const [postContent, setPostContent] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -32,30 +35,98 @@ const Posting = (props) => {
           document.removeEventListener('mousedown', handleClickOutside);
       };
   }, []);
-  
-  // Find the post data based on the ID
-  const postData = samplePosts.find(post => post.id === Number(id)) || {
-      username: "Username",
-      date: "mm/dd/yyyy",
-      content: "Default content"
-  };
 
-  const handleTextAreaResize = (e) => {
-      const textarea = e.target;
-      textarea.style.height = 'auto'; 
-      textarea.style.height = `${textarea.scrollHeight}px`; 
-  };
+    useEffect(() => {
+        const post_string = sessionStorage.getItem('postInfo');
+        console.log(post_string);
+        if (post_string) {
+            const parsedPost = JSON.parse(post_string);
+            console.log(parsedPost);
+            setPostID(parsedPost.post_id);
+            setPostUserName(parsedPost.username);
+            setPostDate(parsedPost.date);
+            setPostContent(parsedPost.content);
+        }
+    }, []);
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitting comment:", comment);
-    setComment(''); 
-    setIsInputFocused(false); 
-  };
+    const postData = {
+          username: postUserName,
+          date: postDate,
+          content: postContent
+        };
 
-  const handlePostClick = () => {
-    navigate('/homepage');
-  };
+    const handleTextAreaResize = (e) => {
+        const textarea = e.target;
+        textarea.style.height = 'auto'; 
+        textarea.style.height = `${textarea.scrollHeight}px`; 
+    };
+
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Submitting comment:", comment);
+        try {
+          const dto = {
+            postID: postID,
+            comment: comment
+          }
+          axios.post('http://localhost:3080/api/v0/createComment', 
+            dto, 
+            {header: {'Content-Type': 'application/json'}, 
+            withCredentials: true})
+            .then((res) => {
+              console.log(res);
+              if(res.data) {
+                // Success, update comments state with new comment
+                const newComment = {
+                  comment_id: res.data.comment_id, 
+                  username: postData.username, 
+                  date: new Date().toLocaleString(),
+                  content: comment
+                }
+                setComments([...comments, newComment]); // Add new comment to existing comments
+      
+                setComment('');
+                setIsInputFocused(false);
+              }
+            });
+        } 
+        catch (error) {
+          console.error(error);
+        }
+
+    };
+
+    const handlePostClick = () => {
+        navigate('/homepage');
+    };
+
+    const [comments, setComments] = useState([]);
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const response = await axios.get("http://localhost:3080/api/v0/getAllComments", {
+                    params: {
+                        post_id: postID
+                    }
+                });
+                const comments = response.data;
+                const parsedComments = comments.map(comment => {
+                    return {
+                        comment_id: comment.comment_id,
+                        username: comment.poster_username,
+                        date: comment.date,
+                        content: comment.comment
+                    };
+                });
+                setComments(parsedComments);
+
+            }
+            catch (error) {
+                console.error(error);
+            }
+        };
+        fetchComments();
+    }, [postID]);
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -84,7 +155,7 @@ const Posting = (props) => {
             <div className={styles.header}>
                 <div className={styles.userInfo}>
                     <img src={userAvatar} alt="User avatar" className={styles.avatar} />
-                    <span className={styles.username}>Username</span>
+                    <span className={styles.username}>{postData.username}</span>
                 </div>
                 <div className={styles.headerIcons} ref={menuRef}>
                     <img src={menuIcon} alt="Menu" className={styles.icon} onClick={handleMenuClick} />
@@ -104,43 +175,54 @@ const Posting = (props) => {
             </div>
         </div>
 
-        <div style={{ position: 'relative' }}>
-            <textarea
-                type="text"
-                value={comment}
-                onChange={(e) => {
-                    setComment(e.target.value);
-                    handleTextAreaResize(e);
-                }}
-                onFocus={() => setIsInputFocused(true)}
-                onBlur={(e) => {
-                    if (!e.relatedTarget || e.relatedTarget.className !== styles.commentButton) {
-                        setIsInputFocused(false);
-                    }
-                }}
-                placeholder="Add a comment"
-                className={styles.commentInput}
-            />
-            <button
-                onClick={handleCommentSubmit}
-                className={`${styles.commentButton} ${isInputFocused ? styles.commentButtonVisible : ''}`}
-            >
-                Comment
-            </button>
-        </div>
+      <div style={{ position: 'relative' }}> {}
+        <textarea
+          type="text"
+          value={comment}
+          onChange={(e) => {
+            setComment(e.target.value);
+            handleTextAreaResize(e);  // dynamically resize as you type
+          }}
+          onFocus={() => setIsInputFocused(true)}
+          
+          onBlur={(e) => {
+            // hide if button isnt clicked
+            if (!e.relatedTarget) {
+                if(e.relatedTarget === null) {
+                    console.log('blur is triggered');
+                    setIsInputFocused(false);
+                }
+                else if ((e.relatedTarget.className) && !e.relatedTarget.className.includes(styles.commentButton)) {
+                    console.log('blur is triggered');
+                    setIsInputFocused(false);
+                }
+                
+            }
+          }}
+          placeholder="Add a comment"
+          className={styles.commentInput}
+        />
+        <button
+          onClick={handleCommentSubmit}
+          className={`${styles.commentButton} ${isInputFocused ? styles.commentButtonVisible : ''}`}
+        >
+          Comment
+        </button>
+      </div>
 
-        <div className={styles.commentsSection}>
-            <h3 className={styles.commentHeader}>Comments</h3>
-            {samplePosts.map((post) => (
-                <div key={post.id} className={styles.comment}>
-                    <div className={styles.userInfo}>
-                        <img src={userAvatar} alt={`${post.username}'s avatar`} className={styles.avatar} />
-                        <span className={styles.username}>{post.username}</span>
-                    </div>
-                    <p className={styles.commentContent}>{post.content}</p>
-                </div>
-            ))}
-        </div>
+      {}
+      <div className={styles.commentsSection}>
+        <h3 className={styles.commentHeader}>Comments</h3>
+        {comments.map((comment) => (
+          <div key={comment.comment_id} className={styles.comment}>
+            <div className={styles.userInfo}>
+              <img src={userAvatar} alt={`${comment.username}'s avatar`} className={styles.avatar} />
+              <span className={styles.username}>{comment.username}</span>
+            </div>
+            <p className={styles.commentContent}>{comment.content}</p>
+          </div>
+        ))}
+      </div>
     </div>
 );
 };

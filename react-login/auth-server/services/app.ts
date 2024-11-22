@@ -11,7 +11,7 @@ import swaggerUi from 'swagger-ui-express';
 import { RegisterRoutes } from '../build/routes';
 
 // Import Firebase services (Firestore and Auth)
-import { db, auth } from '../firebase';  // Import from firebase.ts
+import { db } from '../firebase';  // Import from firebase.ts
 
 import cors from 'cors';
 

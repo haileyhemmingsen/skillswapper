@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import styles from './CreatePost.module.css';
+import styles from './EditPost.module.css';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import dropdownIcon from '../../images/dropdownIcon.svg';
-import userAvatar from '../../images/userAvatar.svg';
-import decorativeIcon from '../../images/decorativeIcon.svg';
-import ImageGallery from '../../skillswapper_components/createPost/tagMenu/ImageGallery';
+import dropdownIcon from '../../../images/dropdownIcon.svg';
+import userAvatar from '../../../images/userAvatar.svg';
+import decorativeIcon from '../../../images/decorativeIcon.svg';
+import ImageGallery from '../../../skillswapper_components/createPost/tagMenu/ImageGallery';
 
-import { LoginContext } from "../../context/Login.tsx";
+import { LoginContext } from "../../../context/Login.tsx";
 
 
 // import Kantumruy pro font
@@ -18,16 +18,18 @@ import { LoginContext } from "../../context/Login.tsx";
 
 
 
-function CreatePost() {
+function EditPost() {
+    const string_data = sessionStorage.getItem('editPostData');
+    const data = JSON.parse(string_data);
     let category_tags = [];
     const navigate = useNavigate();
     const [tagMenuVisible, setTagMenuVisible] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const loginContext = React.useContext(LoginContext);
     // all variables for strings that can be written in
-    const [serviceSeeked, setServiceSeeked] = useState('');
-    const [serviceOffered, setServiceOffered] = useState('');
-    const [description, setDescription] = useState('');
+    const [serviceSeeked, setServiceSeeked] = useState(data.skillsAsked);
+    const [serviceOffered, setServiceOffered] = useState(data.skillsOffered);
+    const [description, setDescription] = useState(data.description);
 
     const [serviceSeekedError, setServiceSeekedError] = useState('');
     const [serviceOfferedError, setServiceOfferedError] = useState('');
@@ -73,8 +75,10 @@ function CreatePost() {
     }
   }
 
-
-  const post = async (e) => {
+  const cancelEdit = async () => {
+    navigate('/userpage');
+  }
+  const edit = async (e) => {
     e.preventDefault();
     setServiceOfferedError('');
     setServiceSeekedError('');
@@ -90,21 +94,28 @@ function CreatePost() {
     if (hasError) return;
 
     const dto = {
-        desireSkills: serviceSeeked,
-        haveSkills: serviceOffered,
+        skillsAsked: serviceSeeked,
+        skillsOffered: serviceOffered,
         description: description,
         categories: selectedCategories.map(category => category.alt),
+        id: data.id,
     };
     try {
-        const response = await axios.post('http://localhost:3080/api/v0/createPost', 
+        const response = await axios.post('http://localhost:3080/api/v0/editPost', 
             dto, 
         {header: {'Content-Type': 'application/json'}, withCredentials: true}).then((res) => {
             console.log(res);
             if (res.data) {
                 // either we succeed or we dont
-                navigate('/homepage');
+                navigate('/userpage');
             }
         });
+        if (response.data) {
+            console.log('update succeeded');
+        }
+        else {
+            console.log('update failed');
+        }
     }
     catch (error) {
         console.error(error);
@@ -113,10 +124,10 @@ function CreatePost() {
 
 
   return (
-    <main className={styles.createPost}>
+    <main className={styles.editPost}>
       <div className={styles.postContainer}>
       <div className={styles.topIcons}>
-        <Link to="/homepage">
+        <Link to="/userpage">
         <img  
             loading="lazy" 
             src={decorativeIcon} 
@@ -148,6 +159,7 @@ function CreatePost() {
               className={styles.formInput}
               type="text"
               placeholder="I am seeking..."
+              value={serviceSeeked}
               onChange={(ev) => {
                 setServiceSeeked(ev.target.value);
                 validateServiceSeeked(ev.target.value)
@@ -162,6 +174,7 @@ function CreatePost() {
               className={styles.formInput}
               type="text"
               placeholder="I can offer..."
+              value={serviceOffered}
               onChange={(ev) => {
                 setServiceOffered(ev.target.value);
                 validateServiceOffered(ev.target.value)
@@ -207,14 +220,18 @@ function CreatePost() {
               className={styles.formInput}
               type="text"
               placeholder="Enter more info..."
+              value={description}
               onChange={(ev) => {
                 setDescription(ev.target.value);
               }}
             ></input>
             
           </form>
-          <button type="submit" className={styles.postButton} onClick={post}>
-              Post
+          <button type="submit" className={styles.postButton} onClick={edit}>
+              Edit
+            </button>
+            <button className={styles.postButton} onClick={cancelEdit}>
+                Cancel
             </button>
         </div>
         
@@ -223,4 +240,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default EditPost;

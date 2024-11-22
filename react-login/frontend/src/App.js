@@ -3,9 +3,12 @@ import SkillSwapper from './skillswapper_components/homepage/homepage.module';
 import SignUpPage from './skillswapper_components/signup/SignUpPage/signup';
 import Login from './skillswapper_components/login/LoginPage/LoginPage';
 import Posting from './skillswapper_components/posting/posting';
+import UserPage from './skillswapper_components/user_page/UserPage';
 import './App.css';
 import { useEffect, useState } from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
+import { LoginProvider } from './context/Login.tsx';
+import EditPost from './skillswapper_components/user_page/editPost/EditPost.jsx';
 import ChatPage from './skillswapper_components/chatui/ChatPage'; 
 import InboxPage from './skillswapper_components/inbox/InboxPage'; 
 
@@ -39,18 +42,22 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
-          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
-          <Route path="/homepage" element={<SkillSwapper />} /> 
-          <Route path="/createpost" element={<CreatePost />} />
-          <Route path="/posting/:id" element={<Posting />} />
-          <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
-          <Route path="/chat/:id" element={<ChatPage />} />
+      <LoginProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+            <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+            <Route path="/homepage" element={<SkillSwapper />} /> 
+            <Route path="/createpost" element={<CreatePost />} />
+            <Route path="/posting/:id" element={<Posting />} />
+            <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
+            <Route path="/userpage" element={<UserPage />} />
+            <Route path="/editpost/:id" element={<EditPost />} />
+            <Route path="/chat/:id" element={<ChatPage />} />
           <Route path="/inbox" element={<InboxPage />} />
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </LoginProvider>
     </div>
   );
 }

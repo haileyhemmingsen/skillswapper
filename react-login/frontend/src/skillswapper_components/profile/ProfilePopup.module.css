@@ -50,6 +50,9 @@
   margin: 8px 0;
   cursor: default; 
   user-select: none;
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .buttonContainer {

@@ -1,9 +1,15 @@
 import React from 'react';
 import styles from './ProfilePopup.module.css';
 import profileImage from '../../images/profile_light.svg';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePopup = ({ username, isVisible }) => {
-  if (!isVisible) return null;
+    const navigate = useNavigate();
+    if (!isVisible) {
+        return null;
+    }
+    console.log('username:' + username);
+  
   
   return (
     <div className={styles.profilePopup}>
@@ -23,6 +29,7 @@ const ProfilePopup = ({ username, isVisible }) => {
           onClick={(e) => {
             e.stopPropagation();
             console.log('View Profile clicked');
+            navigate('/userpage');
           }}
         >
           View Profile

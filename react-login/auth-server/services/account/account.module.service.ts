@@ -65,7 +65,7 @@ export class LoginService {
             expiresIn: '1d',
             algorithm: 'HS256'
           });
-          return {id: userData.uuid, accessToken: accessToken};
+          return {id: userData.uuid, accessToken: accessToken, firstName: userData.firstname, lastName: userData.lastname, zip: userData.zip};
       } else {
         return undefined;
       }
@@ -124,7 +124,7 @@ export class LoginService {
       return undefined;
     }
   }
-  public async changeUsername(body: UpdateUsername): Promise<boolean|undefined> {
-      return true;
-  }
+  // public async changeUsername(body: UpdateUsername): Promise<boolean|undefined> {
+  //     return true;
+  // }
 }
