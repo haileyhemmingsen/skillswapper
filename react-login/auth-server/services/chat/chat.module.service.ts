@@ -72,7 +72,7 @@ export class ChatService {
             // create new collection
             const message_ref = collection(chat_ref, 'messages');
             const message_uuid = uuidv4(); 
-            await setDoc(doc(message_ref, 'messages', message_uuid), {
+            await setDoc(doc(message_ref, message_uuid), {
                 id: message_uuid,
                 senderID: user_id,
                 message: message.message,

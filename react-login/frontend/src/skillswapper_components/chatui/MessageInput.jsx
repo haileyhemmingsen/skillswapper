@@ -28,12 +28,13 @@ const MessageInput = () => {
         event.preventDefault();
         console.log('calling handle send message');
         const dto = {
+            chatID: chatID === "NewChat" ? undefined : chatID,
             message: newMessage,
             sender: loginContext.id,
             receiver: receiverID,
-            timestamp: Date(),
-            chatID: chatID === "NewChat" ? undefined : chatID
+            timestamp: new Date()
         }
+        
         try {
             console.log(dto);
             const response = await axios.post('http://localhost:3080/api/v0/sendMessage',
