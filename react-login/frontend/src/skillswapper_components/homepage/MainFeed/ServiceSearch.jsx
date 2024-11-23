@@ -85,7 +85,8 @@ function ServiceSearch({ selectedCategories }) {
               `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
               `${post.description || ''}`, 
             categories: post.categories || [],
-            zipcode: post.location || undefined
+            zipcode: post.location || undefined,
+            user_id: post.poster_uuid
           };
         });   
         

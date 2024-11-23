@@ -18,6 +18,7 @@ const Posting = (props) => {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [postID, setPostID] = useState('');
     const [postUserName, setPostUserName] = useState('');
+    const [postUserID, setPostUserID] = useState('');
     const [postDate, setPostDate] = useState('');
     const [postContent, setPostContent] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +47,7 @@ const Posting = (props) => {
             setPostUserName(parsedPost.username);
             setPostDate(parsedPost.date);
             setPostContent(parsedPost.content);
+            setPostUserID(parsedPost.user_id)
         }
     }, []);
 
@@ -135,7 +137,7 @@ const Posting = (props) => {
   const handleMessageClick = () => {
     const chat_info = {
         chat_id: "NewChat",
-        receiver_id: "id"
+        receiver_id: postUserID
     }
     const chat_info_string = JSON.stringify(chat_info)
     sessionStorage.setItem('chat_info', chat_info_string);

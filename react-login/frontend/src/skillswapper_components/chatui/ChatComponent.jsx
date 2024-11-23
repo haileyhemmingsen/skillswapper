@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './chatui.module.css';
+import { LoginContext } from "../../../context/Login.tsx";
 
 const ChatComponent = ({ currentUser, otherUser }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [chatID, setChatID] = useState('');
+    // const [receiverID, setReceiverID] = useState('');
+
+    // const loginContext = React.useContext(LoginContext);
+
+
 //   const chatId = [currentUser.id, otherUser.id].sort().join('_'); // Unique chat ID for each user pair
-    setChatID(sessionStorage.getItem('chat_id'));
+    // setChatID(sessionStorage.getItem('chat_id'));
+
+
+    // const chat_info_string = sessionStorage.getItem('chat_info');
+    // const chat_info = JSON.parse(chat_info_string);
+    // setChatID(chat_info.chat_id);
+    // setReceiverID(chat_info.receiver_id);
 //   get messages
   useEffect(() => {
     axios.post('http://localhost:3080/api/v0/unsubscribe', {
@@ -20,24 +32,25 @@ const ChatComponent = ({ currentUser, otherUser }) => {
   }, [chatID]);
 
   const handleSendMessage = () => {
-
-    const dto = {
-        message: newMessage,
-        sender: currentUser,
-        receiver: otherUser,
-        timestamp: Date(),
-        chatID: chatID === "NewChat" ? undefined : chatID
-    }
-    axios.post('http://localhost:3080/api/v0/sendMessage',
-        dto, 
-        {headers: { "Content-Type": "application/json" }, 
-        withCredentials: true, 
-        params: {
-            chat_id: chatID === "NewChat" ? undefined : chatID
-        }}).then((res) => {
-            console.log(res);
-            setNewMessage(''); // Clear the input field
-    });
+    console.log('calling handle send message');
+    // const dto = {
+    //     message: newMessage,
+    //     sender: loginContext.id,
+    //     receiver: receiverID,
+    //     timestamp: Date(),
+    //     chatID: chatID === "NewChat" ? undefined : chatID
+    // }
+    // console.log(dto);
+    // axios.post('http://localhost:3080/api/v0/sendMessage',
+    //     dto, 
+    //     {headers: { "Content-Type": "application/json" }, 
+    //     withCredentials: true, 
+    //    }).then((res) => {
+    //         console.log(res);
+    //         const response_string = JSON.stringify(res)
+    //         sessionStorage.setItem('chatreponsemessge', response_string);
+    //         setNewMessage(''); // Clear the input field
+    // });
   };
 
   return (

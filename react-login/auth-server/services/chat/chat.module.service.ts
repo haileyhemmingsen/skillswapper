@@ -29,7 +29,7 @@ export class ChatService {
     //     });
       
     // }
-    public async sendMessage(message: Message, user_id: string, chat_id: string): Promise<boolean | undefined> {
+    public async sendMessage(message: Message, user_id: string): Promise<boolean | undefined> {
         // we are sending a message here
         if(message.chatID !== undefined) {
             // then chat already exists

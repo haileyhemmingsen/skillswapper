@@ -1,10 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './ChatPage.module.css';
 import sendButton from '../../images/sendButton.svg';
+import axios from 'axios';
+import { LoginContext } from "../../context/Login.tsx";
+import { useNavigate } from 'react-router-dom';
+
+
+const MessageInput = () => {
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [chatID, setChatID] = useState('');
+    const [receiverID, setReceiverID] = useState('');
+
+    const loginContext = React.useContext(LoginContext);
+
+    const chat_info_string = sessionStorage.getItem('chat_info');
+    const chat_info = JSON.parse(chat_info_string);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setChatID(chat_info.chat_id);
+        setReceiverID(chat_info.receiver_id);
+    }, [chat_info]);
+    
+
+    const handleSendMessage = async (event) => {
+        event.preventDefault();
+        console.log('calling handle send message');
+        const dto = {
+            message: newMessage,
+            sender: loginContext.id,
+            receiver: receiverID,
+            timestamp: Date(),
+            chatID: chatID === "NewChat" ? undefined : chatID
+        }
+        try {
+            console.log(dto);
+            const response = await axios.post('http://localhost:3080/api/v0/sendMessage',
+                dto, 
+                {headers: { "Content-Type": "application/json" }, 
+                withCredentials: true
+            });
+            //    .then((res) => {
+            //         console.log(res);
+            //         // const response_string = JSON.stringify(res)
+            //         // sessionStorage.setItem('chatreponsemessge', response_string);
+            //         setNewMessage(''); // Clear the input field
+            //         navigate(`/chat/${res}`);
+            // });
+            console.log(response);
+            setNewMessage('');
+            console.log('got to end of useEffect');
+        }
+        catch (error) {
+            console.error(error);
+        }
+        
+      };
 
 
 
-function MessageInput() {
   return (
     <form className={styles.messageInputForm}>
       <div className={styles.messageInputWrapper}>
@@ -12,10 +67,12 @@ function MessageInput() {
           type="text"
           id="messageInput"
           className={styles.messageInput}
+          value={newMessage}
+          onChange={(e) => {setNewMessage(e.target.value)}}
           placeholder="Type..."
           aria-label="Type a message"
         />
-        <button type="submit" className={styles.sendButton}>
+        <button type="submit" className={styles.sendButton} onClick={handleSendMessage}>
           <img src={sendButton} alt="Send button" />
         </button>
       </div>
