@@ -287,7 +287,7 @@ export class ChatService {
                 }
 
                 const message_collection_ref = collection(chat_doc[0].ref, "messages");
-                const message_q = query(message_collection_ref, orderBy("timestamp", "desc"));
+                const message_q = query(message_collection_ref, orderBy("timestamp", "asc"));
                 const messages = await getDocs(message_q);
                 let message_array = new Array<Returning_Message>();
                 
@@ -298,11 +298,11 @@ export class ChatService {
                         sender_id: message_data.senderID,
                         sender_name: name,
                         message: message_data.message,
-                        time_sent: message_data.timestamp
+                        time_sent: message_data.timestamp,
+                        message_id: message_data.id
                     }
                     message_array.push(return_message);
                 }
-
 
                 const chat_to_return : Chat = {
                     second_chatter: other_user,

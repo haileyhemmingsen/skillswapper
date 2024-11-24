@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './ChatPage.module.css';
 import Message from './Message';
 import MessageInput from './MessageInput';
@@ -18,29 +18,44 @@ function MessageList() {
     const chat_info = JSON.parse(chat_info_string);
     const user_id = sessionStorage.getItem('id');
     
-    useEffect(() => {
-        const get_messages = async () => {
-            const response = await axios.get('http://localhost:3080/api/v0/retrieveChatHistory', 
-                { headers: { "Content-Type": "application/json" }, 
-                  params: { chat_id: chat_info.chat_id },
-                  withCredentials: true
-                });
-            console.log(response);
-            const chat_data = response.data;
-            const message_data = chat_data.messages;
-            const message_result = message_data.map((message) => {
-                return {
-                    sender: message.sender_name,
-                    text: message.message,
-                    avatar: userAvatar,
-                    time: message.time_sent,
-                    isUser: message.sender_id === user_id
-                };
-            });
-            setMessages(message_result);
-        }
+    // set up variables to throttle api requests
+    const intervalRef = useRef(null);
 
-        get_messages();
+    useEffect(() => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+        intervalRef.current = setInterval(async () => {
+            const get_messages = async () => {
+                const response = await axios.get('http://localhost:3080/api/v0/retrieveChatHistory', 
+                    { headers: { "Content-Type": "application/json" }, 
+                    params: { chat_id: chat_info.chat_id },
+                    withCredentials: true
+                    });
+                console.log(response);
+                const chat_data = response.data;
+                const message_data = chat_data.messages;
+                const message_result = message_data.map((message) => {
+                    return {
+                        sender: message.sender_name,
+                        text: message.message,
+                        avatar: userAvatar,
+                        time: message.time_sent,
+                        isUser: message.sender_id === user_id,
+                        id: message.message_id
+                    };
+                });
+                setMessages(message_result);
+            }
+
+            get_messages();
+        }, 1000) // Throttle calls once every second
+        
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
     }, [user_id, chat_info]);
 
   return (
