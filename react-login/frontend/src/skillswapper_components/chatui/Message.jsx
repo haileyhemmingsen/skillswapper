@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './ChatPage.module.css';
 
-function Message({ sender, text, avatar }) {
-  const isUser = sender === 'user';
+function Message({ isUser, sender, text, avatar }) {
+//   const isUser = sender === 'user';
   const messageClass = isUser ? styles.userMessage : styles.receiverMessage;
-  const senderName = isUser ? 'Sender (User)' : 'Receiver';
+  const senderName = `${sender}`;
 
   return (
     <article className={messageClass}>

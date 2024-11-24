@@ -13,8 +13,9 @@ export interface Chat {
 }
 
 export interface Returning_Message {
-    sender: string,
-    message: string
+    sender_id: string,
+    sender_name: string,
+    message: string,
     time_sent: Date
 }
 

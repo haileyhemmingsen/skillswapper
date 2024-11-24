@@ -29,7 +29,7 @@ export class ChatService {
     //     });
       
     // }
-    public async sendMessage(message: Message, user_id: string): Promise<boolean | undefined> {
+    public async sendMessage(message: Message, user_id: string): Promise<string | undefined> {
         // we are sending a message here
         if(message.chatID !== undefined) {
             // then chat already exists
@@ -56,6 +56,7 @@ export class ChatService {
                 //     message: message.message,
                 //     timestamp: message.timestamp
                 // });
+                return message.chatID;
             }
         }
         else {
@@ -77,12 +78,13 @@ export class ChatService {
                 senderID: user_id,
                 message: message.message,
                 timestamp: message.timestamp,
-            })
+            });
+            return chat_uuid;
             
             // upon creating new chat, need to add sender ID to chat doc, receiver ID to chat doc, 
             // the messages collection, and then add the message to the messages collection
         }
-        return true;
+        return message.chatID;
     }
      // Listen to changes in the messages collection for this chat
     // const unsubscribe = db
@@ -232,6 +234,35 @@ export class ChatService {
 
 
     public async retrieveChatHistory(receiver_id: string, chat_id: string): Promise<Chat | undefined> {
+        if (chat_id === 'NewChat') {
+            return {
+                second_chatter: '',
+                chatID: 'NewChat',
+                messages: []
+            }
+        }
+        async function getUsernameByUUID(uuid: string): Promise<string> {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('uuid', '==', uuid));
+            try {
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const userDoc = querySnapshot.docs[0];
+                    const userData = userDoc.data();
+                    let username = `${userData.firstname} ${userData.lastname}`
+                    if (username === ' ') {
+                        // first name does not exist, thus last name does not exist, thus username should be uuid
+                        username = uuid
+                    }
+                    return username;
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+            return 'Unknown User'; // Fallback if user not found
+        }
+
         const chat_collection_ref = collection(db, 'chats');
         try {
             const q = query(chat_collection_ref, where("chat_id", "==", chat_id));
@@ -259,10 +290,13 @@ export class ChatService {
                 const message_q = query(message_collection_ref, orderBy("timestamp", "desc"));
                 const messages = await getDocs(message_q);
                 let message_array = new Array<Returning_Message>();
+                
                 for (const message of messages.docs) {
                     const message_data = message.data();
+                    const name = await getUsernameByUUID(message_data.senderID);
                     const return_message : Returning_Message = {
-                        sender: message_data.senderID,
+                        sender_id: message_data.senderID,
+                        sender_name: name,
                         message: message_data.message,
                         time_sent: message_data.timestamp
                     }

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 const MessageInput = () => {
-    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [chatID, setChatID] = useState('');
     const [receiverID, setReceiverID] = useState('');
@@ -50,8 +49,23 @@ const MessageInput = () => {
             //         navigate(`/chat/${res}`);
             // });
             console.log(response);
-            setNewMessage('');
-            console.log('got to end of useEffect');
+            if(response.data !== undefined) {
+                setNewMessage('');
+                console.log('got to end of useEffect');
+                setChatID(response.data);
+                const new_chat_info = {
+                    chat_id: response.data,
+                    receiver_id: chat_info.receiver_id
+                };
+                const new_chat_info_string = JSON.stringify(new_chat_info);
+                
+                sessionStorage.setItem('chat_info', new_chat_info_string);
+                navigate(`/chat/${response.data}`);
+            }
+            else {
+                console.log('got to end of useEffect with undefined response');
+            }
+            
         }
         catch (error) {
             console.error(error);

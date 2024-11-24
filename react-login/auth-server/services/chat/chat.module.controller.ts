@@ -25,9 +25,9 @@ export class createMessageController extends Controller {
         // @Query() chat_id: string,
         @Body() body: Message,
         @Request() request: express.Request
-    ): Promise<boolean | undefined> {
+    ): Promise<string | undefined> {
         // console.log('got to the send message method');
-        return new ChatService().sendMessage(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise<boolean|undefined> => {
+        return new ChatService().sendMessage(body, `${request.user?.id}`).then(async (identifier: string | undefined): Promise<string|undefined> => {
             if(!identifier) {
                 this.setStatus(500);
             }

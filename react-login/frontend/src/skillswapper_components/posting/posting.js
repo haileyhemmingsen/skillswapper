@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './posting.module.css';
 import userAvatar from '../../images/user.svg';
 import menuIcon from '../../images/3dots.svg';
