@@ -5,52 +5,49 @@ import Login from './skillswapper_components/login/LoginPage/LoginPage';
 import Posting from './skillswapper_components/posting/posting';
 import UserPage from './skillswapper_components/user_page/UserPage';
 import './App.css';
-import { useEffect, useState } from 'react';
+import React from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
-import { LoginProvider } from './context/Login.tsx';
+import { LoginProvider, LoginContext } from './context/Login.tsx';
 import EditPost from './skillswapper_components/user_page/editPost/EditPost.jsx';
 
+import { Navigate } from 'react-router-dom';
+
+// AuthorizedRoute Component
+const AuthorizedRoute = ({ children }) => {
+  const loginContext = React.useContext(LoginContext);
+  console.log('privateroute: '+ loginContext.loggedIn);
+  return loginContext.loggedIn ? children : <Navigate to="/login" replace />;
+};
+
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [email, setEmail] = useState('')
-
-  useEffect(() => {
-    // Fetch the user email and token from local storage
-    const user = JSON.parse(localStorage.getItem('user'))
-  
-    // If the token/email does not exist, mark the user as logged out
-    if (!user || !user.token) {
-      setLoggedIn(false)
-      return
-    }
-  
-    // If the token exists, verify it with the auth server to see if it is valid
-    fetch('http://localhost:3080/verify', {
-      method: 'POST',
-      headers: {
-        'jwt-token': user.token,
-      },
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        setLoggedIn('success' === r.message)
-        setEmail(user.email || '')
-      })
-  }, [])
-
   return (
     <div className="App">
       <LoginProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
-            <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
-            <Route path="/homepage" element={<SkillSwapper />} /> 
-            <Route path="/createpost" element={<CreatePost />} />
-            <Route path="/posting/:id" element={<Posting />} />
-            <Route path="/signup" element={<SignUpPage setLoggedIn={setLoggedIn} setEmail={setEmail}/>} />
-            <Route path="/userpage" element={<UserPage />} />
-            <Route path="/editpost/:id" element={<EditPost />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/homepage" element={
+              <AuthorizedRoute>
+                <SkillSwapper />
+              </AuthorizedRoute>}/> 
+            <Route path="/createpost" element={
+              <AuthorizedRoute>
+                <CreatePost />
+              </AuthorizedRoute>}/>
+            <Route path="/posting/:id" element={
+              <AuthorizedRoute>
+                <Posting />
+              </AuthorizedRoute>}/>
+            <Route path="/signup"  element={<SignUpPage />} />
+            <Route path="/userpage" element={
+              <AuthorizedRoute>
+                <UserPage />
+              </AuthorizedRoute>} />
+            <Route path="/editpost/:id" element={
+              <AuthorizedRoute>
+                <EditPost />
+              </AuthorizedRoute>} />
           </Routes>
         </BrowserRouter>
       </LoginProvider>

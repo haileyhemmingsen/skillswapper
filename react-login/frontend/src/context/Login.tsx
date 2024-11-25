@@ -9,6 +9,8 @@ export const LoginContext = createContext({
   setId: (id: string) => {},
   zip: '',
   setZip: (zip: string) => {},
+  loggedIn: false,
+  setLoggedIn: (loggedIn: boolean) => {},
 });
 
 export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
@@ -16,6 +18,10 @@ export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
   const [userLastName, setUserLastName] = useState(() => sessionStorage.getItem('userLastName') || '');
   const [id, setId] = useState(() => sessionStorage.getItem('id') || '');
   const [zip, setZip] = useState(() => sessionStorage.getItem('zip') || '');
+  const [loggedIn, setLoggedIn] = useState(() => {
+    const storedLoggedIn = sessionStorage.getItem('loggedIn');
+    return storedLoggedIn === 'true'; // Ensure loggedIn is a boolean
+  });
 
   // Sync state changes to sessionStorage
   useEffect(() => {
@@ -33,6 +39,9 @@ export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
     sessionStorage.setItem('zip', zip);
   }, [zip]);
 
+  useEffect(() => {
+    sessionStorage.setItem('loggedIn', loggedIn.toString());
+  }, [loggedIn]);
 
   return (
     <LoginContext.Provider
@@ -45,6 +54,8 @@ export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
         setId,
         zip,
         setZip,
+        loggedIn,
+        setLoggedIn,
       }}
     >
       {children}

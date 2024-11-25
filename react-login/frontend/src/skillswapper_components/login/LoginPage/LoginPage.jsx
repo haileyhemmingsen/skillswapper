@@ -60,8 +60,6 @@ const Login = (props) => {
         const id = res.data.id;
         const zip = res.data.zip;
 
-        props.setLoggedIn(true);
-        props.setEmail(email);
         console.log('name: ' + res.data.firstName);
         if (res.data.firstName === '') {
             loginContext.setUserFirstName(id);
@@ -73,6 +71,8 @@ const Login = (props) => {
         }
         loginContext.setId(id);
         loginContext.setZip(zip);
+        loginContext.setLoggedIn(true);
+        console.log(loginContext.loggedIn);
         navigate('/homepage');
     }).catch((err) => {
       console.log(err);
