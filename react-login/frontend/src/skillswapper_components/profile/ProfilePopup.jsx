@@ -38,6 +38,16 @@ const ProfilePopup = ({ username, isVisible }) => {
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
+            console.log('Inbox clicked');
+            navigate('/inbox');
+          }}
+        >
+          Inbox
+        </button>
+        <button 
+          className={styles.actionBtn}
+          onClick={(e) => {
+            e.stopPropagation();
             console.log('Logout clicked');
           }}
         >
