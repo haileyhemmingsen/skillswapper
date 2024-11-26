@@ -4,6 +4,7 @@ import { MessageCard } from './MessageCard';
 import userProfile from '../../images/userAvatar.svg';
 import exit from '../../images/exit.svg';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 // hard coded chats for now
@@ -11,22 +12,30 @@ const messages = [
   {
     avatarSrc: userProfile,
     username: "Username",
-    message: "Hey I'm interested in your service...."
+    message: "Hi I am interested in your service",
+    timestamp: "11:47 AM",
+    read: false
   },
   {
     avatarSrc: userProfile,
     username: "Username",
-    message: "Hey I'm interested in your service...."
+    message: "Hello wanna swap skills?",
+    timestamp: "9:40 AM",
+    read: false
   },
   {
     avatarSrc: userProfile,
     username: "Username",
-    message: "Hey I'm interested in your service...."
+    message: "Hey I'm interested in your service....",
+    timestamp: "Yesterday",
+    read: true
   },
   {
     avatarSrc: userProfile,
     username: "Username",
-    message: "Hey I'm interested in your service...."
+    message: "How's it going?",
+    timestamp: "Sunday",
+    read: true
   }
 ];
 
@@ -57,25 +66,27 @@ function InboxPage() {
 
   return (
     <main className={styles.inboxContainer}>
-      <img 
-        src= {exit}
-        alt="Settings" 
-        className={styles.exitIcon} 
-        loading="lazy" 
-      />
+      <Link to="/homepage" className={styles.exitIconContainer}>
+        <img 
+          src={exit} 
+          alt="Settings" 
+          className={styles.exitIcon} 
+          loading="lazy" 
+        />
+    </Link>
       
-      <section className={styles.headerSection}>
-        <header className={styles.userHeader}>
-          <img 
-            src= {userProfile}
-            alt="User profile" 
-            className={styles.userAvatar} 
-            loading="lazy" 
-          />
-          <h1 className={styles.userName}>Username</h1>
-        </header>
-        <h2 className={styles.inboxTitle}>Inbox</h2>
-      </section>
+    <section className={styles.headerSection}>
+      <div className={styles.headerUserInfo}>
+        <img 
+          src={userProfile}
+          alt="User profile" 
+          className={styles.userAvatar} 
+          loading="lazy" 
+        />
+        <h1 className={styles.userName}>Username</h1>
+      </div>
+    <h2 className={styles.inboxTitle}>Inbox</h2>
+  </section>
 
       <section className={styles.messagesContainer}>
         {messages.map((message, index) => (
@@ -84,6 +95,8 @@ function InboxPage() {
             avatarSrc={message.avatarSrc}
             username={message.username}
             message={message.message}
+            timestamp={message.timestamp}
+            read={message.read}
           />
         ))}
       </section>

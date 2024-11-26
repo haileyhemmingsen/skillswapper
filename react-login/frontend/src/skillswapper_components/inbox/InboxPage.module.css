@@ -1,5 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
 
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns all content to the left initially */
+  padding: 10px;
+  color: #E06B1D;
+  font-weight: bold;
+  font-family: 'Kantumruy Pro', sans-serif;
+}
+
+.headerUserInfo {
+  display: flex;
+  align-items: center; /* Align avatar and username vertically */
+  gap: 15px; /* Space between avatar and username */
+  width: 100%; /* Ensure it spans the full width */
+  margin-bottom: 10px; /* Space between user info and title */
+}
+
+.userAvatar {
+  width: 63px;
+  height: 63px;
+  margin: 0; /* Remove extra margin */
+}
+
+.userName {
+  font-size: 37px;
+  margin: 0; /* Remove extra margins */
+  color: #E06B1D;
+}
+
+.inboxTitle {
+  text-align: center;
+  width: 100%; /* Center the title across the full width */
+  font-size: 40px;
+  margin-top: 10px;
+}
+
+
 .inboxContainer {
     display: flex;
     flex-direction: column;
@@ -7,47 +45,17 @@
     padding: 0 0;
   }
   
-  /* Exit (X) icon */
   .exitIcon {
     width: 40px;
-    align-self: end;
+  }
+  
+  .exitIconContainer {
+    align-self: end; /* Align the container to the end */
     margin-right: 40px;
     margin-top: 20px;
   }
   
-  .headerSection {
-    display: flex;
-    margin-left: 16px;
-    flex-direction: column;
-    width: 300px;
-    max-width: 100%;
-    
-    font-size: 40px;
-    color: #E06B1D;
-    font-weight: bold;
-    font-family: Kantumruy Pro;
-  }
   
-  /* Top username header */
-  .userHeader {
-    display: flex;
-    margin-left: 0;
-    gap: 35px;
-    
-  }
-  
-  /* top profile picture of user */
-  .userAvatar {
-    /* object-fit: contain; */
-    /* object-position: left; */
-    /* align-self: left; */
-    width: 115px;
-    max-width: 100%;
-  }
-  
-  .userName {
-    font-size: 40px;
-  }
   
   /* inbox title header */
   .inboxTitle {
