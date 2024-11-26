@@ -172,7 +172,7 @@ function ServiceSearch({ selectedCategories }) {
     };
 
     updateFilteredPosts();
-  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated, isPostsLoaded]);
+  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated, isPostsLoaded, loginContext]);
 
   // Function to calculate distances for all posts
   async function calculateDistances(posts, userZipCode) {
