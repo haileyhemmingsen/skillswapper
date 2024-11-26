@@ -9,6 +9,8 @@ import React from 'react';
 import CreatePost from './skillswapper_components/createPost/CreatePost';
 import { LoginProvider, LoginContext } from './context/Login.tsx';
 import EditPost from './skillswapper_components/user_page/editPost/EditPost.jsx';
+import ChatPage from './skillswapper_components/chatui/ChatPage'; 
+import InboxPage from './skillswapper_components/inbox/InboxPage'; 
 
 import { Navigate } from 'react-router-dom';
 

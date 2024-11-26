@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './posting.module.css';
 import userAvatar from '../../images/user.svg';
@@ -18,8 +18,24 @@ const Posting = (props) => {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [postID, setPostID] = useState('');
     const [postUserName, setPostUserName] = useState('');
+    const [postUserID, setPostUserID] = useState('');
     const [postDate, setPostDate] = useState('');
     const [postContent, setPostContent] = useState('');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+          if (menuRef.current && !menuRef.current.contains(event.target)) {
+              setIsMenuOpen(false);
+          }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
+  }, []);
 
     useEffect(() => {
         const post_string = sessionStorage.getItem('postInfo');
@@ -31,6 +47,7 @@ const Posting = (props) => {
             setPostUserName(parsedPost.username);
             setPostDate(parsedPost.date);
             setPostContent(parsedPost.content);
+            setPostUserID(parsedPost.user_id)
         }
     }, []);
 
@@ -113,30 +130,52 @@ const Posting = (props) => {
         fetchComments();
     }, [postID]);
 
+  const handleMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleMessageClick = () => {
+    const chat_info = {
+        chat_id: "NewChat",
+        receiver_id: postUserID
+    }
+    const chat_info_string = JSON.stringify(chat_info)
+    sessionStorage.setItem('chat_info', chat_info_string);
+    navigate('/chat/NewChat');
+    console.log("Message user clicked");
+    setIsMenuOpen(false);
+  };
+
 
   return (
     <div className={styles.container}>
-    <div className={styles.topIcons}>
-      <img src={closeIcon} alt="Close" className={styles.arrowIcon} onClick={handlePostClick} style={{ cursor: 'pointer' }} />
-    </div>
-    
-    <div className={styles.postContent}>
-      <div className={styles.header}>
-        <div className={styles.userInfo}>
-          <img src={userAvatar} alt="User avatar" className={styles.avatar} />
-          <span className={styles.username}>{postData.username}</span>
+        <div className={styles.topIcons}>
+            <img src={closeIcon} alt="Close" className={styles.arrowIcon} onClick={handlePostClick} style={{ cursor: 'pointer' }} />
         </div>
-        <div className={styles.headerIcons}>
-          <img src={menuIcon} alt="Menu" className={styles.icon} />
+        
+        <div className={styles.postContent}>
+            <div className={styles.header}>
+                <div className={styles.userInfo}>
+                    <img src={userAvatar} alt="User avatar" className={styles.avatar} />
+                    <span className={styles.username}>{postData.username}</span>
+                </div>
+                <div className={styles.headerIcons} ref={menuRef}>
+                    <img src={menuIcon} alt="Menu" className={styles.icon} onClick={handleMenuClick} />
+                    {isMenuOpen && (
+                        <div className={styles.menu}>
+                            <button className={styles.menuOption} onClick={handleMessageClick}>
+                                Message User
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+            <div className={styles.content}>
+                {postData.content.split('\n').map((text, index) => (
+                    <p key={index}>{text}</p>
+                ))}
+            </div>
         </div>
-      </div>
-      <div className={styles.content}>
-        {}
-        {postData.content.split('\n').map((text, index) => (
-            <p key={index}>{text}</p>
-          ))}
-      </div>
-    </div>
 
       <div style={{ position: 'relative' }}> {}
         <textarea
@@ -187,7 +226,8 @@ const Posting = (props) => {
         ))}
       </div>
     </div>
-  );
+);
 };
+
 
 export default Posting;

@@ -25,7 +25,6 @@ function ServiceSearch({ selectedCategories }) {
   const [keyword, setKeyword] = useState("");
   const [sortOrder, setSortOrder] = useState(""); 
   const [sortLabel, setSortLabel] = useState("sort by"); 
-  const [userZipCode, setUserZipcode] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]); 
   const [distancesCalculated, setDistancesCalculated] = useState(false);
   const [isPostsLoaded, setIsPostsLoaded] = useState(false);
@@ -85,7 +84,8 @@ function ServiceSearch({ selectedCategories }) {
               `Services Offering: ${post.skillsOffered || 'N/A'}\n` +
               `${post.description || ''}`, 
             categories: post.categories || [],
-            zipcode: post.location || undefined
+            zipcode: post.location || undefined,
+            user_id: post.poster_uuid
           };
         });   
         
@@ -112,7 +112,7 @@ function ServiceSearch({ selectedCategories }) {
       // loginContext.zip for getting the user's zipcode
 
       // Calculate distances only on the first load
-    if (!distancesCalculated && userZipCode) {
+    if (!distancesCalculated && loginContext.zip) {
       postsWithDistances = await calculateDistances(posts, loginContext.zip);
       setPosts(postsWithDistances); // Update posts with distances
       setDistancesCalculated(true); // Mark distances as calculated
@@ -171,7 +171,7 @@ function ServiceSearch({ selectedCategories }) {
     };
 
     updateFilteredPosts();
-  }, [posts, keyword, selectedCategories, sortOrder, userZipCode, distancesCalculated, isPostsLoaded]);
+  }, [posts, keyword, selectedCategories, sortOrder, distancesCalculated, isPostsLoaded, loginContext]);
 
   // Function to calculate distances for all posts
   async function calculateDistances(posts, userZipCode) {

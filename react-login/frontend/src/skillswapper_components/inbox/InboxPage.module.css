@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns all content to the left initially */
+  padding: 10px;
+  color: #E06B1D;
+  font-weight: bold;
+  font-family: 'Kantumruy Pro', sans-serif;
+}
+
+.headerUserInfo {
+  display: flex;
+  align-items: center; /* Align avatar and username vertically */
+  gap: 15px; /* Space between avatar and username */
+  width: 100%; /* Ensure it spans the full width */
+  margin-bottom: 10px; /* Space between user info and title */
+}
+
+.userAvatar {
+  width: 63px;
+  height: 63px;
+  margin: 0; /* Remove extra margin */
+}
+
+.userName {
+  font-size: 37px;
+  margin: 0; /* Remove extra margins */
+  color: #E06B1D;
+}
+
+.inboxTitle {
+  text-align: center;
+  width: 100%; /* Center the title across the full width */
+  font-size: 40px;
+  margin-top: 10px;
+}
+
+
+.inboxContainer {
+    display: flex;
+    flex-direction: column;
+    font-family: Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
+    padding: 0 0;
+  }
+  
+  .backIcon {
+    width: 40px;
+  }
+  
+  .exitIconContainer {
+    align-self: end; /* Align the container to the end */
+    margin-right: 40px;
+    margin-top: 20px;
+  }
+  
+  
+  
+  /* inbox title header */
+  .inboxTitle {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: -10px;
+  }
+  
+  .messagesContainer {
+    display: flex;
+    margin-top: 51px;
+    width: 100%;
+    flex-direction: column;
+    font-weight: 400;
+    padding: 0 40px;
+  }
+  
+  /* @media (max-width: 991px) {
+    .headerSection {
+      white-space: initial;
+    }
+    
+    .userHeader {
+      white-space: initial;
+    }
+    
+    .inboxTitle {
+      margin-top: 40px;
+    }
+    
+    .messagesContainer {
+      max-width: 100%;
+      margin-top: 40px;
+      padding: 0 20px;
+    }
+  } */
