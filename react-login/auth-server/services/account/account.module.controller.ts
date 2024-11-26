@@ -125,6 +125,23 @@ export class EmailController extends Controller {
     }
 }
 
+// Doesn't connect to a function
+// All this route is doing it replacing the cookie with an invalid one to basically 
+// overwrite the old one
+@Route('logout')
+export class LogoutController extends Controller {
+    @Post()
+    @SuccessResponse('200', 'Logged Out')
+    public async logout(
+        @Res() setCookieResponse: TsoaResponse<200, void> // Response to clear the cookie
+    ): Promise<void> {
+        // Clear the access token by setting its Max-Age to 0
+        setCookieResponse(200, undefined, {
+            'Set-Cookie': `accessToken=; HttpOnly; Secure; SameSite=Strict; Max-Age=0`
+        });
+    }
+}
+
 // @Route('changePassword')
 // export class UsernameController extends Controller {
 //     @Post()
