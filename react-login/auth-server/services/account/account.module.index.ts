@@ -1,7 +1,3 @@
-//exporting data transfer object (interface)
-
-import e from "express"
-
 export interface SignUpCredentials {
     firstname?: string,
     lastname?: string,

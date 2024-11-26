@@ -1,4 +1,3 @@
-// this is where the endpoints themselves go
 import {
 	Body,
 	Query,
@@ -39,32 +38,7 @@ export class SignUpController extends Controller {
 }
 
 
-// @Route('login')
-// export class LogInController extends Controller {
-//     @Post()
-//     @Response('401', 'Invalid Username or Password')
-//     @SuccessResponse('200', 'Logged In') // also not sure about here
-//     public async login(@Body() body: SignUpCredentials): Promise<Authenticated|undefined> {
-//         return new LoginService().login(body)
-//             .then(async (valid: Authenticated | undefined): Promise <Authenticated | undefined> => {
-//             if(!valid) {
-//                 this.setStatus(401);
-//                 return undefined;
-//             }
-            
-//             this.setHeader('Set-Cookie', `token=${valid.accessToken}; HttpOnly; Secure; SameSite=strict; Path=/`);
 
-//             // below is reliant upon using ExpressResponse, which appears to not be working, and instead I must use TsoaResponse object
-//             // res.cookie('accessToken', valid.accessToken,  {
-//             //     httpOnly: true,
-//             //     secure: true,
-//             //     sameSite: 'strict',
-//             //     path: '/'
-//             // });
-//             return valid;
-//         })
-//     }
-// }
 @Route('login')
 export class LogInController extends Controller {
     @Post()
@@ -141,18 +115,3 @@ export class LogoutController extends Controller {
         });
     }
 }
-
-// @Route('changePassword')
-// export class UsernameController extends Controller {
-//     @Post()
-//     @Response('500', 'Failed to change password')
-//     @SuccessResponse('200', 'Username changed')
-//     public async changeUsername(@Body() body: UpdateUsername): Promise<boolean|undefined> {
-//         return new LoginService().changeUsername(body).then(async (valid: boolean | undefined): Promise <boolean | undefined> => {
-//             if(!valid) {
-//                 this.setStatus(500);
-//             }
-//             return valid;
-//         })
-//     }
-// }

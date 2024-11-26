@@ -19,7 +19,7 @@ import { NewPost, PostComment, SkillPost, Categories, Comment, Archive, EditPost
 export class NewPostController extends Controller {
     @Post()
     @Security('jwt')
-    @Response('500', 'Internal Error') // need to define multiple different possible errors (500 error for internal server, and 401 for bad auth header)
+    @Response('500', 'Internal Error')
     @Response('401', 'Unauthorized')
     @SuccessResponse('201', 'Post Created')
     public async newPost(
@@ -39,7 +39,7 @@ export class NewPostController extends Controller {
 export class NewCommentController extends Controller {
     @Post()
     @Security('jwt')
-    @Response('500', 'Internal Error') // need to define multiple different possible errors (500 error for internal server, and 401 for bad auth header)
+    @Response('500', 'Internal Error')
     @Response('401', 'Unauthorized')
     @SuccessResponse('201', 'Comment Created')
     public async newComment(
@@ -54,16 +54,7 @@ export class NewCommentController extends Controller {
         });
     }
 }
-/**
- * due to the fact the below route is a get-route, it would be preferable to make it a GET endpoint
- * it should be feasible to do this by adding params to the url endpoint, in axios call it would appear as
- * axios.get('/my_endpoint', {
- *   params: {
- *     param1: value
- *     param2: value2
- *   }
- * });
- */
+
 @Route('getLocalPosts')
 export class GetLocalPostsController extends Controller {
     @Post()
@@ -114,9 +105,6 @@ export class ArchiveUpdaterController extends Controller {
         @Request() request: express.Request 
     ): Promise<boolean | undefined> {
         return new PostService().archiveStatusUpdate(body, `${request.user?.id}`).then(async (identifier: boolean | undefined): Promise<boolean | undefined> => {
-            // if (identifier === undefined) {
-            //     this.setStatus(401);
-            // }
             if (identifier === false) {
                 this.setStatus(500);
             }

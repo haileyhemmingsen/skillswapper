@@ -1,4 +1,3 @@
-// where actual functions are
 import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,8 +5,6 @@ import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Response as ExpressResponse } from 'express';
 import { SignUpCredentials, UpdateEmail, UpdatePassword, UpdateUsername, Authenticated } from './account.module.index';
-// import { access } from 'fs';
-// import something for backend API
 
 export class LoginService {
   private saltRounds = 10;
@@ -124,7 +121,4 @@ export class LoginService {
       return undefined;
     }
   }
-  // public async changeUsername(body: UpdateUsername): Promise<boolean|undefined> {
-  //     return true;
-  // }
 }

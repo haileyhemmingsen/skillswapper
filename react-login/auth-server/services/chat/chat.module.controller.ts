@@ -36,25 +36,6 @@ export class createMessageController extends Controller {
     }
 }
 
-// @Route('unsubscribe')
-// export class unsubscribeController extends Controller {
-//     @Post()
-//     @Security('jwt')
-//     @Response('500', 'Internal Error')
-//     @SuccessResponse('200', 'Unsubscribed')
-//     public async unsubscribe(
-//         @Body() body: {receiver: string},
-//         @Request() request: express.Request
-//     ): Promise<boolean | undefined> {
-//         return new ChatService().unsubscribe(`${request.user?.id}`, body.receiver).then(async (identifier: boolean | undefined): Promise<boolean|undefined> => {
-//             if(!identifier) {
-//                 this.setStatus(500);
-//             }
-//             return identifier;
-//         });
-//     }
-// }
-
 @Route('retrieveChatHistory')
 export class retrieveChatHistoryController extends Controller {
     @Get()

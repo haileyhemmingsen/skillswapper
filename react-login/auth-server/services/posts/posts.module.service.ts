@@ -7,22 +7,7 @@ import { get } from "http";
 
 export class PostService {
     public async newPost(body: NewPost, user_id: string): Promise<string | undefined> {
-        // needs to create post ID and send all info to DB
-        // needs to grab the date
-        // grab their username/UUID
-        // const postRef = doc(db, 'posts', ACCOUNT_IDENTIFIER);
-        
-
-        //check if this user has made a post before
-        // if yes, then update
-
-        // const user_id = 'INSERT_UUID_HERE';
         try {
-            // console.log(user_id);
-            // The middleware will throw an error before it even reaches this part of the function
-            // if (user_id === '') {
-            //     return undefined;
-            // }
             const postDocRef = doc(db, 'posts', user_id);
             const postDocSnapshot = await getDoc(postDocRef);
             const postuuid = uuidv4();
@@ -37,9 +22,7 @@ export class PostService {
             }
             const post_string = JSON.stringify(post);
             if (postDocSnapshot.exists()) {
-                // console.log('Post already exists');
                 // post already exists, thus update
-                
                 await updateDoc(doc(db, 'posts', user_id), {
                     poster_uuid: user_id,
                     posts: arrayUnion(post_string)
@@ -47,8 +30,6 @@ export class PostService {
             }
             else {
                 // account has never posted before, thus create new post
-                //create uuid for the post itself (identifying for commenting later)
-                // console.log('never posted before');
                 await setDoc(doc(db, 'posts', user_id), {
                     poster_uuid: user_id,
                     posts: [post_string]
@@ -84,7 +65,6 @@ export class PostService {
 
                             cur_post = JSON.stringify(cur_post);
                             postData.posts[i] = cur_post;
-                            // console.log(postData)
                             await updateDoc(postDocRef, postData);
                             break;
                         }
@@ -103,7 +83,6 @@ export class PostService {
             else {
                 console.log('User has no posts');
                 return false;
-                // throw new Error('Post does not exist')
             }
         }
         catch (error) {
@@ -136,9 +115,6 @@ export class PostService {
                 username = user_id
             }
             // we are looking at our own posts, getting zip is unnecessary
-            // const userZip = userData.zip;
-
-
             const postDocSnapshot = await getDoc(postDocRef);
             if(postDocSnapshot.exists()) {
                 const postData = postDocSnapshot.data();
@@ -191,7 +167,6 @@ export class PostService {
             const postDocSnapshot = await getDoc(postDocRef);
             const comment_uuid = uuidv4();
             const comment = {
-                // postID: body.postID,
                 postingUserID: user_id,
                 comment: body.comment,
                 comment_id: comment_uuid,
@@ -218,10 +193,8 @@ export class PostService {
         return true;
     }
     public async getLocalPosts(body: Categories | undefined | null): Promise <SkillPost[]> {
-        // get a list of all posts from database and 
-        // console.log('get local posts is called');
+        // get a list of all posts from database that are part of the defined categories. If categories is undefined then grab all posts
         const postsSnapshot = await getDocs(collection(db, 'posts'));
-        // console.log(postsSnapshot.empty);
         let allPosts = new Array<SkillPost>();
         let categories_exist = false;
         if(!!body) {
@@ -275,7 +248,6 @@ export class PostService {
                 }
             }
         }
-        // console.log(allPosts);
         return allPosts;
     }
     public async getAllComments(post_id: string | undefined): Promise <Comment[]> {
@@ -365,7 +337,6 @@ export class PostService {
             else {
                 console.log('User has no posts');
                 return false;
-                // throw new Error('Post does not exist')
             }
             
         }
