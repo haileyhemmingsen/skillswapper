@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from './ServicePost.module.css';
 import userImage from '../../../images/user.svg';
-import ProfilePopup from '../../profile/ProfilePopup';
+// import ProfilePopup from '../../profile/ProfilePopup';
 
 function ServicePost({ username, date, content, keyword }) {
   const [isProfileVisible, setIsProfileVisible] = useState(false);

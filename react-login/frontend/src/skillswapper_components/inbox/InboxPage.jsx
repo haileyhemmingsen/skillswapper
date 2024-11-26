@@ -2,45 +2,22 @@ import React, { useEffect, useState }from 'react';
 import styles from './InboxPage.module.css';
 import { MessageCard } from './MessageCard';
 import userProfile from '../../images/userAvatar.svg';
-import exit from '../../images/exit.svg';
 import backArrow from '../../images/bubble_arrow.svg';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import { LoginContext } from '../../context/Login.tsx';
 
-// hard coded chats for now
-// const messages = [
-//   {
-//     avatarSrc: userProfile,
-//     username: "Username",
-//     message: "Hi I am interested in your service",
-//     timestamp: "11:47 AM",
-//     read: false
-//   },
-//   {
-//     avatarSrc: userProfile,
-//     username: "Username",
-//     message: "Hello wanna swap skills?",
-//     timestamp: "9:40 AM",
-//     read: false
-//   },
-//   {
-//     avatarSrc: userProfile,
-//     username: "Username",
-//     message: "Hey I'm interested in your service....",
-//     timestamp: "Yesterday",
-//     read: true
-//   },
-//   {
-//     avatarSrc: userProfile,
-//     username: "Username",
-//     message: "How's it going?",
-//     timestamp: "Sunday",
-//     read: true
-//   }
-// ];
 
 function InboxPage() {
     const [chats, setChats] = useState([]); 
+    const loginContext = React.useContext(LoginContext);
+    let username;
+    if (`${loginContext.userLastName}` === '') {
+        username = `${loginContext.userFirstName}`;
+    }
+    else {
+        username = `${loginContext.userFirstName} ${loginContext.userLastName}`;
+    }
 
     useEffect(() => {
         const fetch_chats = async () => {
@@ -52,13 +29,14 @@ function InboxPage() {
                 if(chats !== undefined) {
                     // map function should preserve order
                     const parsed_chats = chats.map(chat => {
+                        const date = new Date(chat.time_sent.seconds * 1000);
                         return {
                             username: chat.other_user_name,
                             other_user_id: chat.other_user_id,
                             chat_id: chat.id,
                             read: chat.read,
                             message: chat.recent_message,
-                            timestamp: `${(new Date(chat.time_sent.seconds * 1000)).getMonth() + 1}/${(new Date(chat.time_sent.seconds * 1000)).getDate()}/${(new Date(chat.time_sent.seconds * 1000)).getFullYear()} ${(new Date(chat.time_sent.seconds * 1000)).toLocaleTimeString()}`,
+                            timestamp: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.toLocaleTimeString()}`,
                             avatarSrc: userProfile
                         }
                     });
@@ -91,7 +69,7 @@ function InboxPage() {
           className={styles.userAvatar} 
           loading="lazy" 
         />
-        <h1 className={styles.userName}>Username</h1>
+        <h1 className={styles.userName}>{username}</h1>
       </div>
     <h2 className={styles.inboxTitle}>Inbox</h2>
   </section>

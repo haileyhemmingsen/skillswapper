@@ -43,7 +43,7 @@ function MessageList() {
       };
 
       get_messages();
-    }, 10000); // Throttle calls once every ten seconds
+    }, 5000); // Throttle calls once every five seconds
 
     return () => {
       if (intervalRef.current) {

@@ -16,7 +16,6 @@ function Post({ post, onArchiveToggle, editPost }) {
     const seeking = `Services Seeking: ${post.skillsAsked || 'N/A'}\n`;
     const offer = ` Services Offering: ${post.skillsOffered || 'N/A'}\n`;
     const description = post.description;
-//   const [seeking, offer] = post.content.split('\n');
   
   return (
     <div className={`${styles.postContainer} ${post.archive ? styles.archivedPost : ''}`}>
@@ -98,8 +97,6 @@ function UserPage() {
         }
     fetchMyPosts();
     },[]);
-    
-//   setPosts(initialPosts);
 
 const handleArchiveToggle = async (postId) => {
   try {

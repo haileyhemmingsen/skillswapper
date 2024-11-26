@@ -41,13 +41,6 @@ const MessageInput = () => {
                 {headers: { "Content-Type": "application/json" }, 
                 withCredentials: true
             });
-            //    .then((res) => {
-            //         console.log(res);
-            //         // const response_string = JSON.stringify(res)
-            //         // sessionStorage.setItem('chatreponsemessge', response_string);
-            //         setNewMessage(''); // Clear the input field
-            //         navigate(`/chat/${res}`);
-            // });
             console.log(response);
             if(response.data !== undefined) {
                 setNewMessage('');

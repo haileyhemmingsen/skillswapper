@@ -17,11 +17,3 @@ function ChatPage() {
 }
 
 export default ChatPage;
-
-//   return (
-//     <div>
-//       <h1>Chat Page</h1>
-//       <ChatComponent currentUser={currentUser} otherUser={otherUser} />
-//     </div>
-//   );
-// };

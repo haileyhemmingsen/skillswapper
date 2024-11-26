@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './ChatPage.module.css';
 
 function Message({ isUser, sender, text, avatar }) {
-//   const isUser = sender === 'user';
   const messageClass = isUser ? styles.userMessage : styles.receiverMessage;
   const senderName = `${sender}`;
 
