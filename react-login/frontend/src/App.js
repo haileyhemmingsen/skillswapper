@@ -50,6 +50,14 @@ function App() {
               <AuthorizedRoute>
                 <EditPost />
               </AuthorizedRoute>} />
+            <Route path="/chat/:id" element={
+                <AuthorizedRoute>
+                    <ChatPage />
+                </AuthorizedRoute>} />
+            <Route path="inbox" element={
+                <AuthorizedRoute>
+                    <InboxPage />
+                </AuthorizedRoute>} />
           </Routes>
         </BrowserRouter>
       </LoginProvider>
