@@ -9,6 +9,7 @@ import editGray from '../../images/edit_gray.svg';
 import archiveGray from '../../images/archive_gray.svg';
 import styles from './UserPage.module.css';
 import axios from 'axios';
+import { LoginContext } from '../../context/Login.tsx';
 
 
 function Post({ post, onArchiveToggle, editPost }) {
@@ -72,6 +73,14 @@ function Post({ post, onArchiveToggle, editPost }) {
 }
 
 function UserPage() {
+    const loginContext = React.useContext(LoginContext);
+    let username;
+    if (`${loginContext.userLastName}` === '') {
+        username = `${loginContext.userFirstName}`;
+    }
+    else {
+        username = `${loginContext.userFirstName} ${loginContext.userLastName}`;
+    }
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     useEffect(() => {
@@ -153,7 +162,7 @@ const handleEditPost = async (post) => {
           alt="Profile" 
           className={styles.profileAvatar}
         />
-        <h1 className={styles.profileUsername}>Username</h1>
+        <h1 className={styles.profileUsername}>{username}</h1>
       </div>
 
       <div className={styles.archiveSection}>
