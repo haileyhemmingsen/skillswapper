@@ -3,6 +3,7 @@ import styles from './InboxPage.module.css';
 import { MessageCard } from './MessageCard';
 import userProfile from '../../images/userAvatar.svg';
 import exit from '../../images/exit.svg';
+import backArrow from '../../images/bubble_arrow.svg';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
@@ -75,9 +76,9 @@ function InboxPage() {
     <main className={styles.inboxContainer}>
       <Link to="/homepage" className={styles.exitIconContainer}>
         <img 
-          src={exit} 
+          src={backArrow} 
           alt="Settings" 
-          className={styles.exitIcon} 
+          className={styles.backIcon} 
           loading="lazy" 
         />
     </Link>
