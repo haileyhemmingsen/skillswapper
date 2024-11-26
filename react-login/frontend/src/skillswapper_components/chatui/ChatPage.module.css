@@ -88,7 +88,7 @@
     cursor: pointer;
   }
   
-  .messageList {
+  /* .messageList {
     border-radius: 32px;
     background-color: #ffffff;
     display: flex;
@@ -98,7 +98,18 @@
     flex-direction: column;
     padding: 97px 25px 43px;
     border: 1px solid #e06b1d;
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+
+  .messageList {
+    height: 400px; /* Adjust the height to your needs */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #e06b1d;
+    padding: 40px; /* Optional: Adds some padding for spacing */
+    background-color: #ffffff; /* Optional: Light background for readability */
+    margin-top: 34px;
+
   }
+  
   
   .receiverMessage,
   .userMessage {

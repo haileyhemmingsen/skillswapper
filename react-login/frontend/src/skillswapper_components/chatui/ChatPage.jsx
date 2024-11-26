@@ -10,6 +10,7 @@ function ChatPage() {
       <section className={styles.chatContainer}>
         <ChatHeader />
         <MessageList />
+        <MessageInput />
       </section>
     </main>
   );
