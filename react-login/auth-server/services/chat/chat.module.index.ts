@@ -23,6 +23,7 @@ export interface Returning_Message {
 export interface Chat_Front {
     id: string,
     other_user_name: string,
+    other_user_id: string,
     recent_message: string,
     read: boolean,
     time_sent: Date

@@ -1,10 +1,22 @@
 import React from 'react';
 import styles from './MessageCard.module.css';
 import unreadMessageDot from '../../images/unreadMessage.svg';
+import { useNavigate } from 'react-router-dom';
 
-export function MessageCard({ avatarSrc, username, message, read, timestamp }) {
+export function MessageCard({ avatarSrc, username, message, read, timestamp, chat_id, receiver_id }) {
+    const navigate = useNavigate();
+    const clickedToNav = () => {
+        const data = {
+            chat_id: chat_id,
+            receiver_id: receiver_id
+        }
+        const data_string = JSON.stringify(data);
+        sessionStorage.setItem('chat_info', data_string);
+        navigate(`/chat/${chat_id}`);
+    }
+
   return (
-    <div className={styles.messageWrapper}>
+    <div className={styles.messageWrapper} onClick={clickedToNav}>
       <div className={styles.iconPlaceholder}>
         {!read && (
           <img 

@@ -131,7 +131,6 @@ export class ChatService {
             }
             return 'Unknown User'; // Fallback if user not found
         }
-
         try {
             const q = query(chat_collection_ref, or(where("user_1", '==', receiver_id), where("user_2", '==', receiver_id)));
             const chats = await getDocs(q);
@@ -144,7 +143,6 @@ export class ChatService {
                 const message_q = query(message_collection_ref, orderBy("timestamp", "desc"));
                 // get the snapshot of this query
                 const messages = await getDocs(message_q);
-                
                 const message_array = messages.docs;
                 if (message_array.length > 0) {
                     // messages exist
@@ -155,10 +153,10 @@ export class ChatService {
                     
                     // get username for the other person in the chat
                     const username = await getUsernameByUUID(receiver_id === chat_data.user_1 ? chat_data.user_2 : chat_data.user_1);
-
                     const front : Chat_Front = {
                         id: chat_data.chat_id,
                         other_user_name: username,
+                        other_user_id: receiver_id === chat_data.user_1 ? chat_data.user_2 : chat_data.user_1,
                         read: read,
                         recent_message: recent_message_data.message,
                         time_sent: recent_message_data.timestamp
@@ -166,7 +164,6 @@ export class ChatService {
                     fronts.push(front);
                 }
             }
-
             // internal to the for-each, I need to grab the sender ID of the "newest" message (sorted via timestamp), and then compare that ID to the 
             // "reciever" string that is passed as an argument. If they are not the same, then update the chat as read and move on. If they match, 
             // ignore the "read" tag
@@ -174,14 +171,13 @@ export class ChatService {
         catch (error) {
             console.error(error);
         }
-        
-        const sorted_fronts = fronts.sort((a,b) => {
+        fronts.sort((a,b) => {
             if(a.read !== b.read) {
                 return a.read ? 1 : -1;
             }
-            return a.time_sent.getTime() - b.time_sent.getTime();
-        })
-        return sorted_fronts;
+            return b.time_sent.valueOf() - a.time_sent.valueOf();
+        });
+        return fronts;
     }
 
     // NOW WHEN A CHAT IS CLICKED ON, THEN WE CAN MARK THE CHAT AS READ IF IT IS NOT YET READ, AND 

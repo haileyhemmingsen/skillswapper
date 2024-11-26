@@ -68,7 +68,6 @@ export class retrieveChatHistoryController extends Controller {
         return new ChatService().retrieveChatHistory(`${request.user?.id}`, chat_id).then(async (chat: Chat | undefined): Promise <Chat | undefined> => {
             if(chat === undefined) {
                 this.setStatus(500);
-                return chat
             }
             return chat;
         });
