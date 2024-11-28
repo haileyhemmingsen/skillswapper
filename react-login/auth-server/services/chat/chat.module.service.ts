@@ -185,6 +185,7 @@ export class ChatService {
                 // only one chat exists as it should
                 // get the chat info necessary
                 const chat_data = chat_doc[0].data();
+                const read = chat_data.read;
                 let other_user : string = "";
                 if(chat_data.user_1 === receiver_id) {
                     other_user = chat_data.user_2;
@@ -196,6 +197,18 @@ export class ChatService {
                 const message_collection_ref = collection(chat_doc[0].ref, "messages");
                 const message_q = query(message_collection_ref, orderBy("timestamp", "asc"));
                 const messages = await getDocs(message_q);
+                const message_doc_array = messages.docs;
+                if (message_doc_array.length > 0) {
+                    const recent_message_data = message_doc_array[0].data();
+                    if (!read && (recent_message_data.senderID !== receiver_id)) {
+                        // if most recent message is not read, and person retrieving list of posts is not who sent that message, 
+                        // then conversation should be marked read for them
+                        await updateDoc(chat_doc[0].ref, {
+                            read: true
+                        })
+                    }
+                }
+
                 let message_array = new Array<Returning_Message>();
                 
                 for (const message of messages.docs) {
