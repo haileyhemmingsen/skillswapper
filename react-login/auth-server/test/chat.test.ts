@@ -158,7 +158,8 @@ describe('Retrieve Chats Tests', () => {
       .then((res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body.length).toEqual(1); // Multiple Messages, but only 1 chat between the 2 accounts
+        expect(res.body.length).toEqual(1);
+        expect(res.body[0].recent_message).toEqual('How are you?') // Multiple Messages, but only 1 chat between the 2 accounts
       });
   });
   test('Appropriately Marks Chats as Read when Requesting as the Most Recent Sender', async () => {
@@ -202,7 +203,7 @@ describe('Retrieve Chats Tests', () => {
       .then((res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body.length).toEqual(0); // Multiple Messages, but only 1 chat between the 2 accounts
+        expect(res.body.length).toEqual(0); // 0 chats
       });
   });
 });

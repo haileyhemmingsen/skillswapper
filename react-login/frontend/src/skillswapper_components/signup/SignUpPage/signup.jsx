@@ -76,15 +76,13 @@ const SignUpPage = (props) => {
     };
     console.log(dto);
 
-    const response = await axios
+    await axios
       .post('http://localhost:3080/api/v0/signup', dto, {
         header: { 'Content-Type': 'application/json' },
       })
       .then((res) => {
         console.log(res);
         if (res.data) {
-          props.setLoggedIn(true);
-          props.setEmail(email);
           navigate('/login');
         } else {
           // there is an error of some kind, internal service error, show something to the user that
