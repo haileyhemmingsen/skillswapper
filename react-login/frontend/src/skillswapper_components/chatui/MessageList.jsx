@@ -7,6 +7,7 @@ import axios from 'axios';
 function MessageList() {
   const [messages, setMessages] = useState([]);
   const messageListRef = useRef(null); // Ref for the scrollable container
+  const [loading, setLoading] = useState(true); 
 
   const chat_info_string = sessionStorage.getItem('chat_info');
   const chat_info = JSON.parse(chat_info_string);
@@ -20,12 +21,17 @@ function MessageList() {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(async () => {
+      setLoading(true); // Set loading to true at the start of the request
       const get_messages = async () => {
-        const response = await axios.get('http://localhost:3080/api/v0/retrieveChatHistory', 
-          { headers: { "Content-Type": "application/json" }, 
-          params: { chat_id: chat_info.chat_id },
-          withCredentials: true
-        });
+        try {
+          const response = await axios.get(
+            'http://localhost:3080/api/v0/retrieveChatHistory',
+            {
+              headers: { "Content-Type": "application/json" },
+              params: { chat_id: chat_info.chat_id },
+              withCredentials: true,
+            }
+          );
         console.log(response);
         const chat_data = response.data;
         const message_data = chat_data.messages;
@@ -36,11 +42,16 @@ function MessageList() {
             avatar: userAvatar,
             time: message.time_sent,
             isUser: message.sender_id === user_id,
-            id: message.message_id
+            id: message.message_id,
           };
         });
         setMessages(message_result);
-      };
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      } finally {
+        setLoading(false); // Set loading to false after the request finishes
+      }
+    };
 
       get_messages();
     }, 5000); // Throttle calls once every five seconds
@@ -60,11 +71,14 @@ function MessageList() {
   }, [messages]);
 
   return (
-    <section className={styles.messageList} ref={messageListRef}>
-      {messages.map((message) => (
-        <Message key={message.id} {...message} />
-      ))}
-    </section>
+    <>
+      <section className={styles.messageList} ref={messageListRef}>
+        {messages.map((message) => (
+          <Message key={message.id} {...message} />
+        ))}
+      </section>
+      {loading && <p className={styles.loadingMessage}>Loading Messages...</p>}
+    </>
   );
 }
 
