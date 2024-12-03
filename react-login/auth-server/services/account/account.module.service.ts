@@ -4,7 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Response as ExpressResponse } from 'express';
-import { SignUpCredentials, UpdateEmail, UpdatePassword, UpdateUsername, Authenticated } from './account.module.index';
+import {
+  SignUpCredentials,
+  UpdateEmail,
+  UpdatePassword,
+  UpdateUsername,
+  Authenticated,
+} from './account.module.index';
 
 export class LoginService {
   private saltRounds = 10;
@@ -39,30 +45,47 @@ export class LoginService {
       return undefined;
     }
   }
-  public async login(credentials: SignUpCredentials): Promise<Authenticated|undefined> {
+  public async login(
+    credentials: SignUpCredentials
+  ): Promise<Authenticated | undefined> {
     // search database for credentials, match email, match hashed passwords then return true, else return false
     try {
       const userRef = doc(db, 'users', credentials.email);
       const userSnapshot = await getDoc(userRef);
-      
+
       if (!userSnapshot.exists()) {
         // User not found, login fails
         return undefined;
       }
       const userData = userSnapshot.data();
       // console.log('uuid: ' + userData.id);
-      const passwordMatch = await bcrypt.compare(credentials.password, userData.password);
+      const passwordMatch = await bcrypt.compare(
+        credentials.password,
+        userData.password
+      );
 
       // password should not be in the sessionToken
       // it was before, now it is changed
       if (passwordMatch) {
         const accessToken = jwt.sign(
-          {id: userData.uuid, email: credentials.email, name: userData.firstname}, 
-          `${process.env.JWT_SECRET}`, {
+          {
+            id: userData.uuid,
+            email: credentials.email,
+            name: userData.firstname,
+          },
+          `${process.env.JWT_SECRET}`,
+          {
             expiresIn: '1d',
-            algorithm: 'HS256'
-          });
-          return {id: userData.uuid, accessToken: accessToken, firstName: userData.firstname, lastName: userData.lastname, zip: userData.zip};
+            algorithm: 'HS256',
+          }
+        );
+        return {
+          id: userData.uuid,
+          accessToken: accessToken,
+          firstName: userData.firstname,
+          lastName: userData.lastname,
+          zip: userData.zip,
+        };
       } else {
         return undefined;
       }
@@ -71,7 +94,9 @@ export class LoginService {
       return undefined;
     }
   }
-  public async changePassword(body: UpdatePassword): Promise<boolean|undefined> {
+  public async changePassword(
+    body: UpdatePassword
+  ): Promise<boolean | undefined> {
     // attempt to change password, if database returns success return true here, else if error then return false
     // compare password in db to old password passed through, then update password to new password otherwise return unauthorized
     try {
@@ -81,17 +106,20 @@ export class LoginService {
         // User not found, login fails
         console.log('User not found');
         return undefined;
-      } 
+      }
       const userData = userSnapshot.data();
-      const passwordMatch = await bcrypt.compare(body.oldPass, userData.password);
+      const passwordMatch = await bcrypt.compare(
+        body.oldPass,
+        userData.password
+      );
       if (passwordMatch) {
         const hashedPassword = await bcrypt.hash(body.newPass, this.saltRounds);
         await updateDoc(userRef, { password: hashedPassword });
         return true;
-      } 
+      }
       console.log('Password does not match');
       return undefined;
-    } catch(error) {
+    } catch (error) {
       console.error('Error Changing Password: ', error);
       return undefined;
     }

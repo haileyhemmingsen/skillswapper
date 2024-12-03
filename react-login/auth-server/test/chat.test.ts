@@ -21,18 +21,17 @@ export const validUser = {
   password: 'password',
 };
 
-
 // Set up Firebase test environment and server before all tests
 beforeAll(async () => {
   server = http.createServer(app);
   await new Promise((resolve) => server.listen(resolve));
 
   postTestEnv = await initializeTestEnvironment({
-      projectId: 'post-test', // Replace with your Firebase project ID
-      firestore: {
-          host: 'localhost',
-          port: 8080,
-      },
+    projectId: 'post-test', // Replace with your Firebase project ID
+    firestore: {
+      host: 'localhost',
+      port: 8080,
+    },
   });
 
   db = postTestEnv.unauthenticatedContext().firestore(); // Use this `db` for all Firestore operations in tests
@@ -54,38 +53,37 @@ describe('SignUp User For AccessToken', () => {
         lastname: '',
         email: 'missingperson@email.com',
         password: 'yep',
-        zip: '12345'
+        zip: '12345',
       })
       .expect(201);
   });
   // Valid login test
-    test('Log In User', async () => {
-      await supertest(server)
-        .post('/api/v0/login')
-        .send(validUser)
-        .expect(200)
-        .then((res) => {
-          expect(res).toBeDefined();
-          accessToken = res.body.accessToken; // Store token for further use
-          ID = res.body.id;
-        });
-    });
-    test('Login User 2', async () => {
-      await supertest(server)
-        .post('/api/v0/login')
-        .send({
-          email: 'missingperson@email.com',
-          password: 'yep'
-        })
-        .expect(200)
-        .then((res) => {
-          expect(res).toBeDefined();
-          accessToken2 = res.body.accessToken; // Store token for further use
-          ID2 = res.body.id;
-        });
-    });
+  test('Log In User', async () => {
+    await supertest(server)
+      .post('/api/v0/login')
+      .send(validUser)
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        accessToken = res.body.accessToken; // Store token for further use
+        ID = res.body.id;
+      });
   });
-
+  test('Login User 2', async () => {
+    await supertest(server)
+      .post('/api/v0/login')
+      .send({
+        email: 'missingperson@email.com',
+        password: 'yep',
+      })
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        accessToken2 = res.body.accessToken; // Store token for further use
+        ID2 = res.body.id;
+      });
+  });
+});
 
 // Message Body
 // export interface Message {
@@ -110,7 +108,7 @@ describe('Chat sendMessage Tests', () => {
         message: 'Hello',
         sender: `${ID}`,
         receiver: `${ID2}`,
-        timestamp: new Date()
+        timestamp: new Date(),
       })
       .expect(200)
       .then((res) => {
@@ -128,7 +126,7 @@ describe('Chat sendMessage Tests', () => {
         message: 'How are you?',
         sender: `${ID2}`, // These should be the IDs of the Sender and Receiver
         receiver: `${ID}`,
-        timestamp: new Date()
+        timestamp: new Date(),
       })
       .expect(200)
       .then((res) => {
@@ -145,9 +143,9 @@ describe('Chat sendMessage Tests', () => {
         message: 'Wrong',
         sender: `${ID}`,
         receiver: `${ID2}`,
-        timestamp: new Date()
+        timestamp: new Date(),
       })
-      .expect(404)
+      .expect(404);
   });
 });
 
@@ -165,16 +163,16 @@ describe('Retrieve Chats Tests', () => {
   });
   test('Appropriately Marks Chats as Read when Requesting as the Most Recent Sender', async () => {
     await supertest(server)
-    .post('/api/v0/sendMessage')
-    .set('Cookie', `accessToken=${accessToken2}`)
-    .send({
-      chatID: chatID,
-      message: 'Nope, nevermind.',
-      sender: `${ID2}`, // These should be the IDs of the Sender and Receiver
-      receiver: `${ID}`,
-      timestamp: new Date()
-    })
-    .expect(200)
+      .post('/api/v0/sendMessage')
+      .set('Cookie', `accessToken=${accessToken2}`)
+      .send({
+        chatID: chatID,
+        message: 'Nope, nevermind.',
+        sender: `${ID2}`, // These should be the IDs of the Sender and Receiver
+        receiver: `${ID}`,
+        timestamp: new Date(),
+      })
+      .expect(200);
     await supertest(server)
       .get('/api/v0/retrieveChats')
       .set('Cookie', `accessToken=${accessToken2}`)
@@ -187,16 +185,16 @@ describe('Retrieve Chats Tests', () => {
   });
   test('No Chats to Pull', async () => {
     await supertest(server)
-    .post('/api/v0/login')
-    .send({
-      email: 'dutch@email.com',
-      password: 'tahiti'
-    })
-    .expect(200)
-    .then((res) => {
-      expect(res).toBeDefined();
-      accessToken3 = res.body.accessToken; // Store token for further use
-    });
+      .post('/api/v0/login')
+      .send({
+        email: 'dutch@email.com',
+        password: 'tahiti',
+      })
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        accessToken3 = res.body.accessToken; // Store token for further use
+      });
     await supertest(server)
       .get('/api/v0/retrieveChats')
       .set('Cookie', `accessToken=${accessToken3}`)
@@ -210,11 +208,11 @@ describe('Retrieve Chats Tests', () => {
 });
 
 describe('Retrieve Chat History Tests', () => {
-  test('Get Chat History' , async () => {
+  test('Get Chat History', async () => {
     await supertest(server)
       .get('/api/v0/retrieveChatHistory')
       .set('Cookie', `accessToken=${accessToken}`)
-      .query({chat_id: chatID})
+      .query({ chat_id: chatID })
       .expect(200)
       .then((res) => {
         expect(res).toBeDefined();
@@ -225,11 +223,11 @@ describe('Retrieve Chat History Tests', () => {
         expect(res.body.messages).toBeDefined();
       });
   });
-  test('Get Chat History NewChat' , async () => {
+  test('Get Chat History NewChat', async () => {
     await supertest(server)
       .get('/api/v0/retrieveChatHistory')
       .set('Cookie', `accessToken=${accessToken}`)
-      .query({chat_id: 'NewChat'})
+      .query({ chat_id: 'NewChat' })
       .expect(200)
       .then((res) => {
         expect(res).toBeDefined();
@@ -239,27 +237,26 @@ describe('Retrieve Chat History Tests', () => {
         expect(res.body.messages.length).toEqual(0);
       });
   });
-  test('Get Chat History Wrong ChatID' , async () => {
+  test('Get Chat History Wrong ChatID', async () => {
     await supertest(server)
       .get('/api/v0/retrieveChatHistory')
       .set('Cookie', `accessToken=${accessToken}`)
-      .query({chat_id: 'WrongChat'})
+      .query({ chat_id: 'WrongChat' })
       .expect(500);
   });
   test('Get Chat History From User2', async () => {
     await supertest(server)
-    .get('/api/v0/retrieveChatHistory')
-    .set('Cookie', `accessToken=${accessToken2}`)
-    .query({chat_id: chatID})
-    .expect(200)
-    .then((res) => {
-      expect(res).toBeDefined();
-      expect(res.body).toBeDefined();
-      expect(res.body.chatID).toEqual(chatID);
-      expect(res.body.second_chatter).toBeDefined();
-      expect(res.body.second_chatter).toEqual(`${ID}`);
-      expect(res.body.messages).toBeDefined();
-    });
+      .get('/api/v0/retrieveChatHistory')
+      .set('Cookie', `accessToken=${accessToken2}`)
+      .query({ chat_id: chatID })
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body.chatID).toEqual(chatID);
+        expect(res.body.second_chatter).toBeDefined();
+        expect(res.body.second_chatter).toEqual(`${ID}`);
+        expect(res.body.messages).toBeDefined();
+      });
   });
 });
-

@@ -4,19 +4,19 @@
 // Authenticated is an interface that defines all info related to a SessionUser
 
 export interface User {
-  email: string,
-  name: string,
-  id: string
+  email: string;
+  name: string;
+  id: string;
 }
 
 export interface Credentials {
-  email: string,
-  password: string
+  email: string;
+  password: string;
 }
 
 // Session User is defined in the exprss index.d.ts file
 export interface Authenticated {
-  name: string,
-  accessToken: string,
-  id: string
+  name: string;
+  accessToken: string;
+  id: string;
 }

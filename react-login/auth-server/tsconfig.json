@@ -19,7 +19,7 @@
 
     "baseUrl": "./",
     "resolveJsonModule": true,
-    "removeComments": true,    
-    "typeRoots": ["services/types", "./node_modules/@types"]    
-  },
+    "removeComments": true,
+    "typeRoots": ["services/types", "./node_modules/@types"]
+  }
 }

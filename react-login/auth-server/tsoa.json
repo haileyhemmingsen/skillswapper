@@ -1,21 +1,21 @@
 {
-    "entryFile": "services/app.ts",
-    "noImplicitAdditionalProperties": "throw-on-extras",
-    "controllerPathGlobs": ["services/**/*.module.controller.ts"],
-    "spec": {
-      "outputDirectory": "build",
-      "specVersion": 3,
-      "schemes": [ "http" ],
-      "basePath": "/api/v0",
-      "securityDefinitions": {
-        "jwt": {
-          "type": "http",
-          "scheme": "bearer"
-        }
+  "entryFile": "services/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["services/**/*.module.controller.ts"],
+  "spec": {
+    "outputDirectory": "build",
+    "specVersion": 3,
+    "schemes": ["http"],
+    "basePath": "/api/v0",
+    "securityDefinitions": {
+      "jwt": {
+        "type": "http",
+        "scheme": "bearer"
       }
-    },
-    "routes": {
-      "routesDir": "build",
-      "authenticationModule": "./services/auth/expressAuth.ts"
     }
+  },
+  "routes": {
+    "routesDir": "build",
+    "authenticationModule": "./services/auth/expressAuth.ts"
   }
+}

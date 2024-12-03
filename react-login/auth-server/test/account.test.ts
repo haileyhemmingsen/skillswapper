@@ -13,13 +13,13 @@ let db;
 
 // Sample users
 export const validUser = {
-    email: 'jdoe@email.com',
-    password: 'newpassword',
+  email: 'jdoe@email.com',
+  password: 'newpassword',
 };
 
 export const invalidUser = {
-    email: 'molly@books.com',
-    password: 'incorrectpassword',
+  email: 'molly@books.com',
+  password: 'incorrectpassword',
 };
 
 let accessToken: string;
@@ -30,11 +30,11 @@ beforeAll(async () => {
   await new Promise((resolve) => server.listen(resolve));
 
   accountTestEnv = await initializeTestEnvironment({
-      projectId: 'account-test', // Replace with your Firebase project ID
-      firestore: {
-          host: 'localhost',
-          port: 8080,
-      },
+    projectId: 'account-test', // Replace with your Firebase project ID
+    firestore: {
+      host: 'localhost',
+      port: 8080,
+    },
   });
 
   db = accountTestEnv.unauthenticatedContext().firestore(); // Use this `db` for all Firestore operations in tests
@@ -50,41 +50,37 @@ afterAll(async () => {
 describe('Account Endpoint Tests', () => {
   // Invalid URL
   test('GET Invalid URL', async () => {
-      await supertest(server)
-          .get('/api/v0/non-existent-route')
-          .expect(404);
+    await supertest(server).get('/api/v0/non-existent-route').expect(404);
   });
 
   // Valid docs endpoint
   test('GET API Docs', async () => {
-      await supertest(server)
-          .get('/api/v0/docs/')
-          .expect(200);
+    await supertest(server).get('/api/v0/docs/').expect(200);
   });
 
   // Signup test
   test('Signup New User', async () => {
     await supertest(server)
-        .post('/api/v0/signup')
-        .send({
-            firstname: 'John',
-            lastname: 'Doe',
-            email: 'jdoe@email.com',
-            password: 'newpassword',
-            zip: '12345'
-        })
-        .expect(201);
+      .post('/api/v0/signup')
+      .send({
+        firstname: 'John',
+        lastname: 'Doe',
+        email: 'jdoe@email.com',
+        password: 'newpassword',
+        zip: '12345',
+      })
+      .expect(201);
   });
   // Signup failure due to existing account
   test('Signup Failure for Existing Account', async () => {
     await supertest(server)
       .post('/api/v0/signup')
       .send({
-          firstname: 'John',
-          lastname: 'Doe',
-          email: 'jdoe@email.com',
-          password: 'John123',
-          zip: '12345'
+        firstname: 'John',
+        lastname: 'Doe',
+        email: 'jdoe@email.com',
+        password: 'John123',
+        zip: '12345',
       })
       .expect(409);
   });
@@ -96,12 +92,12 @@ describe('Account Endpoint Tests', () => {
       .send(validUser)
       .expect(200)
       .then((res) => {
-          expect(res).toBeDefined();
-          expect(res.body).toBeDefined();
-          expect(res.body.firstName).toEqual('John');
-          expect(res.body.lastName).toEqual('Doe');
-          expect(res.body.accessToken).toBeDefined();
-          accessToken = res.body.accessToken; // Store token for further use
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body.firstName).toEqual('John');
+        expect(res.body.lastName).toEqual('Doe');
+        expect(res.body.accessToken).toBeDefined();
+        accessToken = res.body.accessToken; // Store token for further use
       });
   });
 
@@ -110,24 +106,19 @@ describe('Account Endpoint Tests', () => {
       .post('/api/v0/changePassword')
       .set('Cookie', 'nope')
       .send(validUser)
-      .expect(401)
+      .expect(401);
   });
 
   test('Login With Wrong Password', async () => {
     await supertest(server)
       .post('/api/v0/login')
-      .send(
-        {email: 'jdoe@email.com',
-        password: 'wrongpassword'})
-      .expect(401)
+      .send({ email: 'jdoe@email.com', password: 'wrongpassword' })
+      .expect(401);
   });
 
   // Invalid login credentials
   test('Bad Credentials Rejected on Login', async () => {
-    await supertest(server)
-      .post('/api/v0/login')
-      .send(invalidUser)
-      .expect(401);
+    await supertest(server).post('/api/v0/login').send(invalidUser).expect(401);
   });
 
   // Test JWT with corrupt token
@@ -146,7 +137,7 @@ describe('Account Endpoint Tests', () => {
       .send({
         email: 'jdoe@email.com',
         oldPass: 'newpassword',
-        newPass: 'password'
+        newPass: 'password',
       })
       .expect(200)
       .then((res) => {
@@ -159,7 +150,7 @@ describe('Account Endpoint Tests', () => {
       .send({
         email: 'jdoe@email.com',
         password: 'password',
-    })
+      })
       .expect(200)
       .then((res) => {
         expect(res).toBeDefined();
@@ -175,23 +166,23 @@ describe('Account Endpoint Tests', () => {
       .post('/api/v0/changePassword')
       .set('Cookie', `accessToken=${accessToken}`)
       .send({
-          email: 'jdoe@email.com',
-          oldPass: 'different',
-          newPass: 'newpassword'
+        email: 'jdoe@email.com',
+        oldPass: 'different',
+        newPass: 'newpassword',
       })
-      .expect(500)
+      .expect(500);
   });
 
-  test('changePassword with Invalid Email' , async () => {
+  test('changePassword with Invalid Email', async () => {
     await supertest(server)
       .post('/api/v0/changePassword')
       .set('Cookie', `accessToken=${accessToken}`)
       .send({
         email: 'fake@email.com',
         oldPass: 'password',
-        newPass: 'newpassword'
+        newPass: 'newpassword',
       })
-      .expect(500)
+      .expect(500);
   });
 
   // Bad access token rejected
@@ -209,12 +200,12 @@ describe('Account Endpoint Tests', () => {
       .send({
         oldEmail: 'jdoe@email.com',
         newEmail: 'new@email.com',
-        password: 'password'
+        password: 'password',
       })
       .expect(200)
       .then((res) => {
-          expect(res).toBeDefined();
-          expect(res.body).toBe(true);
+        expect(res).toBeDefined();
+        expect(res.body).toBe(true);
       });
     await supertest(server)
       .post('/api/v0/login')
@@ -224,14 +215,14 @@ describe('Account Endpoint Tests', () => {
       })
       .expect(200)
       .then((res) => {
-          expect(res).toBeDefined();
-          expect(res.body).toBeDefined();
-          expect(res.body.firstName).toEqual('John');
-          expect(res.body.accessToken).toBeDefined();
-          accessToken = res.body.accessToken; // Store token for further use
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body.firstName).toEqual('John');
+        expect(res.body.accessToken).toBeDefined();
+        accessToken = res.body.accessToken; // Store token for further use
       });
   });
-    
+
   test('changeEmail with Wrong oldEmail', async () => {
     await supertest(server)
       .post('/api/v0/changeEmail')
@@ -239,13 +230,11 @@ describe('Account Endpoint Tests', () => {
       .send({
         oldEmail: 'fake@email.com',
         newEmail: 'new@email.com',
-        password: 'password'
+        password: 'password',
       })
-      .expect(500)
+      .expect(500);
   });
   test('Logout Endpoint Works', async () => {
-    await supertest(server)
-      .post('/api/v0/logout')
-      .expect(200)
+    await supertest(server).post('/api/v0/logout').expect(200);
   });
 });

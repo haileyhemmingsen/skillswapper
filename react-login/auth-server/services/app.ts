@@ -1,17 +1,17 @@
 // src/app.ts
-import express, { 
-  Express, 
-  Router, 
-  Response as ExResponse, 
-  Request as ExRequest, 
-  ErrorRequestHandler 
+import express, {
+  Express,
+  Router,
+  Response as ExResponse,
+  Request as ExRequest,
+  ErrorRequestHandler,
 } from 'express';
 
 import swaggerUi from 'swagger-ui-express';
 import { RegisterRoutes } from '../build/routes';
 
 // Import Firebase services (Firestore and Auth)
-import { db } from '../firebase';  // Import from firebase.ts
+import { db } from '../firebase'; // Import from firebase.ts
 
 import cors from 'cors';
 
@@ -23,15 +23,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // In your server or middleware setup
-app.use(cors({
-  origin: 'http://localhost:3000',  // Adjust to your frontend origin
-  credentials: true  // Allow cookies to be sent
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // Adjust to your frontend origin
+    credentials: true, // Allow cookies to be sent
+  })
+);
 
 // Swagger documentation setup
-app.use('/api/v0/docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
-  return res.send(swaggerUi.generateHTML(await import('../build/swagger.json')));
-});
+app.use(
+  '/api/v0/docs',
+  swaggerUi.serve,
+  async (_req: ExRequest, res: ExResponse) => {
+    return res.send(
+      swaggerUi.generateHTML(await import('../build/swagger.json'))
+    );
+  }
+);
 
 // Register API routes
 const router = Router();
