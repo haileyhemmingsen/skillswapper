@@ -27,6 +27,8 @@ export class NewPostController extends Controller {
         @Request() request: express.Request
     ): Promise<string | undefined> {
         return new PostService().newPost(body, `${request.user?.id}`).then(async (identifier: string | undefined): Promise<string |undefined> => {
+            // Only returns undefined if there is an error
+            // in the try-catch
             if(!identifier) {
                 this.setStatus(500);
             }

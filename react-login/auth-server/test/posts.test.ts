@@ -1,4 +1,4 @@
-// posts.module.test.js
+// posts.test.ts
 import supertest from 'supertest';
 import * as http from 'http';
 import dotenv from 'dotenv';
@@ -95,6 +95,33 @@ describe('SignUp User For AccessToken', () => {
 });
 
 describe('New Post Endpoint Tests', () => {
+  test('editPost Returns False When No Endpoints', async () => {
+    await supertest(server)
+      .post('/api/v0/editPost')
+      .set('Cookie', `accessToken=${accessToken}`)
+      .send({
+        id: comment.postID,
+        skillsAsked: 'random',
+        skillsOffered: 'random',
+        description: 'I am looking for a biking partner.',
+        categories: ['stuff']
+      })
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBe(false);
+      });
+  });
+  test('getUserPosts with No Posts', async () => {
+    await supertest(server)
+      .get('/api/v0/getUserPosts')
+      .set('Cookie', `accessToken=${accessToken}`)
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body.length).toEqual(0);
+      });
+  });
   test('Make New Post', async () => {
     await supertest(server)
       .post('/api/v0/createPost')
@@ -197,6 +224,20 @@ describe('Create Comment Endpoint Tests', () => {
         expect(res.body).toBe(true);
       });
   });
+  test('Create Comment on Post with Account With No Username', async () => {
+    await supertest(server)
+      .post('/api/v0/createComment')
+      .set('Cookie', `accessToken=${accessToken2}`)
+      .send({
+        postID: comment.postID,
+        comment: 'This is a third comment on a post'
+      })
+      .expect(201)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBe(true);
+      });
+  });
   test('Unauthorized Comment' , async () => {
     await supertest(server)
       .post('/api/v0/createComment')
@@ -223,7 +264,26 @@ describe('Get All Comments Endpoint Tests', () => {
       .expect(200)
       .then((res) => {
         expect(res).toBeDefined();
-        expect(res.body.length).toBe(2); // 2 comments on post
+        expect(res.body.length).toBe(3); // 2 comments on post
+      });
+  });
+  test('Get All Comments With Undefined Comment Id', async () => {
+    await supertest(server)
+      .get('/api/v0/getAllComments')
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body.length).toBe(0);
+      });
+  });
+  test('Get All Comments With Wrong Comment Id', async () => {
+    await supertest(server)
+      .get('/api/v0/getAllComments')
+      .query({post_id: '1234'})
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body.length).toBe(0);
       });
   });
 });
@@ -287,6 +347,23 @@ describe('EditPost Endpoint Tests', () => {
       .then((res) => {
         expect(res).toBeDefined();
         expect(res.body).toBe(true);
+      });
+  });
+  test('editPost with Invalid Post ID', async () => {
+    await supertest(server)
+      .post('/api/v0/editPost')
+      .set('Cookie', `accessToken=${accessToken}`)
+      .send({
+        id: 'invalid',
+        skillsAsked: 'biking',
+        skillsOffered: 'running',
+        description: 'I am looking for a biking partner.',
+        categories: ['biking']
+      })
+      .expect(200)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBe(false);
       });
   });
 });

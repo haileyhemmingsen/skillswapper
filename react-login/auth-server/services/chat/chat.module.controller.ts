@@ -19,7 +19,7 @@ import { Message, Chat_Front, Chat } from './chat.module.index';
 export class createMessageController extends Controller {
     @Post()
     @Security('jwt')
-    @Response('500', 'Internal Error')
+    @Response('404', 'Message ID Not Found')
     @SuccessResponse('200', 'Message Created')
     public async sendMessage(
         // @Query() chat_id: string,
@@ -29,7 +29,7 @@ export class createMessageController extends Controller {
         // console.log('got to the send message method');
         return new ChatService().sendMessage(body, `${request.user?.id}`).then(async (identifier: string | undefined): Promise<string|undefined> => {
             if(!identifier) {
-                this.setStatus(500);
+                this.setStatus(404);
             }
             return identifier;
         });
@@ -65,9 +65,9 @@ export class retrieveChatsController extends Controller {
         @Request() request: express.Request,
     ): Promise <Chat_Front[] | undefined> {
         return new ChatService().retrieveChats(`${request.user?.id}`).then(async (chats: Chat_Front[] | undefined): Promise <Chat_Front[] | undefined> => {
-            if (chats === undefined) {
-                this.setStatus(500);
-            }
+            // if (chats === undefined) { This can never trigger anyways
+            //     this.setStatus(500);
+            // }
             return chats;
         });
     }

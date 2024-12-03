@@ -49,8 +49,10 @@ export class PostService {
             const postDocSnapshot = await getDoc(postDocRef);
             if(postDocSnapshot.exists()) {
                 const postData = postDocSnapshot.data();
-
-                if (postData.poster_uuid === user_id) {
+                // This is unnecessary because the snapshot already exists,
+                // meaning that the post must have the poster_uuid be equal to the looked up
+                // user_id
+                // if (postData.poster_uuid === user_id) {
                     let found = false;
                     for (let i =0; i < postData.posts.length; i += 1) {
                         let cur_post = JSON.parse(postData.posts[i]);
@@ -73,12 +75,12 @@ export class PostService {
                         console.log('Post does not exist');
                         return false;
                     }
-                }
-                else {
-                    // user is not creator of these posts
-                    console.log('Incorrect and invalid user attempting to update this post');
-                    return undefined;
-                }
+                // }
+                // else {
+                //     // user is not creator of these posts
+                //     console.log('Incorrect and invalid user attempting to update this post');
+                //     return undefined;
+                // }
             }
             else {
                 console.log('User has no posts');
@@ -101,10 +103,13 @@ export class PostService {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', user_id));
             const userSnapshot = await getDocs(q);
-            if (userSnapshot.empty) {
-                console.log('User not found');
-                return [];
-            }
+            // This is unnecessary
+            // Endpoint is authorized, so if they are accessing it, they are in the database
+            // i.e. the snapshot can't ever be empty here
+            // if (userSnapshot.empty) { 
+            //     console.log('User not found');
+            //     return [];
+            // }
 
 
             const userDoc = userSnapshot.docs[0];
@@ -118,7 +123,10 @@ export class PostService {
             const postDocSnapshot = await getDoc(postDocRef);
             if(postDocSnapshot.exists()) {
                 const postData = postDocSnapshot.data();
-                if (postData.poster_uuid === user_id) {
+                // This if is unnecessary, the only way to access this endpoint
+                // is through the authorized endpoint, which means that if the snapshot exists,
+                // then the poster Id queried as the user ID will already match
+                // if (postData.poster_uuid === user_id) { 
                     for (let i = 0; i < postData.posts.length; i += 1) {
                         const cur_post = JSON.parse(postData.posts[i]);
                         
@@ -135,12 +143,12 @@ export class PostService {
                         }
                         allPosts.push(next_post);        
                     }
-                }
-                else {
-                    // user is not creator of these posts
-                    console.log('Incorrect and invalid user attempting to read these posts');
-                    return [];
-                }
+                // }
+                // else {
+                //     // user is not creator of these posts
+                //     console.log('Incorrect and invalid user attempting to read these posts');
+                //     return [];
+                // }
             }
             else {
                 console.log('User has no posts');
@@ -206,8 +214,8 @@ export class PostService {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', uuid));
             const querySnapshot = await getDocs(q);
-            
-            if (!querySnapshot.empty) {
+            // Since users can only post if they are in the database, this snapshot can't be empty
+            // if (!querySnapshot.empty) {
               const userDoc = querySnapshot.docs[0];
               const userData = userDoc.data();
               const zip = userData.zip;
@@ -217,8 +225,8 @@ export class PostService {
                 username = uuid
               }
               return [username, zip];
-            }
-            return ['Unknown User', undefined]; // Fallback if user not found
+            // }
+            // return ['Unknown User', undefined]; // Fallback if user not found
           }
 
           for (const doc of postsSnapshot.docs) { // Use for...of instead of forEach
@@ -261,12 +269,15 @@ export class PostService {
             const usersRef = collection(db, 'users');
             const q = query(usersRef, where('uuid', '==', uuid));
             const querySnapshot = await getDocs(q);
-            if (!querySnapshot.empty) {
+            // Any comment made will have a user in the database 
+            // because the endpoint is authorized, i.e. comments can
+            // only be made by users in the database
+            // if (!querySnapshot.empty) {
                 const userDoc = querySnapshot.docs[0];
                 const userData = userDoc.data();
                 return `${userData.firstname} ${userData.lastname}`;
-            }
-            return 'Unknown User'; // Fallback if user not found
+            // }
+            // return 'Unknown User'; // Fallback if user not found
         }
 
         try {
@@ -276,6 +287,7 @@ export class PostService {
                 if (commentsData) {
                     for (let i = 0; i < commentsData.comment.length; i += 1) {
                         const post_obj = JSON.parse(commentsData.comment[i]);
+                        // Post obj will always have a postingUserID
                         let username = await getUsernameByUUID(post_obj.postingUserID);
                         if (username === ' ') {
                             // username dn exist. 

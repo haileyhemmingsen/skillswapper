@@ -1,4 +1,4 @@
-// account.module.test.js
+// account.test.ts
 import supertest from 'supertest';
 import * as http from 'http';
 import dotenv from 'dotenv';
@@ -242,5 +242,10 @@ describe('Account Endpoint Tests', () => {
         password: 'password'
       })
       .expect(500)
+  });
+  test('Logout Endpoint Works', async () => {
+    await supertest(server)
+      .post('/api/v0/logout')
+      .expect(200)
   });
 });

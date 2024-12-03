@@ -21,7 +21,7 @@ export class ChatService {
         // we are sending a message here
         if(message.chatID !== undefined) {
             // then chat already exists
-            console.log(message.chatID);
+            // console.log(message.chatID);
             const chat_ref = doc(db, 'chats', message.chatID);
             const chat_snapshot = await getDoc(chat_ref);
             if (chat_snapshot.exists()) {
@@ -46,6 +46,7 @@ export class ChatService {
                 read: false
             });
             const chat_ref = doc(db, 'chats', chat_uuid);
+            
             // create new collection
             const message_ref = collection(chat_ref, 'messages');
             const message_uuid = uuidv4(); 
@@ -60,7 +61,7 @@ export class ChatService {
             // upon creating new chat, need to add sender ID to chat doc, receiver ID to chat doc, 
             // the messages collection, and then add the message to the messages collection
         }
-        return message.chatID;
+        return undefined;
     }
 
     // this function SOLELY RETURNS ALL OF THE CHATS, MARKING THEM AS READ OR NOT, THEIR ID, AND THE MOST RECENT MESSAGE. THIS GOES NO DEEPER. IT WILL ORDER THEM CORRECTLY
