@@ -43,7 +43,6 @@
   "scripts": {
     "not-prestart": "npm run build",
     "start": "node build/src/server.ts",
-    "format": "prettier --write .",
     "prebuild": "npm run swagger",
     "build": "tsc",
     "predev": "npm run swagger",
