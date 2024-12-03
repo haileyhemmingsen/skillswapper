@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './ServicePost.module.css';
 import userImage from '../../../images/user.svg';
 // import ProfilePopup from '../../profile/ProfilePopup';
@@ -10,9 +10,11 @@ function ServicePost({ username, date, content, keyword }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (popupRef.current && 
-          !popupRef.current.contains(event.target) &&
-          !iconRef.current.contains(event.target)) {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target) &&
+        !iconRef.current.contains(event.target)
+      ) {
         setIsProfileVisible(false);
       }
     };
@@ -20,7 +22,7 @@ function ServicePost({ username, date, content, keyword }) {
     if (isProfileVisible) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    
+
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isProfileVisible]);
 
@@ -33,34 +35,45 @@ function ServicePost({ username, date, content, keyword }) {
   const highlightText = (text, keyword) => {
     const keywords = keyword.split(' ').filter(Boolean); // Extract keywords
     const lines = text.split('\n'); // Split content into lines
-  
+
     const highlightedLines = lines.map((line, index) => {
       // Check if the line starts with the specified prefixes
-      const isSeekingLine = line.trim().toLowerCase().startsWith("services seeking:");
-      const isOfferingLine = line.trim().toLowerCase().startsWith("services offering:");
-  
+      const isSeekingLine = line
+        .trim()
+        .toLowerCase()
+        .startsWith('services seeking:');
+      const isOfferingLine = line
+        .trim()
+        .toLowerCase()
+        .startsWith('services offering:');
+
       let prefix = '';
       let content = line;
-  
+
       // Separate the prefix from the line content
       if (isSeekingLine) {
-        prefix = "Services Seeking: ";
+        prefix = 'Services Seeking: ';
         content = line.substring(prefix.length).trim();
       } else if (isOfferingLine) {
-        prefix = "Services Offering: ";
+        prefix = 'Services Offering: ';
         content = line.substring(prefix.length).trim();
       }
-  
+
       // Highlight the content excluding the prefix
       const words = content.split(' ');
       const highlightedWords = words.map((word) => {
         const lowerCaseWord = word.toLowerCase();
-        const matchingKeyword = keywords.find((kw) => lowerCaseWord.includes(kw.toLowerCase()));
-  
+        const matchingKeyword = keywords.find((kw) =>
+          lowerCaseWord.includes(kw.toLowerCase())
+        );
+
         if (matchingKeyword) {
           const parts = word.split(new RegExp(`(${matchingKeyword})`, 'gi'));
           return parts.map((part, partIndex) => (
-            <span key={partIndex} className={partIndex % 2 === 1 ? styles.highlight : ''}>
+            <span
+              key={partIndex}
+              className={partIndex % 2 === 1 ? styles.highlight : ''}
+            >
               {part}
             </span>
           ));
@@ -68,7 +81,7 @@ function ServicePost({ username, date, content, keyword }) {
           return word;
         }
       });
-  
+
       return (
         <p key={index} className={styles.contentLine}>
           {prefix}
@@ -81,10 +94,9 @@ function ServicePost({ username, date, content, keyword }) {
         </p>
       );
     });
-  
+
     return highlightedLines;
   };
-  
 
   const highlightedContent = highlightText(content, keyword);
 
@@ -93,9 +105,9 @@ function ServicePost({ username, date, content, keyword }) {
       <div className={styles.postHeader}>
         <div className={styles.userInfo}>
           <div ref={iconRef} className={styles.iconWrapper}>
-            <img 
+            <img
               src={userImage}
-              alt="User avatar" 
+              alt="User avatar"
               className={styles.userAvatar}
               onClick={handleIconClick}
             />
@@ -112,13 +124,10 @@ function ServicePost({ username, date, content, keyword }) {
         </div>
         <span className={styles.postDate}>{date}</span>
       </div>
-      
-      <div className={styles.postContent}>
-        {highlightedContent}
-      </div>
+
+      <div className={styles.postContent}>{highlightedContent}</div>
     </div>
   );
 }
 
 export default ServicePost;
-

@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  width: 100%; 
+  width: 100%;
   flex-direction: column;
   object-position: center;
   max-height: 100%;
@@ -13,7 +13,7 @@
     margin-top: 40px;
     object-position: center;
   }
-} 
+}
 
 .header {
   position: relative;
@@ -27,7 +27,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   object-position: center;
-  z-index: 100; 
+  z-index: 100;
 }
 
 @media (max-width: 991px) {
@@ -62,7 +62,7 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 10005; 
+  z-index: 10005;
 }
 
 .clickableUserArea {
@@ -75,7 +75,12 @@
   display: flex;
   margin-top: 29px;
   gap: 25px;
-  font-family: Kantumruy Pro, -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    Kantumruy Pro,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   color: #e06b1d;
   font-weight: 400;
   flex-wrap: wrap;
@@ -129,8 +134,8 @@
 }
 
 .searchInput::placeholder {
-  color: rgba(0, 0, 0, 0.4); 
-  opacity: 1; 
+  color: rgba(0, 0, 0, 0.4);
+  opacity: 1;
 }
 
 .clickableSearchArea {
@@ -171,27 +176,29 @@
   max-width: 100%;
   color: #fff;
   padding: 8px 70px;
-  font: 465 24px Inter, sans-serif;
+  font:
+    465 24px Inter,
+    sans-serif;
   align-items: center;
   border: none;
   outline: none;
-  cursor: pointer; 
+  cursor: pointer;
   transition: box-shadow 0.15s ease;
 }
 
 .postButton:hover {
-cursor: pointer; 
-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
 }
 
 .postButton:active {
-box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4); 
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
 }
 
 .postsContainer {
   flex-grow: 1;
   width: 100%;
-  max-height: 690px; 
+  max-height: 690px;
   overflow-y: scroll;
   margin-top: 20px;
   scrollbar-width: thin;
@@ -200,30 +207,30 @@ box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
 }
 
 .postsContainer::-webkit-scrollbar {
-width: 8px;
+  width: 8px;
 }
 
 .postsContainer::-webkit-scrollbar-track {
-background: rgba(226, 122, 43, 0.1);
-border-radius: 10px;
+  background: rgba(226, 122, 43, 0.1);
+  border-radius: 10px;
 }
 
 .postsContainer::-webkit-scrollbar-thumb {
-background: rgba(226, 122, 43, 0.35);
-border-radius: 10px;
-width: 8px;
+  background: rgba(226, 122, 43, 0.35);
+  border-radius: 10px;
+  width: 8px;
 }
 
 .visually-hidden {
-position: absolute;
-width: 1px;
-height: 1px;
-padding: 0;
-margin: -1px;
-overflow: hidden;
-clip: rect(0, 0, 0, 0);
-white-space: nowrap;
-border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* --------------dropdown button ---------------- */
@@ -231,16 +238,16 @@ border: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between; 
+  justify-content: space-between;
   width: 100%;
   margin-top: 30px;
-  position: relative; 
+  position: relative;
 }
 
 .postButton {
-  position: absolute; 
-  left: 50%; 
-  transform: translateX(-50%); 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 0;
 }
 
@@ -257,10 +264,10 @@ border: 0;
   gap: 8px;
   margin-top: 32px;
   padding: 8px 20px;
-  background-color: #F8DECA;
-  border: 1px solid #E06B1D;
+  background-color: #f8deca;
+  border: 1px solid #e06b1d;
   border-radius: 25px;
-  color: #E06B1D;
+  color: #e06b1d;
   font-family: 'Kantumruy Pro', sans-serif;
   font-size: 17px;
   font-weight: 400;
@@ -268,7 +275,7 @@ border: 0;
   transition: all 0.2s ease;
   height: 40px;
   width: auto; /* Allow the button to resize based on content */
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .dropdownIcon {
@@ -286,8 +293,8 @@ border: 0;
   top: calc(100% + 4px);
   left: 0;
   width: 100%; /* Match width of button */
-  background-color: #F8DECA;
-  border: 1px solid #E06B1D;
+  background-color: #f8deca;
+  border: 1px solid #e06b1d;
   border-radius: 25px;
   overflow: hidden;
   z-index: 10002;
@@ -298,7 +305,7 @@ border: 0;
   padding: 12px 20px;
   background: none;
   border: none;
-  color: #E06B1D;
+  color: #e06b1d;
   font-family: 'Kantumruy Pro', sans-serif;
   font-size: 17px;
   font-weight: 400;
@@ -308,7 +315,7 @@ border: 0;
 }
 
 .sortOption:hover {
-  background-color: #E06B1D;
+  background-color: #e06b1d;
   color: white;
 }
 

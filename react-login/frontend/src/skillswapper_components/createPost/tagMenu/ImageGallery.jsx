@@ -9,12 +9,36 @@ import digitalImage from '../../../images/digital.svg';
 import fixingImage from '../../../images/fixing.svg';
 
 const galleryImages = [
-  { src: basketballImage, alt: 'Sports', className: `${styles.imageSize1} ${styles.galleryImage}` },
-  { src: mediaImage, alt: 'Media', className: `${styles.imageSize1} ${styles.galleryImage}` },
-  { src: musicImage, alt: 'Music', className: `${styles.imageSize1} ${styles.galleryImage}` },
-  { src: foodImage, alt: 'Food', className: `${styles.imageSize2} ${styles.galleryImage}` },
-  { src: digitalImage, alt: 'Digital', className: `${styles.imageSize1} ${styles.galleryImage}` },
-  { src: fixingImage, alt: 'Handywork', className: `${styles.imageSize1} ${styles.galleryImage}` }
+  {
+    src: basketballImage,
+    alt: 'Sports',
+    className: `${styles.imageSize1} ${styles.galleryImage}`,
+  },
+  {
+    src: mediaImage,
+    alt: 'Media',
+    className: `${styles.imageSize1} ${styles.galleryImage}`,
+  },
+  {
+    src: musicImage,
+    alt: 'Music',
+    className: `${styles.imageSize1} ${styles.galleryImage}`,
+  },
+  {
+    src: foodImage,
+    alt: 'Food',
+    className: `${styles.imageSize2} ${styles.galleryImage}`,
+  },
+  {
+    src: digitalImage,
+    alt: 'Digital',
+    className: `${styles.imageSize1} ${styles.galleryImage}`,
+  },
+  {
+    src: fixingImage,
+    alt: 'Handywork',
+    className: `${styles.imageSize1} ${styles.galleryImage}`,
+  },
 ];
 
 const ImageGallery = ({ onCategorySelect }) => (

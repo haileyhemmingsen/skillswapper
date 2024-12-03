@@ -2,120 +2,120 @@
 
 /* The whole page */
 .loginPage {
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    align-items: center;
-    color: #fff;
-    padding: 34px 80px 54px;
-    font-family: 'Kantumruy Pro', sans-serif;
-  }
-  
-  /* Light orange square */
-  .container {
-    border-radius: 50px;
-    background-color: #f8deca;
-    display: flex;
-    width: 60%;
-    max-width: 1082px;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 80px 0px;
-  }
-  
-  /* SkillSwapper title at top */
-  .logo {
-    margin-top: 37px;
-    width: 110%;
-  }
-  
-  /* Login title after SkillSwapper */
-  .title {
-    color: #e06b1d;
-    margin: 60px 0 15px 0px;
-    width: 40%;
-  }
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  color: #fff;
+  padding: 34px 80px 54px;
+  font-family: 'Kantumruy Pro', sans-serif;
+}
 
-  /* For the placeholder text in input boxes */
-  ::placeholder {
-    color: #fff;
-    opacity: 1;
-  }
-  
-  /* Design of input text boxes */
-  .inputField {
-    border-radius: 30px;
-    background-color: rgba(224, 107, 29, 0.5);
-    width: 550px;
-    max-width: 100%;
-    padding: 27px 21px 20px;
-    font-size: 25px;
-    color:#fff;
-    font-family: 'Kantumruy Pro', sans-serif;
-    border-style: none;
-  }
-  
-  /* How much space in between text boxes */
-  .inputField:first-of-type {
-    margin-top: 20px;
-  }
-  
-  /* Styling of login button */
-  .loginButton {
-    border-radius: 10px;
-    background-color: #e06b1d;
-    width: 180px;
-    max-width: 100%;
-    font-weight: 500;
-    /*30%*/
-    margin: 30px 0 10px 33%;
-    padding: 8px 20px;
-    font-size: 25px;
-    
-    color:#fff;
-    font-family: 'Kantumruy Pro', sans-serif;
-    font-weight: bolder;
-    letter-spacing: 1px;
-    border-style: none;
-    /* margin-bottom: 15px; */
-  }
-  
-  .loginButton:hover {
-    cursor: pointer; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-  }
-  
-  .loginButton:active {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
-  }
+/* Light orange square */
+.container {
+  border-radius: 50px;
+  background-color: #f8deca;
+  display: flex;
+  width: 60%;
+  max-width: 1082px;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 80px 0px;
+}
 
-  /* Color link */
-  a {
-    color: #000;
-    color: rgba(0, 0, 0, 0.28);
-  }
+/* SkillSwapper title at top */
+.logo {
+  margin-top: 37px;
+  width: 110%;
+}
 
-  /* Sign up prompt text at bottom */
-  .signupPrompt {
-    font-size: 30px;
-    margin-top: 20px;
-    color: #000;
-    color: rgba(0, 0, 0, 0.28);
-  }
-  
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-  
+/* Login title after SkillSwapper */
+.title {
+  color: #e06b1d;
+  margin: 60px 0 15px 0px;
+  width: 40%;
+}
+
+/* For the placeholder text in input boxes */
+::placeholder {
+  color: #fff;
+  opacity: 1;
+}
+
+/* Design of input text boxes */
+.inputField {
+  border-radius: 30px;
+  background-color: rgba(224, 107, 29, 0.5);
+  width: 550px;
+  max-width: 100%;
+  padding: 27px 21px 20px;
+  font-size: 25px;
+  color: #fff;
+  font-family: 'Kantumruy Pro', sans-serif;
+  border-style: none;
+}
+
+/* How much space in between text boxes */
+.inputField:first-of-type {
+  margin-top: 20px;
+}
+
+/* Styling of login button */
+.loginButton {
+  border-radius: 10px;
+  background-color: #e06b1d;
+  width: 180px;
+  max-width: 100%;
+  font-weight: 500;
+  /*30%*/
+  margin: 30px 0 10px 33%;
+  padding: 8px 20px;
+  font-size: 25px;
+
+  color: #fff;
+  font-family: 'Kantumruy Pro', sans-serif;
+  font-weight: bolder;
+  letter-spacing: 1px;
+  border-style: none;
+  /* margin-bottom: 15px; */
+}
+
+.loginButton:hover {
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.loginButton:active {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Color link */
+a {
+  color: #000;
+  color: rgba(0, 0, 0, 0.28);
+}
+
+/* Sign up prompt text at bottom */
+.signupPrompt {
+  font-size: 30px;
+  margin-top: 20px;
+  color: #000;
+  color: rgba(0, 0, 0, 0.28);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Container to position eye icon */
 .passwordContainer {
   position: relative;
@@ -128,7 +128,7 @@
   height: 30px;
   opacity: 0.7;
   margin-left: -55px; /* Pull the icon back over the input field */
-  flex-shrink: 0; 
+  flex-shrink: 0;
   margin-bottom: -3px;
 }
 

@@ -1,11 +1,11 @@
 import styles from '../loginPage.module.css';
 import logo from '../../../images/SkillSwapper.svg';
 import title from '../../../images/Log_In.svg';
-import eyeClosed from '../../../images/eyeClosed.svg'; 
+import eyeClosed from '../../../images/eyeClosed.svg';
 import eyeOpen from '../../../images/eyeOpen.svg';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import { LoginContext } from '../../../context/Login.tsx';
 
@@ -46,44 +46,44 @@ const Login = (props) => {
     if (hasError) return;
 
     const dto = {
-      email: email, 
-      password: password
+      email: email,
+      password: password,
     };
 
-    const response = await axios.post('http://localhost:3080/api/v0/login', 
-        dto, 
-        {header: {'Content-Type': 'application/json'},
-        withCredentials: true
-      }
-    ).then((res) => {
+    const response = await axios
+      .post('http://localhost:3080/api/v0/login', dto, {
+        header: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      })
+      .then((res) => {
         console.log(res);
         const id = res.data.id;
         const zip = res.data.zip;
 
         console.log('name: ' + res.data.firstName);
         if (res.data.firstName === '') {
-            loginContext.setUserFirstName(id);
-            loginContext.setUserLastName('');
-        }
-        else {
-            loginContext.setUserFirstName(res.data.firstName);
-            loginContext.setUserLastName(res.data.lastName);
+          loginContext.setUserFirstName(id);
+          loginContext.setUserLastName('');
+        } else {
+          loginContext.setUserFirstName(res.data.firstName);
+          loginContext.setUserLastName(res.data.lastName);
         }
         loginContext.setId(id);
         loginContext.setZip(zip);
         loginContext.setLoggedIn(true);
         console.log(loginContext.loggedIn);
         navigate('/homepage');
-    }).catch((err) => {
-      console.log(err);
+      })
+      .catch((err) => {
+        console.log(err);
 
-      // Check for backend response errors
-      if (err.response && err.response.status === 401) {
-        setPasswordError('Incorrect password. Please try again.');
-      } else {
-        setPasswordError('An error occurred. Please try again later.');
-      }
-    })
+        // Check for backend response errors
+        if (err.response && err.response.status === 401) {
+          setPasswordError('Incorrect password. Please try again.');
+        } else {
+          setPasswordError('An error occurred. Please try again later.');
+        }
+      });
   };
 
   return (
@@ -93,7 +93,9 @@ const Login = (props) => {
         <img src={title} alt="Login Title" className={styles.title} />
         <form>
           <div>
-            <label htmlFor="email" className={styles['visually-hidden']}>Email</label>
+            <label htmlFor="email" className={styles['visually-hidden']}>
+              Email
+            </label>
             <input
               id="email"
               className={styles.inputField}
@@ -105,11 +107,13 @@ const Login = (props) => {
             {emailError && <p className={styles.errorLabel}>{emailError}</p>}
           </div>
           <div className={styles.passwordContainer}>
-            <label htmlFor="password" className={styles['visually-hidden']}>Password</label>
+            <label htmlFor="password" className={styles['visually-hidden']}>
+              Password
+            </label>
             <input
               id="password"
               className={styles.inputField}
-              type={showPassword ? 'text' : 'password'}  // Toggle between text and password
+              type={showPassword ? 'text' : 'password'} // Toggle between text and password
               placeholder="Password..."
               aria-label="Password"
               onChange={(ev) => setPassword(ev.target.value)}
@@ -118,11 +122,19 @@ const Login = (props) => {
               src={showPassword ? eyeOpen : eyeClosed}
               alt="Toggle password visibility"
               className={styles.eyeIcon}
-              onClick={() => setShowPassword(!showPassword)}  // Handle toggle on click
+              onClick={() => setShowPassword(!showPassword)} // Handle toggle on click
             />
-            {passwordError && <p className={styles.errorLabel}>{passwordError}</p>}
+            {passwordError && (
+              <p className={styles.errorLabel}>{passwordError}</p>
+            )}
           </div>
-          <button type="button" className={styles.loginButton} onClick={onButtonClick}>Log In</button>
+          <button
+            type="button"
+            className={styles.loginButton}
+            onClick={onButtonClick}
+          >
+            Log In
+          </button>
         </form>
         <p className={styles.signupPrompt}>
           Don't have an account? <a href="/signup">Sign up</a>

@@ -1,18 +1,18 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = (props) => {
-  const { loggedIn, email } = props
-  const navigate = useNavigate()
+  const { loggedIn, email } = props;
+  const navigate = useNavigate();
 
   const onButtonClick = () => {
     if (loggedIn) {
-      localStorage.removeItem('user')
-      props.setLoggedIn(false)
+      localStorage.removeItem('user');
+      props.setLoggedIn(false);
     } else {
-      navigate('/login')
+      navigate('/login');
     }
-  }
+  };
 
   return (
     <div className="mainContainer">
@@ -30,7 +30,7 @@ const Home = (props) => {
         {loggedIn ? <div>Your email address is {email}</div> : <div />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

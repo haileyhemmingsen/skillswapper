@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './LoginPage.module.css'; 
+import styles from './LoginPage.module.css';
 import LoginPage from './LoginPage/LoginPage';
 // import ServiceSearch from './MainFeed/ServiceSearch';
 

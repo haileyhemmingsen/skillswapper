@@ -33,7 +33,7 @@
 }
 
 .profileUsername {
-  color: #E06B1D;
+  color: #e06b1d;
   font-size: 25px;
   font-weight: bold;
 }
@@ -43,7 +43,7 @@
 }
 
 .archiveTitle {
-  color: #E06B1D;
+  color: #e06b1d;
   font-size: 1.875rem;
   margin-bottom: 24px;
   text-align: center;
@@ -88,7 +88,7 @@
 }
 
 .username {
-  color: #E06B1D;
+  color: #e06b1d;
   font-size: 1.25rem;
 }
 
@@ -99,7 +99,7 @@
 }
 
 .postDate {
-  color: #E06B1D;
+  color: #e06b1d;
   font-size: 0.875rem;
 }
 
@@ -125,15 +125,21 @@
 }
 
 .contentText {
-  color: #E06B1D;
+  color: #e06b1d;
   flex: 1;
 }
 
 .archivedText {
   color: #000000;
-  opacity: .25
+  opacity: 0.25;
 }
 
-.pageContainer, .profileSection, .profileUsername, .archiveSection, .archiveTitle, .postDate, .username {
-  font-family: "Kantumruy Pro";
+.pageContainer,
+.profileSection,
+.profileUsername,
+.archiveSection,
+.archiveTitle,
+.postDate,
+.username {
+  font-family: 'Kantumruy Pro';
 }

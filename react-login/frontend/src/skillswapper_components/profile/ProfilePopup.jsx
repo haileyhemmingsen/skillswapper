@@ -3,21 +3,24 @@ import styles from './ProfilePopup.module.css';
 import profileImage from '../../images/profile_light.svg';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../context/Login.tsx';
-import axios from 'axios'
-
+import axios from 'axios';
 
 const ProfilePopup = ({ username, isVisible }) => {
   const loginContext = React.useContext(LoginContext);
   const navigate = useNavigate();
   if (!isVisible) {
-      return null;
+    return null;
   }
   console.log('username:' + username);
 
   const logout = async () => {
     loginContext.setLoggedIn(false);
     // Trigger the logout API
-    await axios.post('http://localhost:3080/api/v0/logout', {}, { withCredentials: true });
+    await axios.post(
+      'http://localhost:3080/api/v0/logout',
+      {},
+      { withCredentials: true }
+    );
     // Clear sessionStorage
     sessionStorage.clear();
     loginContext.setUserFirstName('');
@@ -25,23 +28,18 @@ const ProfilePopup = ({ username, isVisible }) => {
     loginContext.setId('');
     loginContext.setZip('');
     navigate('/login');
-  }
-  
-  
+  };
+
   return (
     <div className={styles.profilePopup}>
       <div className={styles.userInfo}>
         <div className={styles.avatarContainer}>
-          <img 
-            src={profileImage}
-            alt="Profile" 
-            className={styles.userAvatar} 
-          />
+          <img src={profileImage} alt="Profile" className={styles.userAvatar} />
         </div>
       </div>
       <span className={styles.username}>{username}</span>
       <div className={styles.buttonContainer}>
-        <button 
+        <button
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
@@ -51,7 +49,7 @@ const ProfilePopup = ({ username, isVisible }) => {
         >
           View Profile
         </button>
-        <button 
+        <button
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
@@ -61,7 +59,7 @@ const ProfilePopup = ({ username, isVisible }) => {
         >
           Inbox
         </button>
-        <button 
+        <button
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();

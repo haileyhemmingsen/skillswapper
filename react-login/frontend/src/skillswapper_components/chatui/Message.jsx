@@ -8,7 +8,11 @@ function Message({ isUser, sender, text, avatar }) {
   return (
     <article className={messageClass}>
       <div className={styles.messageHeader}>
-        <img src={avatar} alt={`${senderName}'s avatar`} className={styles.messageAvatar} />
+        <img
+          src={avatar}
+          alt={`${senderName}'s avatar`}
+          className={styles.messageAvatar}
+        />
         <span className={styles.senderName}>{senderName}</span>
       </div>
       <p className={styles.messageText}>{text}</p>

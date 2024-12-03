@@ -9,19 +9,20 @@ import digitalImage from '../../../images/digital.svg';
 import fixingImage from '../../../images/fixing.svg';
 import logo from '../../../images/SkillSwapper.svg';
 
-
 const categories = [
-  { src: basketballImage, alt: "Sports" },
-  { src: mediaImage, alt: "Media" },
-  { src: musicImage, alt: "Music" },
-  { src: foodImage, alt: "Food" },
-  { src: digitalImage, alt: "Digital" },
-  { src: fixingImage, alt: "Handywork" }
+  { src: basketballImage, alt: 'Sports' },
+  { src: mediaImage, alt: 'Media' },
+  { src: musicImage, alt: 'Music' },
+  { src: foodImage, alt: 'Food' },
+  { src: digitalImage, alt: 'Digital' },
+  { src: fixingImage, alt: 'Handywork' },
 ];
 
 const CategorySelection = ({ setSelectedCategories }) => {
   // State to track which buttons are active
-  const [activeCategories, setActiveCategories] = useState(Array(categories.length).fill(false));
+  const [activeCategories, setActiveCategories] = useState(
+    Array(categories.length).fill(false)
+  );
   // State to track the selected categories' alt texts
   const [localSelectedCategories, setLocalSelectedCategories] = useState([]);
 
@@ -29,15 +30,21 @@ const CategorySelection = ({ setSelectedCategories }) => {
     const newActiveCategories = [...activeCategories];
     newActiveCategories[index] = !newActiveCategories[index];
     setActiveCategories(newActiveCategories);
-  
+
     if (newActiveCategories[index]) {
       setLocalSelectedCategories((prev) => [...prev, alt]);
     } else {
-      setLocalSelectedCategories((prev) => prev.filter((category) => category !== alt));
+      setLocalSelectedCategories((prev) =>
+        prev.filter((category) => category !== alt)
+      );
     }
-  
+
     // Update the parent component with the selected categories
-    setSelectedCategories(newActiveCategories.map((active, i) => active ? categories[i].alt : null).filter(Boolean));
+    setSelectedCategories(
+      newActiveCategories
+        .map((active, i) => (active ? categories[i].alt : null))
+        .filter(Boolean)
+    );
   };
 
   return (
@@ -46,7 +53,7 @@ const CategorySelection = ({ setSelectedCategories }) => {
       <h2 className={styles.categoryPrompt}>
         {localSelectedCategories.length > 0
           ? `Selected: ${localSelectedCategories.join(', ')}`
-          : "Select category..."}
+          : 'Select category...'}
       </h2>
       <section className={styles.categoryGrid}>
         {categories.map((category, index) => (

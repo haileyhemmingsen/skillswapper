@@ -1,4 +1,9 @@
-import React, { useState, useEffect, createContext, PropsWithChildren } from "react";
+import React, {
+  useState,
+  useEffect,
+  createContext,
+  PropsWithChildren,
+} from 'react';
 
 export const LoginContext = createContext({
   userFirstName: '',
@@ -14,8 +19,12 @@ export const LoginContext = createContext({
 });
 
 export const LoginProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [userFirstName, setUserFirstName] = useState(() => sessionStorage.getItem('userFirstName') || '');
-  const [userLastName, setUserLastName] = useState(() => sessionStorage.getItem('userLastName') || '');
+  const [userFirstName, setUserFirstName] = useState(
+    () => sessionStorage.getItem('userFirstName') || ''
+  );
+  const [userLastName, setUserLastName] = useState(
+    () => sessionStorage.getItem('userLastName') || ''
+  );
   const [id, setId] = useState(() => sessionStorage.getItem('id') || '');
   const [zip, setZip] = useState(() => sessionStorage.getItem('zip') || '');
   const [loggedIn, setLoggedIn] = useState(() => {

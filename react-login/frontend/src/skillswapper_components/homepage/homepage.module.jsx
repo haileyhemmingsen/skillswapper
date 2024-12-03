@@ -1,11 +1,12 @@
 import React, { useState } from 'react'; // Import useState
-import styles from './homepage.module.css'; 
+import styles from './homepage.module.css';
 import CategorySelection from './CategorySelection/CategorySelection';
 import ServiceSearch from './MainFeed/ServiceSearch';
 
-const Homepage = () => { // Change to uppercase
+const Homepage = () => {
+  // Change to uppercase
   const [selectedCategories, setSelectedCategories] = useState([]);
-  
+
   return (
     <div className={styles.container}>
       <aside className={styles.categorySection}>
@@ -18,4 +19,4 @@ const Homepage = () => { // Change to uppercase
   );
 };
 
-export default Homepage; // Ensure the export matches the component name 
+export default Homepage; // Ensure the export matches the component name
