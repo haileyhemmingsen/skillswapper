@@ -1,22 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
 
 .headerSection {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Aligns all content to the left initially */
+  align-items: flex-start; /* Keep contents aligned to the left */
   padding: 10px;
   color: #E06B1D;
   font-weight: bold;
   font-family: 'Kantumruy Pro', sans-serif;
+  width: 100%; /* Ensure the container spans the full width */
 }
 
 .headerUserInfo {
   display: flex;
-  align-items: center; /* Align avatar and username vertically */
-  gap: 15px; /* Space between avatar and username */
-  width: 100%; /* Ensure it spans the full width */
+  align-items: center; /* Align all items (arrow, avatar, username) vertically */
+  gap: 15px; /* Space between the arrow, avatar, and username */
   margin-bottom: 10px; /* Space between user info and title */
+  justify-content: flex-start; /* Keep items on the left */
+  width: auto; /* Prevent stretching */
 }
+
+.backIconContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 73px;
+}
+
+.backIcon {
+  margin-top: 13px;
+  width: 40px;
+  height: auto;
+  cursor: pointer; 
+}
+
 
 .userAvatar {
   width: 63px;
@@ -28,6 +46,7 @@
   font-size: 37px;
   margin: 0; /* Remove extra margins */
   color: #E06B1D;
+  margin-top: 13px;
 }
 
 .inboxTitle {

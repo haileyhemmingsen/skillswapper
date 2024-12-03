@@ -52,27 +52,27 @@ function InboxPage() {
    
   return (
     <main className={styles.inboxContainer}>
-      <Link to="/homepage" className={styles.exitIconContainer}>
-        <img 
-          src={backArrow} 
-          alt="Settings" 
-          className={styles.backIcon} 
-          loading="lazy" 
-        />
-    </Link>
-      
-    <section className={styles.headerSection}>
-      <div className={styles.headerUserInfo}>
-        <img 
-          src={userProfile}
-          alt="User profile" 
-          className={styles.userAvatar} 
-          loading="lazy" 
-        />
-        <h1 className={styles.userName}>{username}</h1>
-      </div>
-    <h2 className={styles.inboxTitle}>Inbox</h2>
-  </section>
+      <section className={styles.headerSection}>
+        <div className={styles.headerUserInfo}>
+          <Link to="/homepage" className={styles.backIconContainer}>
+            <img
+              src={backArrow}
+              alt="Back"
+              className={styles.backIcon}
+              loading="lazy"
+            />
+          </Link>
+          <img
+            src={userProfile}
+            alt="User profile"
+            className={styles.userAvatar}
+            loading="lazy"
+          />
+          <h1 className={styles.userName}>{username}</h1>
+        </div>
+        <h2 className={styles.inboxTitle}>Inbox</h2>
+      </section>
+
 
       <section className={styles.messagesContainer}>
         {chats.map((message, index) => (
