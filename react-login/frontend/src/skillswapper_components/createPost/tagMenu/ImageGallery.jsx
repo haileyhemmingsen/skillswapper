@@ -41,6 +41,8 @@ const galleryImages = [
   },
 ];
 
+export { galleryImages }; 
+
 const ImageGallery = ({ onCategorySelect }) => (
   <section className={styles.tagMenu}>
     <div className={styles.imageRow}>

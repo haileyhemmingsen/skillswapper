@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './EditPost.module.css';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import dropdownIcon from '../../../images/dropdownIcon.svg';
 import userAvatar from '../../../images/userAvatar.svg';
 import decorativeIcon from '../../../images/decorativeIcon.svg';
-import ImageGallery from '../../../skillswapper_components/createPost/tagMenu/ImageGallery';
+import ImageGallery, { galleryImages } from '../../../skillswapper_components/createPost/tagMenu/ImageGallery';
 
 import { LoginContext } from '../../../context/Login.tsx';
 
@@ -32,6 +32,21 @@ function EditPost() {
   const [serviceSeekedError, setServiceSeekedError] = useState('');
   const [serviceOfferedError, setServiceOfferedError] = useState('');
 
+  useEffect(() => {
+    // If there are existing categories in the post data
+    if (data.categories && data.categories.length > 0) {
+      // Map existing category names to full category objects
+      const existingCategories = data.categories.map(categoryName => {
+        // Find the gallery image that matches the category name
+        const matchedCategory = galleryImages.find(img => img.alt.toLowerCase() === categoryName.toLowerCase());
+        return matchedCategory;
+      }).filter(category => category !== undefined); // Remove any undefined categories
+
+      setSelectedCategories(existingCategories);
+    }
+  }, []);
+  
+
   const username =
     loginContext.userLastName === ''
       ? loginContext.userFirstName
@@ -42,20 +57,12 @@ function EditPost() {
 
   const handleCategorySelect = (category) => {
     setSelectedCategories((prevCategories) => {
-      if (prevCategories.includes(category)) {
-        const result = prevCategories.filter((cat) => cat !== category);
-        category_tags = [];
-        for (let i = 0; i < result.length; i += 1) {
-          category_tags.push(result[i].alt);
-        }
-        return result;
-      } else {
-        const result = [...prevCategories, category];
-        for (let i = 0; i < result.length; i += 1) {
-          category_tags.push(result[i].alt);
-        }
-        return result;
+      // If category already selected, remove it
+      if (prevCategories.some(cat => cat.alt === category.alt)) {
+        return prevCategories.filter((cat) => cat.alt !== category.alt);
       }
+      // If not selected, add it
+      return [...prevCategories, category];
     });
   };
 

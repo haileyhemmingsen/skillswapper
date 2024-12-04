@@ -17,7 +17,7 @@ import { Navigate } from 'react-router-dom';
 // AuthorizedRoute Component
 const AuthorizedRoute = ({ children }) => {
   const loginContext = React.useContext(LoginContext);
-  console.log('privateroute: ' + loginContext.loggedIn);
+  // console.log('privateroute: ' + loginContext.loggedIn);
   return loginContext.loggedIn ? children : <Navigate to="/login" replace />;
 };
 
