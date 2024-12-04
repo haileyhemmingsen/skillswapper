@@ -371,7 +371,7 @@ export class PostService {
         //     return undefined;
         // }
       } else {
-        console.log('User has no posts');
+        // console.log('User has no posts');
         return false;
       }
     } catch (error) {
