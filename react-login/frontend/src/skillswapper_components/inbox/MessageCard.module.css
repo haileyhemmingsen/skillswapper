@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.messageWrapper {
+  display: flex;
+  align-items: center; /* Vertically align the dot and the card */
+  flex-grow: 1; /* Allow the card to take up remaining space */
+  width: 100%; /* Ensure the card spans the container's width */
+  max-width: 6000px; /* Optional: Limit the maximum width */
+}
+
+.messageCard {
+  display: flex;
+  gap: 20px; /* Gap between avatar and text */
+  align-items: flex-start; /* Align content to the top */
+  border-radius: 20px;
+  background-color: rgba(226, 122, 43, 0.25);
+  padding: 5px;
+  margin-top: 20px;
+  flex-direction: column; /* Align elements horizontally */
+  flex-grow: 1; /* Allow the card to take up remaining space */
+  width: 100%; /* Ensure the card spans the container's width */
+  max-width: 6000px;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.2s ease; /* Optional: Add smooth hover effect */
+}
+
+.messageCard:hover {
+  background-color: rgba(
+    226,
+    122,
+    43,
+    0.4
+  ); /* Optional: Slightly darker background on hover */
+}
+
+.messageCard:first-child {
+  margin-top: 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center; /* Align items (avatar, username, timestamp) vertically */
+  justify-content: space-between; /* Space between left (avatar + username) and right (timestamp) */
+  width: 100%; /* Ensure it spans the full width of the card */
+  gap: 20px; /* Adjust spacing as needed */
+}
+
+.userDetails {
+  display: flex;
+  align-items: center; /* Align avatar and username vertically */
+  gap: 10px; /* Space between avatar and username */
+}
+
+.messageWrapper {
+  display: flex;
+  align-items: center; /* Vertically align the dot and the card */
+  width: 100%; /* Ensure the card spans the container's width */
+}
+
+.iconPlaceholder {
+  width: 40px; /* Same width as the unread dot */
+  height: 40px; /* Same height as the unread dot */
+  margin-right: 10px; /* Space between dot and card */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.unreadDot {
+  width: 40px;
+  height: 40px;
+  border-radius: 90%;
+}
+
+/* messenger username profile picture */
+.userAvatar {
+  width: 55px;
+  margin-left: 20px;
+  margin-top: 5px;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+/* messenger username title */
+.userName {
+  flex-basis: auto;
+  font-size: 32px;
+  font-weight: normal;
+  color: #e06b1d;
+  margin-bottom: 5px;
+  margin-left: 7px;
+}
+
+/* message text snippet */
+.messagePreview {
+  color: rgba(224, 107, 29, 0.6);
+  font-size: 24px;
+  margin-left: 95px; /* Remove unnecessary margin */
+  margin-top: -1px;
+  flex-grow: 1; /* Allow the preview to grow if needed */
+}
+
+.timestamp {
+  font-size: 20px; /* Smaller font for the timestamp */
+  color: rgba(211, 100, 26, 0.661); /* Subtle color for timestamp */
+  white-space: nowrap; /* Prevent wrapping to the next line */
+  text-align: right; /* Align text to the right */
+  margin-right: 14px;
+}
+
+/* @media (max-width: 991px) {
+    .messageCard {
+      max-width: 100%;
+      padding-right: 20px;
+    }
+    
+    .userInfo {
+      white-space: initial;
+    }
+    
+    .messagePreview {
+      margin-left: 10px;
+    }
+  } */

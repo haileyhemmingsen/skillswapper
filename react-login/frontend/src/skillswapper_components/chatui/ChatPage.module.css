@@ -1,0 +1,245 @@
+.chatPage {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: start;
+  font-family:
+    'Kantumruy Pro',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  color: #e06b1d;
+  font-weight: 400;
+  justify-content: center;
+  padding: 80px;
+}
+
+.messageInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.messageInput {
+  flex: 1;
+  border-radius: 15px;
+  background-color: #fff;
+  font-size: 24px;
+  padding: 22px 70px 22px 22px; /* Add right padding for the button */
+  border: 1px solid #e06b1d;
+}
+
+.sendButton {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ffff;
+  padding: 8px; /* Reduce padding for a smaller button */
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Decrease width */
+  height: 40px; /* Decrease height */
+}
+
+.chatContainer {
+  border-radius: 20px;
+  background-color: rgba(226, 122, 43, 0.25);
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 22px 29px 35px;
+}
+
+.chatHeader {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 26px;
+  font-size: 32px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.exitLink {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.receiverName {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.menuIcon {
+  width: 41px;
+  height: 41px;
+  cursor: pointer;
+}
+
+/* .messageList {
+    border-radius: 32px;
+    background-color: #ffffff;
+    display: flex;
+    margin-top: 34px;
+    width: 100%;
+    max-width: 1951px;
+    flex-direction: column;
+    padding: 97px 25px 43px;
+    border: 1px solid #e06b1d;
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+
+.messageList {
+  height: 400px; /* Adjust the height to your needs */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #e06b1d;
+  padding: 40px; /* Optional: Adds some padding for spacing */
+  background-color: #ffffff; /* Optional: Light background for readability */
+  margin-top: 34px;
+  border-radius: 15px;
+}
+
+.receiverMessage,
+.userMessage {
+  border-radius: 15px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: start;
+  padding: 8px 18px 16px;
+  margin-bottom: 17px;
+}
+
+.receiverMessage {
+  background-color: rgba(216, 216, 216, 0.28);
+  border: 1px solid rgba(216, 216, 216, 0.28);
+}
+
+.userMessage {
+  background-color: #f7deca;
+  border: 1px solid #f7deca;
+}
+
+.messageHeader {
+  display: flex;
+  gap: 11px;
+  font-size: 24px;
+  align-items: center;
+}
+
+.messageAvatar {
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.senderName {
+  margin: auto 0;
+}
+
+.messageText {
+  font-size: 20px;
+  margin: 5px 0 0 20px;
+}
+
+.messageInputForm {
+  margin-top: 27px;
+}
+
+.messageInput {
+  width: 100%;
+  border-radius: 15px;
+  background-color: #fff;
+  font-size: 24px;
+  padding: 22px;
+  border: 1px solid #e06b1d; /* Keeps the border orange */
+  color: #e06b1d; /* Text color orange */
+}
+
+.messageInput:focus {
+  outline: none; /* Removes default black outline */
+  border-color: #e06b1d; /* Keeps border orange */
+  box-shadow: 0 0 5px rgba(224, 107, 29, 0.5); /* Optional subtle glow effect for focus */
+}
+
+.messageInput::placeholder {
+  color: #eb7e36; /* Placeholder text in orange */
+}
+
+.sendButton {
+  border-radius: 15px;
+  background-color: none;
+  padding: 22px;
+  margin-left: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 991px) {
+  .chatPage {
+    padding: 0 20px;
+  }
+
+  .chatContainer {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  .chatHeader {
+    white-space: initial;
+  }
+
+  .messageList {
+    max-width: 100%;
+    padding-left: 20px;
+  }
+
+  .messageText {
+    margin-left: 10px;
+  }
+
+  .messageInput {
+    max-width: 100%;
+    white-space: initial;
+    padding: 0 20px;
+  }
+}
+
+.loadingMessage {
+  font-size: 14px;
+  color: #e06b1d;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 10;
+}

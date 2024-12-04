@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.pageContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.backLink {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.backArrow {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  margin-right: 16px;
+}
+
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.profileAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.profileUsername {
+  color: #e06b1d;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.archiveSection {
+  margin-top: 20px;
+}
+
+.archiveTitle {
+  color: #e06b1d;
+  font-size: 1.875rem;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.postsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Post Styles */
+.postContainer {
+  position: relative;
+  border-radius: 20px;
+  background-color: rgba(226, 122, 43, 0.25);
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+.archivedPost {
+  background-color: rgba(140, 114, 94, 0.25);
+}
+
+.postHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.userInfo {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.username {
+  color: #e06b1d;
+  font-size: 1.25rem;
+}
+
+.postMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.postDate {
+  color: #e06b1d;
+  font-size: 0.875rem;
+}
+
+.actionIcon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.postBody {
+  margin-left: 52px;
+}
+
+.contentLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.contentLine:last-child {
+  margin-bottom: 0;
+}
+
+.contentText {
+  color: #e06b1d;
+  flex: 1;
+}
+
+.archivedText {
+  color: #000000;
+  opacity: 0.25;
+}
+
+.pageContainer,
+.profileSection,
+.profileUsername,
+.archiveSection,
+.archiveTitle,
+.postDate,
+.username {
+  font-family: 'Kantumruy Pro';
+}

@@ -1,0 +1,106 @@
+.container {
+  background-color: #fff;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 31px 15px 670px;
+  background-color: rgba(226, 122, 43, 0.25);
+}
+
+@media (max-width: 991px) {
+  .container {
+    max-width: 100%;
+    margin-top: 40px;
+    padding: 0 20px 100px 0;
+  }
+}
+
+.logo {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 991px) {
+  .logo {
+    max-width: 250px;
+  }
+}
+
+.categoryPrompt {
+  color: rgba(226, 122, 43, 0.8);
+  align-self: start;
+  margin-top: 60px;
+  font:
+    400 20px Kantumruy Pro,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+}
+
+@media (max-width: 991px) {
+  .categoryPrompt {
+    margin: 40px 0 0 8px;
+  }
+}
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 9px; */
+  gap: 20px 40px;
+  margin-top: 4px;
+  justify-content: center;
+}
+
+/* Style the button */
+.categoryButton {
+  border: none;
+  background: none;
+  padding: 0;
+  border-radius: 32px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+  background-color: transparent;
+  max-height: 55px;
+  position: relative;
+}
+
+.categoryButton:hover {
+  cursor: pointer;
+  /* box-shadow: 0 4px 1px rgba(0, 0, 0, 0.2); */
+  background-color: rgba(226, 122, 43, 0.1);
+  box-shadow: 0 4px 1px rgba(226, 122, 44, 0.2);
+}
+
+.categoryButton.active {
+  /* box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4); */
+  background-color: rgba(226, 122, 43, 0.25);
+  box-shadow: 0 4px 1px rgba(226, 122, 44, 100);
+}
+
+.categoryImage {
+  aspect-ratio: 2.39;
+  object-fit: contain;
+  object-position: center;
+  width: 136px;
+  border-radius: 32px;
+  background-color: #fff;
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

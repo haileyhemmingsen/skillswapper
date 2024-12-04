@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap');
+
+.headerSection {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Keep contents aligned to the left */
+  padding: 10px;
+  color: #e06b1d;
+  font-weight: bold;
+  font-family: 'Kantumruy Pro', sans-serif;
+  width: 100%; /* Ensure the container spans the full width */
+}
+
+.headerUserInfo {
+  display: flex;
+  align-items: center; /* Align all items (arrow, avatar, username) vertically */
+  gap: 15px; /* Space between the arrow, avatar, and username */
+  margin-bottom: 10px; /* Space between user info and title */
+  justify-content: flex-start; /* Keep items on the left */
+  width: auto; /* Prevent stretching */
+}
+
+.backIconContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 73px;
+}
+
+.backIcon {
+  margin-top: 13px;
+  width: 40px;
+  height: auto;
+  cursor: pointer;
+}
+
+.userAvatar {
+  width: 63px;
+  height: 63px;
+  margin: 0; /* Remove extra margin */
+}
+
+.userName {
+  font-size: 37px;
+  margin: 0; /* Remove extra margins */
+  color: #e06b1d;
+  margin-top: 13px;
+}
+
+.inboxTitle {
+  text-align: center;
+  width: 100%; /* Center the title across the full width */
+  font-size: 40px;
+  margin-top: 10px;
+}
+
+.inboxContainer {
+  display: flex;
+  flex-direction: column;
+  font-family:
+    Kantumruy Pro,
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  padding: 0 0;
+}
+
+.backIcon {
+  width: 40px;
+}
+
+.exitIconContainer {
+  align-self: end; /* Align the container to the end */
+  margin-right: 40px;
+  margin-top: 20px;
+}
+
+/* inbox title header */
+.inboxTitle {
+  text-align: center;
+  font-size: 40px;
+  margin-bottom: -10px;
+}
+
+.messagesContainer {
+  display: flex;
+  margin-top: 51px;
+  width: 100%;
+  flex-direction: column;
+  font-weight: 400;
+  padding: 0 40px;
+}
+
+/* @media (max-width: 991px) {
+    .headerSection {
+      white-space: initial;
+    }
+    
+    .userHeader {
+      white-space: initial;
+    }
+    
+    .inboxTitle {
+      margin-top: 40px;
+    }
+    
+    .messagesContainer {
+      max-width: 100%;
+      margin-top: 40px;
+      padding: 0 20px;
+    }
+  } */

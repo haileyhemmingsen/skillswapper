@@ -1,0 +1,8 @@
+services:
+
+login function
+
+- when sending creditials, will verify if they are correct, and sends correct HTTP response code
+  sign up function
+- check header for session token to maintain it between various pages
+- recommend we set up a tsoa.json and tsoa.config file for tsoa and documentation/API

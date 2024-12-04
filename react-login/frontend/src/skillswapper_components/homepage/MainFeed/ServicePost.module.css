@@ -1,0 +1,66 @@
+.postContainer {
+  position: relative;
+  border-radius: 20px;
+  background-color: rgba(226, 122, 43, 0.25);
+  display: flex;
+  margin-top: 30px;
+  width: 100%;
+  flex-direction: column;
+  padding: 6px 40px 27px 13px;
+  z-index: 1; /* base */
+}
+
+.postHeader {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
+}
+
+.userInfo {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.iconWrapper {
+  position: relative;
+  cursor: pointer;
+  z-index: 2; /* above postContainer */
+}
+
+.userAvatar {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.popupContainer {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 9999; /* ensure it's above everything */
+}
+
+.username {
+  font-size: 24px;
+}
+
+.postDate {
+  font-size: 15px;
+}
+
+.postContent {
+  margin-top: 10px;
+}
+
+.contentLine {
+  margin: 5px 0;
+}
+
+.highlight {
+  font-weight: bold;
+}
