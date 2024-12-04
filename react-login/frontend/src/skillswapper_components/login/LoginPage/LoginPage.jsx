@@ -50,17 +50,16 @@ const Login = (props) => {
       password: password,
     };
 
-    const response = await axios
+    await axios
       .post('http://localhost:3080/api/v0/login', dto, {
         header: { 'Content-Type': 'application/json' },
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
         const id = res.data.id;
         const zip = res.data.zip;
 
-        console.log('name: ' + res.data.firstName);
+        // console.log('name: ' + res.data.firstName);
         if (res.data.firstName === '') {
           loginContext.setUserFirstName(id);
           loginContext.setUserLastName('');
@@ -71,11 +70,10 @@ const Login = (props) => {
         loginContext.setId(id);
         loginContext.setZip(zip);
         loginContext.setLoggedIn(true);
-        console.log(loginContext.loggedIn);
         navigate('/homepage');
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
 
         // Check for backend response errors
         if (err.response && err.response.status === 401) {

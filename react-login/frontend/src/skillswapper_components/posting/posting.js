@@ -39,10 +39,8 @@ const Posting = (props) => {
 
   useEffect(() => {
     const post_string = sessionStorage.getItem('postInfo');
-    console.log(post_string);
     if (post_string) {
       const parsedPost = JSON.parse(post_string);
-      console.log(parsedPost);
       setPostID(parsedPost.post_id);
       setPostUserName(parsedPost.username);
       setPostDate(parsedPost.date);
@@ -65,7 +63,7 @@ const Posting = (props) => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting comment:', comment);
+    // console.log('Submitting comment:', comment);
     try {
       const dto = {
         postID: postID,
@@ -77,7 +75,6 @@ const Posting = (props) => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
           if (res.data) {
             // Success, update comments state with new comment
             const newComment = {
@@ -142,7 +139,7 @@ const Posting = (props) => {
     const chat_info_string = JSON.stringify(chat_info);
     sessionStorage.setItem('chat_info', chat_info_string);
     navigate('/chat/NewChat');
-    console.log('Message user clicked');
+    // console.log('Message user clicked');
     setIsMenuOpen(false);
   };
 
@@ -205,13 +202,11 @@ const Posting = (props) => {
             // hide if button isnt clicked
             if (!e.relatedTarget) {
               if (e.relatedTarget === null) {
-                console.log('blur is triggered');
                 setIsInputFocused(false);
               } else if (
                 e.relatedTarget.className &&
                 !e.relatedTarget.className.includes(styles.commentButton)
               ) {
-                console.log('blur is triggered');
                 setIsInputFocused(false);
               }
             }

@@ -23,7 +23,6 @@ const MessageInput = () => {
 
   const handleSendMessage = async (event) => {
     event.preventDefault();
-    console.log('calling handle send message');
     const dto = {
       chatID: chatID === 'NewChat' ? undefined : chatID,
       message: newMessage,
@@ -33,7 +32,6 @@ const MessageInput = () => {
     };
 
     try {
-      console.log(dto);
       const response = await axios.post(
         'http://localhost:3080/api/v0/sendMessage',
         dto,
@@ -42,10 +40,8 @@ const MessageInput = () => {
           withCredentials: true,
         }
       );
-      console.log(response);
       if (response.data !== undefined) {
         setNewMessage('');
-        console.log('got to end of useEffect');
         setChatID(response.data);
         const new_chat_info = {
           chat_id: response.data,
@@ -55,9 +51,7 @@ const MessageInput = () => {
 
         sessionStorage.setItem('chat_info', new_chat_info_string);
         navigate(`/chat/${response.data}`);
-      } else {
-        console.log('got to end of useEffect with undefined response');
-      }
+      } 
     } catch (error) {
       console.error(error);
     }

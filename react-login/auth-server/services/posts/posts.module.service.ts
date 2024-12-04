@@ -94,7 +94,7 @@ export class PostService {
           }
         }
         if (found === false) {
-          console.log('Post does not exist');
+          console.error('Post does not exist');
           return false;
         }
         // }
@@ -104,7 +104,7 @@ export class PostService {
         //     return undefined;
         // }
       } else {
-        console.log('User has no posts');
+        // console.log('User has no posts');
         return false;
       }
     } catch (error) {
@@ -168,7 +168,7 @@ export class PostService {
         //     return [];
         // }
       } else {
-        console.log('User has no posts');
+        // console.log('User has no posts');
         return [];
       }
     } catch (error) {
@@ -361,7 +361,7 @@ export class PostService {
           }
         }
         if (found === false) {
-          console.log('Post does not exist');
+          console.error('Post does not exist');
           return false;
         }
         // }

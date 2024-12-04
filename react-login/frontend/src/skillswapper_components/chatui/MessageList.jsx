@@ -32,7 +32,6 @@ function MessageList() {
               withCredentials: true,
             }
           );
-          console.log(response);
           const chat_data = response.data;
           const message_data = chat_data.messages;
           const message_result = message_data.map((message) => {

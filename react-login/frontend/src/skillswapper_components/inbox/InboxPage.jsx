@@ -28,7 +28,6 @@ function InboxPage() {
           }
         );
         const chats = response.data;
-        console.log(chats);
         if (chats !== undefined) {
           // map function should preserve order
           const parsed_chats = chats.map((chat) => {

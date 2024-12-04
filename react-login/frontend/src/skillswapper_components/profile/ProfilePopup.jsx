@@ -11,7 +11,6 @@ const ProfilePopup = ({ username, isVisible }) => {
   if (!isVisible) {
     return null;
   }
-  console.log('username:' + username);
 
   const logout = async () => {
     loginContext.setLoggedIn(false);
@@ -43,7 +42,7 @@ const ProfilePopup = ({ username, isVisible }) => {
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
-            console.log('View Profile clicked');
+            // console.log('View Profile clicked');
             navigate('/userpage');
           }}
         >
@@ -53,7 +52,7 @@ const ProfilePopup = ({ username, isVisible }) => {
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
-            console.log('Inbox clicked');
+            // console.log('Inbox clicked');
             navigate('/inbox');
           }}
         >
@@ -63,7 +62,7 @@ const ProfilePopup = ({ username, isVisible }) => {
           className={styles.actionBtn}
           onClick={(e) => {
             e.stopPropagation();
-            console.log('Logout clicked');
+            // console.log('Logout clicked');
             logout();
           }}
         >

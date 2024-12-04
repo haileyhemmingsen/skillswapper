@@ -74,14 +74,12 @@ const SignUpPage = (props) => {
       lastname: lastName,
       zip: zip,
     };
-    console.log(dto);
 
     await axios
       .post('http://localhost:3080/api/v0/signup', dto, {
         header: { 'Content-Type': 'application/json' },
       })
       .then((res) => {
-        console.log(res);
         if (res.data) {
           navigate('/login');
         } else {
@@ -90,7 +88,7 @@ const SignUpPage = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 

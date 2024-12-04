@@ -57,13 +57,13 @@ function ServiceSearch({ selectedCategories }) {
   const handleHeaderIconClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Header icon clicked');
+    // console.log('Header icon clicked');
     setShowHeaderPopup(!showHeaderPopup);
   };
 
   useEffect(() => {
     const fetchPosts = async () => {
-      console.log('selected categories: ', selectedCategories);
+    //   console.log('selected categories: ', selectedCategories);
       const payload = {
         categories: selectedCategories.length > 0 ? selectedCategories : [],
       };
@@ -74,8 +74,6 @@ function ServiceSearch({ selectedCategories }) {
           payload,
           { headers: { 'Content-Type': 'application/json' } }
         );
-        console.log('Response data:', response.data);
-        console.log('Response data location:', response.data[0]);
 
         const posts = response.data;
         const parsedPosts = posts.map((post) => {
@@ -123,7 +121,6 @@ function ServiceSearch({ selectedCategories }) {
         postsWithDistances = await calculateDistances(posts, loginContext.zip);
         setPosts(postsWithDistances); // Update posts with distances
         setDistancesCalculated(true); // Mark distances as calculated
-        console.log('Posts with distances calculated:', postsWithDistances);
       }
 
       const filtered = postsWithDistances
@@ -229,7 +226,7 @@ function ServiceSearch({ selectedCategories }) {
   };
 
   const handleSortOption = (option) => {
-    console.log('Selected sort option:', option);
+    // console.log('Selected sort option:', option);
     setSortOrder(option);
     setSortLabel(`sort by ${option}`); // Update the button label
     setShowSortDropdown(false);

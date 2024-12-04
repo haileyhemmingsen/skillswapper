@@ -94,13 +94,12 @@ function CreatePost() {
       categories: selectedCategories.map((category) => category.alt),
     };
     try {
-      const response = await axios
+      await axios
         .post('http://localhost:3080/api/v0/createPost', dto, {
           header: { 'Content-Type': 'application/json' },
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
           if (res.data) {
             // either we succeed or we dont
             navigate('/homepage');
