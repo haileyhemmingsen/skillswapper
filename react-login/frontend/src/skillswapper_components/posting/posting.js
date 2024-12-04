@@ -5,6 +5,7 @@ import userAvatar from '../../images/user.svg';
 import menuIcon from '../../images/3dots.svg';
 import closeIcon from '../../images/bubble_arrow.svg';
 import axios from 'axios';
+import { LoginContext } from '../../context/Login.tsx';
 
 // import Kantumruy pro font
 <style>
@@ -23,6 +24,7 @@ const Posting = (props) => {
   const [postContent, setPostContent] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const loginContext = React.useContext(LoginContext);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -79,7 +81,8 @@ const Posting = (props) => {
             // Success, update comments state with new comment
             const newComment = {
               comment_id: res.data.comment_id,
-              username: postData.username,
+              username: loginContext.userLastName === '' ? 
+                loginContext.userFirstName : `${loginContext.userFirstName} ${loginContext.userLastName}`,
               date: new Date().toLocaleString(),
               content: comment,
             };
